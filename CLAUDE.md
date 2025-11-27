@@ -9,3 +9,5 @@ See [docs/vision.md](docs/vision.md) for the full product vision, design princip
 ## Communication Style
 
 Be direct and concise. No fluff, no filler—get straight to the point.
+
+Don't summarize or repeat back what you just did—I can see the changes in the files. Only tell me things I can't already see: errors, blockers, decisions you made, or questions you have.
