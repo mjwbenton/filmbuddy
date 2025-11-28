@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Top spool flange (wider) -->
+  <rect x="6" y="3" width="12" height="2" rx="1" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
+  <!-- Paper body (narrower) -->
+  <rect x="8" y="5" width="8" height="14" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
+  <!-- Paper band lines -->
+  <line x1="8" y1="10" x2="16" y2="10" stroke="#6b6b6b" stroke-width="1"/>
+  <line x1="8" y1="14" x2="16" y2="14" stroke="#6b6b6b" stroke-width="1"/>
+  <!-- Bottom spool flange (wider) -->
+  <rect x="6" y="19" width="12" height="2" rx="1" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
+</svg>

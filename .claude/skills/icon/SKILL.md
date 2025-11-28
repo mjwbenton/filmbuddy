@@ -16,17 +16,20 @@ Icons live in `assets/icons/`:
 
 ## Icon Design Process
 
-### 1. Understand the Reference
+### 1. Study the Reference Image
 
-The user will provide a reference image in the chat. Study it carefully to understand:
-- Key shapes and elements
-- Visual hierarchy
-- Level of detail to maintain
-- Distinctive features that make it recognizable
+The user will provide a reference image. Study it carefully to identify:
+
+- **Structural relationships:** Which parts protrude beyond others? (e.g., 120 film spool flanges are wider than the paper body)
+- **Key shapes:** What are the 3-5 essential elements that make it recognizable?
+- **Proportions:** How do the parts relate in size to each other?
+- **Distinctive features:** What makes this object unique and identifiable at small sizes?
+
+**Keep it simple.** Aim for the minimum number of elements needed - usually 3-5 shapes total.
 
 ### 2. Create the Icon
 
-Create a new SVG file in `assets/icons/` using this template:
+Create both active and inactive SVG files in `assets/icons/`:
 
 ```svg
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,40 +38,34 @@ Create a new SVG file in `assets/icons/` using this template:
 ```
 
 **Design Guidelines:**
-- **Size:** 24x24 viewBox, keeping content within safe margins (2px padding)
-- **Style:** Stroke-based, no fills (use `fill="none"`)
+- **Size:** 24x24 viewBox, content within 2px safe margins
+- **Style:** Stroke-based only (use `fill="none"`)
 - **Colors:**
-  - Active state: `stroke="#487cab"` (blue) with `stroke="#ecc24c"` (yellow) highlight accent
-  - Inactive state: `stroke="#6b6b6b"` (medium gray)
+  - Active: `stroke="#487cab"` (blue) with `stroke="#ecc24c"` (yellow) accent
+  - Inactive: `stroke="#6b6b6b"` (gray)
 - **Stroke widths:**
   - Primary elements: `stroke-width="1.5"`
   - Secondary details: `stroke-width="1"`
-- **Simplicity:** Icons should be recognizable at small sizes
-- **Consistency:** Match the visual weight of existing icons
 
-**Common Elements:**
-- Use `<rect>`, `<circle>`, `<line>`, `<path>` for shapes
-- Add `rx` for rounded corners
-- Keep paths simple and readable
+**SVG Layering:**
+Elements are drawn in order - later elements appear on top. If you want element A to appear behind element B, draw A first:
+
+```svg
+<!-- Yellow lines drawn first (behind) -->
+<line x1="8" y1="10" x2="16" y2="10" stroke="#ecc24c" stroke-width="1"/>
+<!-- Blue rect drawn second (on top) -->
+<rect x="8" y="5" width="8" height="14" stroke="#487cab" stroke-width="1.5" fill="none"/>
+```
 
 ### 3. Naming Convention
 
-Name icons descriptively:
-- `{object}-active.svg` - Active tab state (blue)
+- `{object}-active.svg` - Active tab state (blue/yellow)
 - `{object}-inactive.svg` - Inactive tab state (gray)
 - `{feature}.svg` - Single-state icons
 
-Examples: `camera-active.svg`, `film-roll-inactive.svg`, `plus.svg`
+### 4. Add to Preview Page
 
-### 4. Verification Workflow
-
-After creating the icon, verify it visually using `assets/icons/preview.html`:
-
-**A. Add your icon to the preview page:**
-
-1. Open `assets/icons/preview.html`
-2. Add a new icon card before the `<!-- Add new icons below this line -->` comment
-3. Use this template:
+Add your icon to `assets/icons/preview.html` before the `<!-- Add new icons above this line -->` comment:
 
 ```html
 <div class="icon-card">
@@ -79,21 +76,15 @@ After creating the icon, verify it visually using `assets/icons/preview.html`:
       <div class="icon-sizes">
         <div class="size-box">
           <div class="size-label">24px</div>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Paste your SVG content here -->
-          </svg>
+          <img src="your-icon-name.svg" width="24" height="24">
         </div>
         <div class="size-box">
           <div class="size-label">48px</div>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Paste your SVG content here -->
-          </svg>
+          <img src="your-icon-name.svg" width="48" height="48">
         </div>
         <div class="size-box">
           <div class="size-label">96px</div>
-          <svg width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Paste your SVG content here -->
-          </svg>
+          <img src="your-icon-name.svg" width="96" height="96">
         </div>
       </div>
     </div>
@@ -101,75 +92,70 @@ After creating the icon, verify it visually using `assets/icons/preview.html`:
 </div>
 ```
 
-4. Paste your SVG content (just the inner elements, not the outer `<svg>` tag) into all three size boxes
+The preview uses `<img>` tags that reference the SVG files directly - no need to copy/paste SVG content.
 
-**B. Use Playwright to capture and review:**
+### 5. Get User Feedback (REQUIRED)
 
-1. Navigate to `file:///Users/mattb/workspace/filmbuddy/assets/icons/preview.html`
-2. Take a screenshot of the page or the specific new icon card
-3. Review the screenshot to check:
-   - Visual quality at all sizes (especially 24px)
-   - Consistent stroke weight
-   - Proper centering and alignment
-   - Clean, simple shapes
-   - Matches the reference image style
+After creating the icon and adding it to preview.html:
 
-**C. Iterate if needed:**
+1. Take a screenshot using Playwright
+2. Show the user the preview link and ask for feedback:
 
-If the icon doesn't look right:
-- Adjust shapes and proportions in the SVG file
-- Update the preview.html with the new SVG content
-- Take another screenshot
-- Repeat until satisfied
+> Here's the icon. Open the preview to see it at different sizes:
+> **file:///Users/mattb/workspace/filmbuddy/assets/icons/preview.html**
+>
+> Let me know if you'd like any changes before I finalize.
 
-### 5. Finalize
+3. **Wait for the user to respond** before proceeding
+4. Iterate based on feedback until the user approves
 
-After verification is complete:
-- Ensure the final SVG is saved in `assets/icons/`
-- Keep the icon in `preview.html` for future reference
-- Confirm the icon follows naming conventions
+### 6. Finalize
 
-## Example: Creating a Camera Icon
+Only after user approval:
+- Ensure final SVGs are saved in `assets/icons/`
+- Confirm both active and inactive versions exist
+- Keep icons in `preview.html` for future reference
 
-Given a reference image of a camera, create both active and inactive states:
+## Examples
 
-**Inactive state (gear-inactive.svg):**
+### Camera Icon (gear)
+
 ```svg
+<!-- gear-inactive.svg -->
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Camera body -->
   <rect x="3" y="7" width="18" height="12" rx="2" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
-  <!-- Viewfinder bump -->
   <rect x="8" y="4" width="6" height="3" rx="1" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
-  <!-- Lens -->
   <circle cx="12" cy="13" r="4" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
   <circle cx="12" cy="13" r="2" stroke="#6b6b6b" stroke-width="1" fill="none"/>
 </svg>
 ```
 
-**Active state (gear-active.svg):**
+### 120 Film Roll (rolls)
+
+Key insight: The spool flanges (top/bottom) are wider than the paper body.
+
 ```svg
+<!-- rolls-inactive.svg -->
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Camera body -->
-  <rect x="3" y="7" width="18" height="12" rx="2" stroke="#487cab" stroke-width="1.5" fill="none"/>
-  <!-- Viewfinder bump -->
-  <rect x="8" y="4" width="6" height="3" rx="1" stroke="#487cab" stroke-width="1.5" fill="none"/>
-  <!-- Lens -->
-  <circle cx="12" cy="13" r="4" stroke="#487cab" stroke-width="1.5" fill="none"/>
-  <circle cx="12" cy="13" r="2" stroke="#ecc24c" stroke-width="1.5" fill="none"/>
+  <!-- Top flange (wider) -->
+  <rect x="6" y="3" width="12" height="2" rx="1" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
+  <!-- Paper body (narrower) -->
+  <rect x="8" y="5" width="8" height="14" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
+  <!-- Paper band lines -->
+  <line x1="8" y1="10" x2="16" y2="10" stroke="#6b6b6b" stroke-width="1"/>
+  <line x1="8" y1="14" x2="16" y2="14" stroke="#6b6b6b" stroke-width="1"/>
+  <!-- Bottom flange (wider) -->
+  <rect x="6" y="19" width="12" height="2" rx="1" stroke="#6b6b6b" stroke-width="1.5" fill="none"/>
 </svg>
 ```
 
-Note how the active state uses blue for primary elements and adds a yellow highlight on a key detail (the inner lens circle) for visual interest.
+For active state: yellow lines are drawn BEFORE the body rect so they appear behind the blue outline.
 
 ## Tips
 
-- **Start simple:** Capture the essence, not every detail
-- **Test at actual size:** Icons must work at 24px
-- **Use geometric primitives:** Circles, rectangles, and simple paths
-- **Align to pixel grid:** Use whole numbers or .5 values for crisp rendering
-- **Iterate quickly:** Generate, preview, refine
-- **Compare side-by-side:** The preview workflow is essential
-
-## Reference
-
-See existing icons in `assets/icons/` for style consistency.
+- **Start simple:** 3-5 elements max
+- **Study proportions:** What protrudes? What's inset?
+- **Layer order matters:** First drawn = behind, last drawn = on top
+- **Test at 24px:** Must be recognizable at actual size
+- **Use whole numbers:** Align to pixel grid for crisp rendering
+- **Always get feedback:** Don't finalize without user approval
