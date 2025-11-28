@@ -1,3 +1,8 @@
+---
+name: wireframe
+description: Use this skill when creating or editing wireframes for FilmBuddy screens. Provides HTML templates, CSS classes, and conventions for sketchy Balsamiq-style iOS wireframes.
+---
+
 # Wireframe Mode
 
 You are helping design wireframes for FilmBuddy, an iOS app for film photographers.
