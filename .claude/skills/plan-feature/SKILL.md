@@ -1,34 +1,42 @@
-# Plan Feature
+---
+name: plan-feature
+description: Use this skill when creating or refining feature plans for FilmBuddy. Provides a structured process for defining features with user stories, GIVEN/WHEN/THEN scenarios, and wireframe links.
+---
 
-You are helping create or refine a feature plan for FilmBuddy.
+# Feature Planning Mode
 
-## Context
+You are helping create or refine a feature plan for FilmBuddy, an iOS app for film photographers.
 
-- Feature plans live in `docs/plans/`
-- Wireframes live in `docs/wireframes/` (use the `wireframe` skill conventions when creating)
+## Setup
+
+Feature plans live in `docs/plans/`:
+- Use kebab-case for filenames (e.g., `roll-tracking.md`)
+- Wireframes live in `docs/wireframes/` (use the `wireframe` skill when creating)
 - Product vision is in `docs/vision.md`
 
-## Starting Point
+## Feature Planning Process
 
-First, determine if this is a new or existing plan:
+### 1. Determine Starting Point
+
+First, check if this is a new or existing plan:
 
 1. Check if the user provided a feature name
 2. Check if `docs/plans/{feature-name}.md` already exists
 
-**If existing plan:** Read it, give a brief summary of current state (scenarios count, wireframes linked, open questions), then ask what the user wants to add or change.
+**If existing plan:** Read it, give a brief summary of current state (scenario count, wireframes linked, open questions), then ask what the user wants to add or change.
 
 **If new plan:** Proceed with the phases below.
 
-## Phase 1: Feature Definition
+### 2. Feature Definition
 
 Ask these questions one at a time, waiting for answers:
 
-1. "What's the feature name?" (will become the filename, use kebab-case)
+1. "What's the feature name?" (will become the filename)
 2. "Describe this feature in one sentence."
 3. "Which area of the app does this touch?" (Rolls, Meter, Gear, Archive, or multiple)
 4. "Does this feature depend on any others?" Check `docs/plans/` for existing plans to reference.
 
-## Phase 2: User Story
+### 3. User Story
 
 Ask:
 - "What does the user want to accomplish with this feature?"
@@ -36,9 +44,9 @@ Ask:
 
 Then draft a user story: "As a film photographer, I want to [goal] so that [benefit]."
 
-Confirm with the user before proceeding.
+**Wait for user confirmation before proceeding.**
 
-## Phase 3: Scenarios (GIVEN/WHEN/THEN)
+### 4. Scenarios (GIVEN/WHEN/THEN)
 
 Build scenarios iteratively:
 
@@ -51,20 +59,20 @@ Build scenarios iteratively:
 
 Keep asking "Any other scenarios?" until the user says they're done.
 
-## Phase 4: Wireframes
+### 5. Wireframes
 
 For the scenarios defined:
 
 1. Ask: "What screens does this feature need?"
 2. Check existing wireframes in `docs/wireframes/` - list any relevant ones
 3. For each new screen needed:
-   - Create the wireframe HTML file following the `wireframe` skill conventions
+   - Use the `wireframe` skill to create the HTML file
    - Add it to `docs/wireframes/index.html`
 4. Link wireframes to which scenarios use them
 
-## Phase 5: Generate Plan
+### 6. Generate Plan
 
-Create or update `docs/plans/{feature-name}.md` using this structure:
+Create or update `docs/plans/{feature-name}.md` using this template:
 
 ```markdown
 # Feature: [Name]
@@ -102,11 +110,9 @@ As a film photographer, I want to [goal] so that [benefit].
 - [Any unresolved decisions or unknowns]
 ```
 
-Also ensure `docs/plans/index.md` exists and includes this plan.
+### 7. Update Plans Index
 
-## Plans Index Structure
-
-If `docs/plans/index.md` doesn't exist, create it:
+Ensure `docs/plans/index.md` exists and includes this plan. Create if needed:
 
 ```markdown
 # Feature Plans
@@ -134,3 +140,11 @@ When updating an existing plan:
 - When adding scenarios, append to existing list
 - When adding wireframes, add links without removing existing ones
 - Ask before removing or significantly changing existing scenarios
+
+## Tips
+
+- **One question at a time:** Don't overwhelm with multiple questions
+- **Confirm before proceeding:** Get explicit approval on user stories and scenarios
+- **Check for dependencies:** Reference existing plans when features connect
+- **Link wireframes to scenarios:** Make it clear which screens support which flows
+- **Capture open questions:** Don't lose track of unresolved decisions
