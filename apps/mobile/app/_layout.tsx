@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import {
   useFonts,
   Jost_400Regular,
@@ -7,10 +8,14 @@ import {
 } from "@expo-google-fonts/jost";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { LogBox } from "react-native";
 import { useDbReady } from "../db";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
+
+// Suppress deprecation warning from dependencies until they update
+LogBox.ignoreLogs(["SafeAreaView has been deprecated"]);
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -35,8 +40,10 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(tabs)" />
-    </Stack>
+    <SafeAreaProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </SafeAreaProvider>
   );
 }
