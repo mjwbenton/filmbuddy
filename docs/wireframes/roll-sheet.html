@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Roll Sheet - FilmBuddy Wireframes</title>
+    <link rel="stylesheet" href="wireframe.css" />
+  </head>
+  <body>
+    <div class="screen">
+      <!-- iOS Status Bar -->
+      <div class="status-bar">9:41 AM</div>
+
+      <!-- Dimmed background representing the rolls list behind -->
+      <div class="sheet-backdrop"></div>
+
+      <!-- Sheet -->
+      <div class="sheet">
+        <div class="sheet-header">
+          <a href="rolls.html" class="sheet-cancel">Cancel</a>
+          <h2>Add Roll</h2>
+          <a href="rolls.html" class="sheet-action disabled">Save</a>
+        </div>
+
+        <div class="sheet-content">
+          <div class="form-group">
+            <label class="form-label">Film Stock</label>
+            <input type="text" class="input" placeholder="e.g., Portra 400" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ISO</label>
+            <div class="picker">
+              <div class="picker-value">Select ISO</div>
+              <div class="picker-arrow">▼</div>
+            </div>
+            <div class="picker-options">
+              <div class="picker-option">25</div>
+              <div class="picker-option">50</div>
+              <div class="picker-option">80</div>
+              <div class="picker-option">100</div>
+              <div class="picker-option">160</div>
+              <div class="picker-option">200</div>
+              <div class="picker-option selected">400</div>
+              <div class="picker-option">800</div>
+              <div class="picker-option">1600</div>
+              <div class="picker-option">3200</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Camera</label>
+            <input type="text" class="input" placeholder="e.g., Leica M6" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Save button is disabled until all three fields have values. ISO picker
+      shows: 25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200.
+    </div>
+  </body>
+</html>

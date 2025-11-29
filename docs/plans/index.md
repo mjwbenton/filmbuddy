@@ -2,7 +2,7 @@
 
 ## Rolls
 
-<!-- Plans for roll management features -->
+- [Rolls V1](rolls-v1.md) - Add and track active film rolls
 
 ## Meter
 

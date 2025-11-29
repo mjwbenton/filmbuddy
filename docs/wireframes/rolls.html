@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rolls - FilmBuddy Wireframes</title>
+    <link rel="stylesheet" href="wireframe.css" />
+  </head>
+  <body>
+    <div class="screen">
+      <!-- iOS Status Bar -->
+      <div class="status-bar">9:41 AM</div>
+
+      <!-- Navigation Bar -->
+      <nav class="nav-bar">
+        <h1>Rolls</h1>
+        <a href="roll-sheet.html" class="button">
+          <span class="button-icon">+</span>
+        </a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="content">
+        <!-- Active Rolls -->
+        <h2 class="section-header">Active</h2>
+
+        <a href="roll-sheet-edit.html" class="card">
+          <div class="card-title">Portra 400 @ 400</div>
+          <div class="card-subtitle">Leica M6</div>
+          <div class="card-meta">Loaded Nov 28</div>
+        </a>
+
+        <a href="roll-sheet-edit.html" class="card">
+          <div class="card-title">Tri-X @ 800</div>
+          <div class="card-subtitle">Hasselblad 500C/M</div>
+          <div class="card-meta">Loaded Nov 20</div>
+        </a>
+
+        <a href="roll-sheet-edit.html" class="card">
+          <div class="card-title">Ektar 100 @ 100</div>
+          <div class="card-subtitle">Contax T2</div>
+          <div class="card-meta">Loaded Nov 15</div>
+        </a>
+
+        <!-- Finished Rolls -->
+        <h2 class="section-header">Finished</h2>
+
+        <a href="roll-sheet-finished.html" class="card card-finished">
+          <div class="card-title">Gold 200 @ 200</div>
+          <div class="card-subtitle">Olympus XA</div>
+          <div class="card-meta">Finished Nov 25</div>
+        </a>
+
+        <a href="roll-sheet-finished.html" class="card card-finished">
+          <div class="card-title">HP5 @ 400</div>
+          <div class="card-subtitle">Leica M6</div>
+          <div class="card-meta">Finished Nov 10</div>
+        </a>
+      </main>
+
+      <!-- Tab Bar -->
+      <nav class="tab-bar">
+        <a href="rolls.html" class="tab-item active">
+          <div class="tab-icon"></div>
+          <span>Rolls</span>
+        </a>
+        <a href="#" class="tab-item">
+          <div class="tab-icon"></div>
+          <span>Meter</span>
+        </a>
+        <a href="#" class="tab-item">
+          <div class="tab-icon"></div>
+          <span>Gear</span>
+        </a>
+      </nav>
+    </div>
+
+    <div class="note">
+      Tap + to add a new roll. Tap a roll card to edit or mark as
+      finished/delete. Active rolls sorted by most recently loaded. Finished
+      rolls sorted by most recently finished.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finished Roll Sheet - FilmBuddy Wireframes</title>
+    <link rel="stylesheet" href="wireframe.css" />
+  </head>
+  <body>
+    <div class="screen">
+      <!-- iOS Status Bar -->
+      <div class="status-bar">9:41 AM</div>
+
+      <!-- Dimmed background representing the rolls list behind -->
+      <div class="sheet-backdrop"></div>
+
+      <!-- Sheet -->
+      <div class="sheet">
+        <div class="sheet-header">
+          <a href="rolls.html" class="sheet-cancel">Close</a>
+          <h2>Finished Roll</h2>
+          <span class="sheet-action-placeholder"></span>
+        </div>
+
+        <div class="sheet-content">
+          <div class="form-group">
+            <label class="form-label">Film Stock</label>
+            <div class="form-value">Gold 200</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ISO</label>
+            <div class="form-value">200</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Camera</label>
+            <div class="form-value">Olympus XA</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label-meta">Loaded Nov 10</label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label form-label-meta">Finished Nov 25</label>
+          </div>
+        </div>
+
+        <div class="sheet-footer">
+          <a href="rolls.html" class="button sheet-button-finish"
+            >Mark as Active</a
+          >
+          <a href="rolls.html" class="button sheet-button-delete"
+            >Delete Roll</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Finished rolls are read-only (no edit). Shows both loaded and finished
+      dates. Can unmark as finished ("Mark as Active") or delete.
+    </div>
+  </body>
+</html>
