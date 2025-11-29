@@ -13,6 +13,9 @@ node_modules/
 !.yarn/versions
 .pnp.*
 
+# TypeScript
+*.tsbuildinfo
+
 # Expo
 .expo/
 dist/
