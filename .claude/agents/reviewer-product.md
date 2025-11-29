@@ -14,12 +14,14 @@ Review code changes to ensure they align with the product vision and any documen
 ## Reference Documents
 
 Always read:
+
 - docs/vision.md - The product vision, target user, and design principles
 - docs/plans/ - Feature plans (check if there's a plan for the current work)
 
 ## Product Vision Summary
 
 FilmBuddy is a field companion for experienced film photographers who:
+
 - Shoot regularly with multiple cameras
 - Want to remember intentions and experiments
 - Value their shooting flow and won't tolerate fiddly interfaces
@@ -43,6 +45,7 @@ FilmBuddy is a field companion for experienced film photographers who:
 ## Output Format
 
 Report:
+
 - Any deviations from the feature plan (if one exists)
 - Any concerns about vision/principle alignment
 - Any scope creep or missing functionality

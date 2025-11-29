@@ -4,18 +4,18 @@ Technical architecture for the FilmBuddy iOS application.
 
 ## Stack Overview
 
-| Layer | Technology |
-|-------|------------|
-| Package Manager | Yarn 4 (Berry) with workspaces |
-| Framework | Expo SDK 52 (managed workflow) |
-| Language | TypeScript |
-| Styling | NativeWind v4 (Tailwind CSS for React Native) |
-| Navigation | Expo Router (file-based routing) |
-| State Management | Zustand |
-| Data Persistence | Drizzle ORM + expo-sqlite |
-| CI/CD | GitHub Actions + Fastlane |
-| OTA Updates | hot-updater (S3 + CloudFront) |
-| Platform | iOS only |
+| Layer            | Technology                                    |
+| ---------------- | --------------------------------------------- |
+| Package Manager  | Yarn 4 (Berry) with workspaces                |
+| Framework        | Expo SDK 52 (managed workflow)                |
+| Language         | TypeScript                                    |
+| Styling          | NativeWind v4 (Tailwind CSS for React Native) |
+| Navigation       | Expo Router (file-based routing)              |
+| State Management | Zustand                                       |
+| Data Persistence | Drizzle ORM + expo-sqlite                     |
+| CI/CD            | GitHub Actions + Fastlane                     |
+| OTA Updates      | hot-updater (S3 + CloudFront)                 |
+| Platform         | iOS only                                      |
 
 ## Project Structure
 
@@ -107,9 +107,7 @@ Add the runtime plugin to `app.json`:
 ```json
 {
   "expo": {
-    "plugins": [
-      ["@hot-updater/react-native", { "channel": "production" }]
-    ]
+    "plugins": [["@hot-updater/react-native", { "channel": "production" }]]
   }
 }
 ```
@@ -119,6 +117,7 @@ Add the runtime plugin to `app.json`:
 NativeWind v4 brings Tailwind CSS to React Native with near-complete feature parity.
 
 See configuration files:
+
 - [babel.config.js](../apps/mobile/babel.config.js)
 - [metro.config.js](../apps/mobile/metro.config.js)
 - [tailwind.config.js](../apps/mobile/tailwind.config.js) - Maps design system tokens to Tailwind utilities
@@ -129,8 +128,9 @@ See configuration files:
 Expo Router provides file-based routing built on React Navigation.
 
 See layout files:
-- [app/_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout with font loading
-- [app/(tabs)/_layout.tsx](../apps/mobile/app/(tabs)/_layout.tsx) - Tab bar configuration
+
+- [app/\_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout with font loading
+- [app/(tabs)/\_layout.tsx](<../apps/mobile/app/(tabs)/_layout.tsx>) - Tab bar configuration
 
 ## State Management
 
@@ -151,9 +151,10 @@ interface ExampleStore {
 export const useExampleStore = create<ExampleStore>((set) => ({
   items: [],
   addItem: (item) => set((state) => ({ items: [...state.items, item] })),
-  removeItem: (id) => set((state) => ({
-    items: state.items.filter((i) => i.id !== id)
-  })),
+  removeItem: (id) =>
+    set((state) => ({
+      items: state.items.filter((i) => i.id !== id),
+    })),
 }));
 ```
 
@@ -162,6 +163,7 @@ export const useExampleStore = create<ExampleStore>((set) => ({
 For simple cases, use Drizzle's `useLiveQuery` directly in components. For complex state that combines multiple data sources or derived state, Zustand stores can wrap Drizzle queries.
 
 **When to use each approach:**
+
 - `useLiveQuery`: Simple list/detail views that display database data directly
 - Zustand + Drizzle: Complex UI state, optimistic updates, combining multiple queries
 
@@ -215,7 +217,7 @@ import { items } from "../db/schema";
 
 export function ItemList() {
   const { data, error } = useLiveQuery(
-    db.select().from(items).orderBy(desc(items.createdAt))
+    db.select().from(items).orderBy(desc(items.createdAt)),
   );
   // ...
 }

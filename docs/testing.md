@@ -4,10 +4,10 @@ Automated testing focused on two levels: acceptance tests for user-facing featur
 
 ## Testing Stack
 
-| Layer | Tool | Purpose |
-|-------|------|---------|
+| Layer      | Tool    | Purpose                          |
+| ---------- | ------- | -------------------------------- |
 | Acceptance | Maestro | User flow testing via YAML specs |
-| Unit | Vitest | Pure function logic |
+| Unit       | Vitest  | Pure function logic              |
 
 ## Acceptance Testing with Maestro
 
@@ -101,20 +101,22 @@ src/
 
 ```ts
 // src/lib/exposure.test.ts
-import { describe, it, expect } from 'vitest'
-import { calculateShutterSpeed } from './exposure'
+import { describe, it, expect } from "vitest";
+import { calculateShutterSpeed } from "./exposure";
 
-describe('calculateShutterSpeed', () => {
-  it('calculates 1/125 at f/8, ISO 400, EV 14', () => {
-    expect(calculateShutterSpeed({ aperture: 8, iso: 400, ev: 14 }))
-      .toBe('1/125')
-  })
+describe("calculateShutterSpeed", () => {
+  it("calculates 1/125 at f/8, ISO 400, EV 14", () => {
+    expect(calculateShutterSpeed({ aperture: 8, iso: 400, ev: 14 })).toBe(
+      "1/125",
+    );
+  });
 
-  it('handles half-stop apertures', () => {
-    expect(calculateShutterSpeed({ aperture: 1.7, iso: 400, ev: 12 }))
-      .toBe('1/500')
-  })
-})
+  it("handles half-stop apertures", () => {
+    expect(calculateShutterSpeed({ aperture: 1.7, iso: 400, ev: 12 })).toBe(
+      "1/500",
+    );
+  });
+});
 ```
 
 ### Running Locally
@@ -148,7 +150,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
       - run: npm run test:unit
 
@@ -159,7 +161,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
 
       - name: Build iOS app
@@ -191,14 +193,14 @@ When building a feature:
 ### vitest.config.ts
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    environment: 'node',
-    include: ['src/**/*.test.ts'],
+    environment: "node",
+    include: ["src/**/*.test.ts"],
   },
-})
+});
 ```
 
 ### e2e/maestro.config.yaml

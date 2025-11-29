@@ -13,14 +13,15 @@ Review code changes from this session using specialized reviewer agents.
 3. Run `git diff` on only those session-related files to get the actual changes
 4. Launch **all four reviewer agents in parallel** using the Task tool:
 
-| Agent | subagent_type | Task |
-|-------|---------------|------|
-| reviewer-design | reviewer-design | Review these changes for design consistency |
-| reviewer-code-quality | reviewer-code-quality | Review these changes for code quality |
-| reviewer-testing | reviewer-testing | Review test coverage for these changes |
-| reviewer-product | reviewer-product | Review product alignment for these changes |
+| Agent                 | subagent_type         | Task                                        |
+| --------------------- | --------------------- | ------------------------------------------- |
+| reviewer-design       | reviewer-design       | Review these changes for design consistency |
+| reviewer-code-quality | reviewer-code-quality | Review these changes for code quality       |
+| reviewer-testing      | reviewer-testing      | Review test coverage for these changes      |
+| reviewer-product      | reviewer-product      | Review product alignment for these changes  |
 
 For each agent, include:
+
 - The list of files related to this session
 - The diff output for those files
 - A note that they should ONLY review these files, ignoring other changes in the repo

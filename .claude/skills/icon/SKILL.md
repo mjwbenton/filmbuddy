@@ -10,6 +10,7 @@ You are helping design SVG icons for FilmBuddy, an iOS app for film photographer
 ## Setup
 
 Icons live in `assets/icons/`:
+
 - All icons are 24x24 SVG files
 - Use stroke-based design (no fills)
 - Follow the monochrome style guide
@@ -38,6 +39,7 @@ Create both active and inactive SVG files in `assets/icons/`:
 ```
 
 **Design Guidelines:**
+
 - **Size:** 24x24 viewBox, content within 2px safe margins
 - **Style:** Stroke-based only (use `fill="none"`)
 - **Colors:**
@@ -76,15 +78,15 @@ Add your icon to `assets/icons/preview.html` before the `<!-- Add new icons abov
       <div class="icon-sizes">
         <div class="size-box">
           <div class="size-label">24px</div>
-          <img src="your-icon-name.svg" width="24" height="24">
+          <img src="your-icon-name.svg" width="24" height="24" />
         </div>
         <div class="size-box">
           <div class="size-label">48px</div>
-          <img src="your-icon-name.svg" width="48" height="48">
+          <img src="your-icon-name.svg" width="48" height="48" />
         </div>
         <div class="size-box">
           <div class="size-label">96px</div>
-          <img src="your-icon-name.svg" width="96" height="96">
+          <img src="your-icon-name.svg" width="96" height="96" />
         </div>
       </div>
     </div>
@@ -112,6 +114,7 @@ After creating the icon and adding it to preview.html:
 ### 6. Finalize
 
 Only after user approval:
+
 - Ensure final SVGs are saved in `assets/icons/`
 - Confirm both active and inactive versions exist
 - Keep icons in `preview.html` for future reference

@@ -10,6 +10,7 @@ You are helping create or refine a feature plan for FilmBuddy, an iOS app for fi
 ## Setup
 
 Feature plans live in `docs/plans/`:
+
 - Use kebab-case for filenames (e.g., `roll-tracking.md`)
 - Wireframes live in `docs/wireframes/` (use the `wireframe` skill when creating)
 - Product vision is in `docs/vision.md`
@@ -39,6 +40,7 @@ Ask these questions one at a time, waiting for answers:
 ### 3. User Story
 
 Ask:
+
 - "What does the user want to accomplish with this feature?"
 - "Why is this valuable to them?"
 
@@ -84,6 +86,7 @@ Create or update `docs/plans/{feature-name}.md` using this template:
 ## Dependencies
 
 <!-- Remove this section if no dependencies -->
+
 - [Other Feature](other-feature.md) - [brief reason why needed]
 
 ## User Story
@@ -107,6 +110,7 @@ As a film photographer, I want to [goal] so that [benefit].
 ## Open Questions
 
 <!-- Remove this section if no open questions -->
+
 - [Any unresolved decisions or unknowns]
 ```
 
@@ -118,15 +122,19 @@ Ensure `docs/plans/index.md` exists and includes this plan. Create if needed:
 # Feature Plans
 
 ## Rolls
+
 - [Feature Name](feature-name.md)
 
 ## Meter
+
 - [Feature Name](feature-name.md)
 
 ## Gear
+
 - [Feature Name](feature-name.md)
 
 ## Archive
+
 - [Feature Name](feature-name.md)
 ```
 

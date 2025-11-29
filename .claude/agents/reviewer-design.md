@@ -14,6 +14,7 @@ Review code changes for visual and UX consistency with the established design sy
 ## Reference Documents
 
 Always read these first:
+
 - docs/design.md - The complete design system (colors, typography, spacing, components)
 
 ## What to Check
@@ -29,6 +30,7 @@ Always read these first:
 ## Output Format
 
 List each issue found with:
+
 - File path and line number
 - What's wrong
 - What it should be (reference the design system)
