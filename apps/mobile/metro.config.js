@@ -24,6 +24,7 @@ config.resolver.assetExts = config.resolver.assetExts.filter(
   (ext) => ext !== "svg",
 );
 config.resolver.sourceExts.push("svg");
+config.resolver.sourceExts.push("sql");
 
 module.exports = withNativeWind(config, {
   input: "./global.css",
