@@ -12,7 +12,8 @@
     "run:ios": "yarn workspace @filmbuddy/mobile run:ios",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --build --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
     "test": "yarn workspaces foreach -A run test"
   },
   "devDependencies": {

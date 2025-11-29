@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "FILE=$(jq -r '.tool_input.file_path'); [[ \"$FILE\" =~ \\.(ts|tsx|js|jsx|json|md|css|html)$ ]] && npx prettier --write \"$FILE\" || true",
+            "command": "FILE=$(jq -r '.tool_input.file_path'); [[ \"$FILE\" =~ \\.(ts|tsx|js|jsx|json|md|css|html|yml|yaml)$ ]] && npx prettier --write \"$FILE\" || true",
             "timeout": 30
           }
         ]
