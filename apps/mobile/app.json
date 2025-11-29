@@ -4,7 +4,7 @@
     "slug": "filmbuddy",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appicon.png",
     "scheme": "filmbuddy",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
@@ -12,10 +12,7 @@
       "supportsTablet": false,
       "bundleIdentifier": "tech.mattb.filmbuddy"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "experiments": {
       "typedRoutes": true
     }
