@@ -143,3 +143,58 @@ Use sparingly to maintain clean aesthetic:
 - Warm paper background instead of pure white
 - Subtle texture overlays (optional, for key screens)
 - Amber accent for "active" or "current" states (like a highlighted field note)
+
+## NativeWind / Tailwind Integration
+
+Design tokens map to Tailwind utilities via `tailwind.config.js`:
+
+| Design Token | Tailwind Class |
+|--------------|----------------|
+| Amber | `text-amber`, `bg-amber`, `border-amber` |
+| Slate Blue | `text-slate-blue`, `bg-slate-blue` |
+| Paper | `bg-paper` |
+| Ink | `text-ink` |
+| Stone | `text-stone` |
+| Fog | `border-fog`, `bg-fog` |
+| Cloud | `bg-cloud` |
+| Spacing md (16px) | `p-md`, `m-md`, `gap-md` |
+| Border radius md (8px) | `rounded-md` |
+
+### Component Example
+
+```tsx
+// components/Card.tsx
+import { View, Text } from "react-native";
+
+interface CardProps {
+  title: string;
+  children: React.ReactNode;
+  active?: boolean;
+}
+
+export function Card({ title, children, active }: CardProps) {
+  return (
+    <View
+      className={`
+        bg-cloud rounded-md p-md shadow-sm
+        ${active ? "border-l-[3px] border-l-amber" : ""}
+      `}
+    >
+      <Text className="font-heading text-subheading text-ink mb-sm">
+        {title}
+      </Text>
+      {children}
+    </View>
+  );
+}
+```
+
+### Touch Targets
+
+iOS requires 44x44pt minimum touch targets. Use `min-h-[44px] min-w-[44px]` for interactive elements:
+
+```tsx
+<Pressable className="min-h-[44px] min-w-[44px] items-center justify-center">
+  <Text>Tap me</Text>
+</Pressable>
+```
