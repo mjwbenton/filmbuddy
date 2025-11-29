@@ -9,7 +9,7 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { LogBox } from "react-native";
-import { useDbReady } from "../db";
+import { useDbReady } from "@/db";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();

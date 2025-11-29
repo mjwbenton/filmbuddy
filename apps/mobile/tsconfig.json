@@ -4,7 +4,7 @@
     "composite": true,
     "strict": true,
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./src/*"],
       "@assets/*": ["../../assets/*"]
     }
   },

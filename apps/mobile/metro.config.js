@@ -15,6 +15,7 @@ config.resolver.nodeModulesPaths = [
 ];
 config.resolver.extraNodeModules = {
   "@assets": path.resolve(workspaceRoot, "assets"),
+  "@": path.resolve(projectRoot, "src"),
 };
 
 // SVG transformer
