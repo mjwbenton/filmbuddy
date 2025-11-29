@@ -1,0 +1,21 @@
+{
+  "name": "filmbuddy",
+  "private": true,
+  "packageManager": "yarn@4.9.1",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "start": "yarn workspace @filmbuddy/mobile start",
+    "ios": "yarn workspace @filmbuddy/mobile ios",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --build --noEmit",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.4.0"
+  }
+}
