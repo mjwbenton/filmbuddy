@@ -4,12 +4,17 @@
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
-    "ios": "expo start --ios",
-    "android": "expo start --android",
+    "ios": "expo run:ios",
     "prebuild": "expo prebuild",
+    "run:ios": "expo run:ios",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:e2e": "maestro test e2e/flows/",
+    "test": "yarn test:unit && yarn test:e2e",
+    "android": "expo run:android"
   },
   "dependencies": {
     "@expo-google-fonts/jost": "^0.4.2",
@@ -43,7 +48,8 @@
     "drizzle-kit": "^0.31.7",
     "react-native-svg-transformer": "^1.5.2",
     "tailwindcss": "^3.4.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.14"
   },
   "private": true
 }

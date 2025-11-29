@@ -7,10 +7,13 @@
   ],
   "scripts": {
     "start": "yarn workspace @filmbuddy/mobile start",
-    "ios": "yarn workspace @filmbuddy/mobile ios",
+    "start:ios": "yarn workspace @filmbuddy/mobile start:ios",
+    "prebuild": "yarn workspace @filmbuddy/mobile prebuild",
+    "run:ios": "yarn workspace @filmbuddy/mobile run:ios",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --build --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
+    "test": "yarn workspaces foreach -A run test"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

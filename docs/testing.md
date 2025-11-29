@@ -54,6 +54,7 @@ appId: tech.mattb.filmbuddy
 
 ```bash
 # Install Maestro
+brew tap mobile-dev-inc/tap
 brew install maestro
 
 # Run all flows
@@ -107,13 +108,13 @@ import { calculateShutterSpeed } from "./exposure";
 describe("calculateShutterSpeed", () => {
   it("calculates 1/125 at f/8, ISO 400, EV 14", () => {
     expect(calculateShutterSpeed({ aperture: 8, iso: 400, ev: 14 })).toBe(
-      "1/125",
+      "1/125"
     );
   });
 
   it("handles half-stop apertures", () => {
     expect(calculateShutterSpeed({ aperture: 1.7, iso: 400, ev: 12 })).toBe(
-      "1/500",
+      "1/500"
     );
   });
 });
@@ -190,34 +191,6 @@ When building a feature:
 
 ## Configuration Files
 
-### vitest.config.ts
-
-```ts
-import { defineConfig } from "vitest/config";
-
-export default defineConfig({
-  test: {
-    environment: "node",
-    include: ["src/**/*.test.ts"],
-  },
-});
-```
-
-### e2e/maestro.config.yaml
-
-```yaml
-appId: tech.mattb.filmbuddy
-```
-
-### package.json scripts
-
-```json
-{
-  "scripts": {
-    "test:unit": "vitest run",
-    "test:unit:watch": "vitest",
-    "test:e2e": "maestro test e2e/flows/",
-    "test": "npm run test:unit && npm run test:e2e"
-  }
-}
-```
+- [apps/mobile/vitest.config.mts](../apps/mobile/vitest.config.mts)
+- [apps/mobile/e2e/maestro.config.yaml](../apps/mobile/e2e/maestro.config.yaml)
+- [apps/mobile/package.json](../apps/mobile/package.json) - test scripts

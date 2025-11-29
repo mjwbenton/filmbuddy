@@ -12,9 +12,15 @@
       "supportsTablet": false,
       "bundleIdentifier": "tech.mattb.filmbuddy"
     },
-    "plugins": ["expo-router", "expo-font"],
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ],
     "experiments": {
       "typedRoutes": true
+    },
+    "android": {
+      "package": "tech.mattb.filmbuddy"
     }
   }
 }
