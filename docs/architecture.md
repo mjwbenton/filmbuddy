@@ -134,7 +134,7 @@ See layout files:
 
 ## State Management
 
-Zustand provides lightweight, TypeScript-first state management.
+Zustand provides lightweight, TypeScript-first state management. Store definitions live in [stores/](../apps/mobile/stores/).
 
 ### Store Pattern
 
@@ -145,16 +145,11 @@ import { create } from "zustand";
 interface ExampleStore {
   items: Item[];
   addItem: (item: Item) => void;
-  removeItem: (id: string) => void;
 }
 
 export const useExampleStore = create<ExampleStore>((set) => ({
   items: [],
   addItem: (item) => set((state) => ({ items: [...state.items, item] })),
-  removeItem: (id) =>
-    set((state) => ({
-      items: state.items.filter((i) => i.id !== id),
-    })),
 }));
 ```
 
@@ -171,44 +166,32 @@ For simple cases, use Drizzle's `useLiveQuery` directly in components. For compl
 
 Drizzle ORM provides type-safe database access over expo-sqlite.
 
-### Dependencies
+See configuration files:
 
-```bash
-yarn add drizzle-orm expo-sqlite
-yarn add -D drizzle-kit babel-plugin-inline-import
-```
+- [db/index.ts](../apps/mobile/db/index.ts) - Database initialization
+- [db/schema.ts](../apps/mobile/db/schema.ts) - Schema definitions
+- [drizzle.config.ts](../apps/mobile/drizzle.config.ts) - Drizzle Kit configuration
 
-### Schema Definition
+### Schema Pattern
+
+Define tables using Drizzle's schema builder, then infer types:
 
 ```typescript
-// db/schema.ts
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const items = sqliteTable("items", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  description: text("description"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 });
 
 export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
 ```
 
-### Database Initialization
-
-```typescript
-// db/index.ts
-import { drizzle } from "drizzle-orm/expo-sqlite";
-import { openDatabaseSync } from "expo-sqlite";
-import * as schema from "./schema";
-
-const expo = openDatabaseSync("app.db", { enableChangeListener: true });
-export const db = drizzle(expo, { schema });
-```
-
 ### Live Queries
+
+Use `useLiveQuery` for reactive data that updates when the database changes:
 
 ```tsx
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
@@ -225,28 +208,11 @@ export function ItemList() {
 
 ### Migrations
 
-Create `drizzle.config.ts`:
-
-```typescript
-import type { Config } from "drizzle-kit";
-
-export default {
-  schema: "./db/schema.ts",
-  out: "./drizzle",
-  dialect: "sqlite",
-  driver: "expo",
-} satisfies Config;
-```
-
-Generate and apply migrations:
+Generate migrations after schema changes:
 
 ```bash
 npx drizzle-kit generate
 ```
-
-Add to `babel.config.js` plugins: `["inline-import", { extensions: [".sql"] }]`
-
-Add to `metro.config.js`: `config.resolver.sourceExts.push("sql")`
 
 ## Development Workflow
 

@@ -7,6 +7,7 @@ import {
 } from "@expo-google-fonts/jost";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { useDbReady } from "../db";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -17,14 +18,19 @@ export default function RootLayout() {
     Jost_500Medium,
     Jost_600SemiBold,
   });
+  const { success: dbReady, error: dbError } = useDbReady();
 
   useEffect(() => {
-    if (fontsLoaded) {
+    if (fontsLoaded && dbReady) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [fontsLoaded, dbReady]);
 
-  if (!fontsLoaded) {
+  if (dbError) {
+    throw dbError;
+  }
+
+  if (!fontsLoaded || !dbReady) {
     return null;
   }
 
