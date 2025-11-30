@@ -10,7 +10,7 @@
     "start:ios": "yarn workspace @filmbuddy/mobile start:ios",
     "prebuild": "yarn workspace @filmbuddy/mobile prebuild",
     "run:ios": "yarn workspace @filmbuddy/mobile run:ios",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "typecheck": "tsc --build --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
@@ -18,14 +18,23 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,json,md,yml,yaml}": "prettier --write"
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md,yml,yaml}": "prettier --write"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@types/node": "^20.0.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-functional": "^9.0.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-native": "^5.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.2.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "typescript-eslint": "^8.48.0"
   }
 }
