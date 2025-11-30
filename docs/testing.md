@@ -108,13 +108,13 @@ import { calculateShutterSpeed } from "./exposure";
 describe("calculateShutterSpeed", () => {
   it("calculates 1/125 at f/8, ISO 400, EV 14", () => {
     expect(calculateShutterSpeed({ aperture: 8, iso: 400, ev: 14 })).toBe(
-      "1/125"
+      "1/125",
     );
   });
 
   it("handles half-stop apertures", () => {
     expect(calculateShutterSpeed({ aperture: 1.7, iso: 400, ev: 12 })).toBe(
-      "1/500"
+      "1/500",
     );
   });
 });
