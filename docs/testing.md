@@ -91,17 +91,16 @@ Co-locate with source:
 
 ```
 src/
-├── lib/
-│   ├── exposure.ts
-│   ├── exposure.test.ts
-│   ├── frames.ts
-│   └── frames.test.ts
+├── exposure.ts
+├── exposure.test.ts
+├── frames.ts
+└── frames.test.ts
 ```
 
 ### Example Test
 
 ```ts
-// src/lib/exposure.test.ts
+// src/exposure.test.ts
 import { describe, it, expect } from "vitest";
 import { calculateShutterSpeed } from "./exposure";
 
