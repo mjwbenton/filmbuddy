@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e1f88af6-5e28-49f3-aebc-4ea3b601dbf8",
+  "id": "6ee52c24-3b92-4ec1-9eba-cb95bee3784d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "rolls": {
@@ -14,11 +14,39 @@
           "notNull": true,
           "autoincrement": false
         },
-        "film": {
-          "name": "film",
+        "film_stock": {
+          "name": "film_stock",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "iso": {
+          "name": "iso",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "camera": {
+          "name": "camera",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "loaded_at": {
+          "name": "loaded_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "finished_at": {
+          "name": "finished_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },

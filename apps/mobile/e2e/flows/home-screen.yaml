@@ -1,4 +1,0 @@
-appId: tech.mattb.filmbuddy
----
-- launchApp
-- assertVisible: "FilmBuddy"

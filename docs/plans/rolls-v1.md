@@ -89,3 +89,47 @@ As a film photographer, I want to add and track my active film rolls so that I k
 - [Add Roll Sheet](../wireframes/roll-sheet.html) - adding a new roll (Scenarios: Add, Incomplete save)
 - [Edit Roll Sheet](../wireframes/roll-sheet-edit.html) - editing an active roll (Scenarios: Edit, Incomplete edit, Mark finished, Delete active)
 - [Finished Roll Sheet](../wireframes/roll-sheet-finished.html) - viewing a finished roll (Scenarios: Cannot edit, Unmark, Delete finished)
+
+## Implementation Plan
+
+### Status: Complete
+
+### Tasks
+
+1. [x] **Data layer**
+   - [x] Update `rolls` table in `src/db/schema.ts` with full schema (filmStock, iso, camera, loadedAt, finishedAt)
+   - [x] Generate Drizzle migration
+   - [x] Create `Roll` and `NewRoll` types
+   - [x] Add ISO constants to `src/types/roll.ts`
+
+2. [x] **Unit tests** (write before implementation)
+   - [x] `src/lib/roll-validation.test.ts` - validation logic for required fields
+   - [x] `src/lib/roll-sorting.test.ts` - sorting helpers for active/finished rolls
+   - [x] `src/lib/date-format.test.ts` - date formatting tests
+
+3. [x] **Pure functions**
+   - [x] `src/lib/roll-validation.ts` - `isValidRoll`, `getValidationErrors`
+   - [x] `src/lib/roll-sorting.ts` - `sortRollsByDate`, `separateRolls`
+   - [x] `src/lib/date-format.ts` - `formatRelativeDate` for "Loaded Nov 28" display
+
+4. [x] **Store**
+   - [x] `src/stores/rollStore.ts` - Zustand store with CRUD operations
+
+5. [x] **Components**
+   - [x] `src/components/RollCard.tsx` - card for roll display
+   - [x] `src/components/RollForm.tsx` - form fields (filmStock, ISO picker, camera)
+   - [x] `src/components/ISOPicker.tsx` - ISO selection component
+   - [x] `src/components/SectionHeader.tsx` - "Active" / "Finished" headers
+
+6. [x] **Screens**
+   - [x] Update `app/(tabs)/index.tsx` - Rolls list screen
+   - [x] `app/roll/add.tsx` - Add roll sheet (modal)
+   - [x] `app/roll/[id].tsx` - Edit roll sheet (modal) or finished roll view
+
+7. [x] **Maestro E2E tests**
+   - [x] `e2e/flows/rolls-add-new-roll.yaml` - Scenario: Add a new roll
+   - [x] `e2e/flows/rolls-incomplete-roll.yaml` - Scenario: Attempt to save incomplete roll
+   - [x] `e2e/flows/rolls-edit-roll.yaml` - Scenario: Edit an active roll
+   - [x] `e2e/flows/rolls-mark-finished.yaml` - Scenario: Mark a roll as finished
+   - [x] `e2e/flows/rolls-unmark-finished.yaml` - Scenario: Unmark a finished roll
+   - [x] `e2e/flows/rolls-delete-roll.yaml` - Scenario: Delete a roll

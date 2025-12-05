@@ -43,6 +43,8 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="roll/add" options={{ presentation: "modal" }} />
+        <Stack.Screen name="roll/[id]" options={{ presentation: "modal" }} />
       </Stack>
     </SafeAreaProvider>
   );
