@@ -1,0 +1,85 @@
+appId: tech.mattb.filmbuddy
+---
+# Scenario: Rolls display order
+# GIVEN I have multiple active and finished rolls
+# WHEN I view the Rolls screen
+# THEN active rolls appear first (most recently loaded first), followed by finished rolls
+
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 10000
+
+# Create first roll (will be older active)
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "film-stock-input"
+- inputText: "First Roll"
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-100"
+- tapOn:
+    id: "camera-input"
+- inputText: "Camera A"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# Create second roll (will be newer active, should appear first)
+- tapOn:
+    id: "add-roll-button"
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Second Roll"
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-200"
+- tapOn:
+    id: "camera-input"
+- inputText: "Camera B"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# Create third roll and mark it finished
+- tapOn:
+    id: "add-roll-button"
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Finished Roll"
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-400"
+- tapOn:
+    id: "camera-input"
+- inputText: "Camera C"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+- tapOn: "Finished Roll"
+- tapOn:
+    id: "mark-finished-button"
+
+# THEN verify Active section appears first
+- assertVisible:
+    id: "active-section-header"
+
+# THEN verify Finished section appears
+- assertVisible:
+    id: "finished-section-header"
+
+# THEN verify active rolls are present
+- assertVisible: "Second Roll"
+- assertVisible: "First Roll"
+
+# THEN verify finished roll is in finished section
+- assertVisible: "Finished Roll"

@@ -1,0 +1,35 @@
+appId: tech.mattb.filmbuddy
+---
+# GIVEN I have an active roll
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 10000
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Portra 400"
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-400"
+- tapOn:
+    id: "camera-input"
+- inputText: "Leica M6"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+- assertVisible: "Portra 400"
+
+# WHEN I delete the roll
+- tapOn: "Portra 400"
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed
+- assertNotVisible: "Portra 400"

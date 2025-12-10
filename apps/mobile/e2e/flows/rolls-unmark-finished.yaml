@@ -1,0 +1,45 @@
+appId: tech.mattb.filmbuddy
+---
+# Scenario: Unmark a finished roll
+# Setup: Create a roll and mark it as finished
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 10000
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Portra 400"
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-400"
+- tapOn:
+    id: "camera-input"
+- inputText: "Leica M6"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# Mark the roll as finished
+- tapOn: "Portra 400"
+- tapOn:
+    id: "mark-finished-button"
+
+# GIVEN I have a finished roll
+- assertVisible: "Finished"
+- assertVisible: "Portra 400"
+
+# WHEN I unmark it as finished
+- tapOn: "Portra 400"
+- tapOn:
+    id: "mark-active-button"
+
+# THEN it returns to the active rolls list
+- assertVisible:
+    id: "active-section-header"
+- assertVisible: "Portra 400"

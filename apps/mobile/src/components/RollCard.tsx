@@ -18,15 +18,30 @@ export function RollCard({ roll, onPress, testID }: RollCardProps) {
     <Pressable
       onPress={onPress}
       testID={testID}
+      accessibilityLabel={`${roll.filmStock} @ ${roll.iso}, ${roll.camera}, ${dateText}`}
+      accessibilityRole="button"
       className={`mb-sm rounded-md bg-cloud p-md shadow-sm ${
         !isFinished ? "border-l-[3px] border-l-amber" : ""
       }`}
     >
-      <Text className="font-heading text-subheading font-medium text-ink">
+      <Text
+        testID={testID ? `${testID}-title` : undefined}
+        className="font-heading text-subheading font-medium text-ink"
+      >
         {roll.filmStock} @ {roll.iso}
       </Text>
-      <Text className="mt-xs text-body text-stone">{roll.camera}</Text>
-      <Text className="mt-xs text-sm text-stone">{dateText}</Text>
+      <Text
+        testID={testID ? `${testID}-camera` : undefined}
+        className="mt-xs text-body text-stone"
+      >
+        {roll.camera}
+      </Text>
+      <Text
+        testID={testID ? `${testID}-date` : undefined}
+        className="mt-xs text-sm text-stone"
+      >
+        {dateText}
+      </Text>
     </Pressable>
   );
 }

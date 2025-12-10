@@ -1,0 +1,37 @@
+appId: tech.mattb.filmbuddy
+---
+# Scenario: Add a new roll
+# GIVEN I'm on the Rolls screen
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 10000
+
+# WHEN I tap "Add Roll", enter film stock, select ISO, enter camera, and save
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Portra 400"
+- hideKeyboard
+
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-400"
+
+- tapOn:
+    id: "camera-input"
+- inputText: "Leica M6"
+
+- tapOn:
+    id: "save-button"
+
+# THEN the roll appears in my active rolls list with today's date shown
+- assertVisible: "Portra 400 @ 400"
+- assertVisible: "Leica M6"
+- assertVisible:
+    text: "Loaded.*"
