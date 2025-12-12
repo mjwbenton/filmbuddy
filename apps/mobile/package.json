@@ -13,6 +13,7 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:e2e": "maestro test e2e/flows/",
+    "test:e2e:debug": "maestro test --debug-output e2e/output e2e/flows/",
     "test": "yarn test:unit && yarn test:e2e",
     "android": "expo run:android"
   },
@@ -34,6 +35,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-native": "0.81.5",
+    "react-native-launch-arguments": "^4.1.1",
     "react-native-reanimated": "~4.1.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",

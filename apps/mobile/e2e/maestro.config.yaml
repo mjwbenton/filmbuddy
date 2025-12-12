@@ -1,1 +1,2 @@
 appId: tech.mattb.filmbuddy
+testOutputDir: ./e2e/output

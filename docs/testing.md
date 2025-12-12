@@ -53,12 +53,15 @@ appId: tech.mattb.filmbuddy
 ### Running Locally
 
 ```bash
-# Install Maestro
+# Install Maestro (one-time setup)
 brew tap mobile-dev-inc/tap
 brew install maestro
 
 # Run all flows
-maestro test e2e/flows/
+yarn test:e2e
+
+# Run with debug output (saves screenshots/logs to e2e/output/)
+yarn test:e2e:debug
 
 # Run single flow
 maestro test e2e/flows/load-roll.yaml
@@ -123,13 +126,13 @@ describe("calculateShutterSpeed", () => {
 
 ```bash
 # Run all unit tests
-npm run test:unit
+yarn test:unit
 
 # Watch mode during development
-npm run test:unit -- --watch
+yarn test:unit:watch
 
 # Run specific file
-npm run test:unit src/lib/exposure.test.ts
+yarn test:unit src/lib/exposure.test.ts
 ```
 
 ## GitHub Actions
