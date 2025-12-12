@@ -10,6 +10,10 @@ See [docs/vision.md](docs/vision.md) for the full product vision, design princip
 
 See [docs/design.md](docs/design.md) for colors, typography, spacing, and component guidelines. All UI work should follow these standards.
 
+## Architecture
+
+See [docs/architecture.md](docs/architecture.md) for the technical stack, project structure, and development workflow.
+
 ## Communication Style
 
 Be direct and concise. No fluff, no filler—get straight to the point.
