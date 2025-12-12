@@ -9,13 +9,20 @@ import {
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { LogBox } from "react-native";
+import { LaunchArguments } from "react-native-launch-arguments";
 import { useDbReady } from "@/db";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
 
-// Suppress deprecation warning from dependencies until they update
-LogBox.ignoreLogs(["SafeAreaView has been deprecated"]);
+// Disable LogBox warnings when running under Maestro E2E tests
+interface MaestroLaunchArgs {
+  maestro?: boolean;
+}
+const launchArgs = LaunchArguments.value<MaestroLaunchArgs>();
+if (launchArgs.maestro) {
+  LogBox.ignoreAllLogs();
+}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
