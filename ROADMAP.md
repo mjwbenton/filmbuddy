@@ -15,9 +15,11 @@
 
 ## Features
 
+- [ ] Replace ISOPicker
+
 ## Bugs
 
-- [ ] Has suppressing SafeViewArea logs worked?
+- [ ] Suppressing SafeViewArea logs
 
 ## Other
 
