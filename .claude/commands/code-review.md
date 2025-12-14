@@ -1,16 +1,20 @@
 # Code Review
 
-Review code changes from this session using specialized reviewer agents.
+Review code changes from this session (or all modified files if requested) using specialized reviewer agents.
+
+**Arguments:** $ARGUMENTS
 
 ## Instructions
 
 1. Run `git status` to see all modified files in the working directory
-2. Review the conversation history to identify files related to this session:
-   - Files Claude directly created or edited
-   - Files the user modified as part of this task
-   - Files changed by running code/commands during this session
-   - Exclude files that appear unrelated to the work done in this chat
-3. Run `git diff` on only those session-related files to get the actual changes
+2. Determine which files to review:
+   - **If arguments contain "all"**: Include ALL modified files from git status
+   - **Otherwise (default)**: Only include files related to this session:
+     - Files Claude directly created or edited
+     - Files the user modified as part of this task
+     - Files changed by running code/commands during this session
+     - Exclude files that appear unrelated to the work done in this chat
+3. Run `git diff` on the appropriate files based on step 2 to get the actual changes
 4. Launch **all four reviewer agents in parallel** using the Task tool:
 
 | Agent                 | subagent_type         | Task                                        |
