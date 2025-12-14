@@ -1,0 +1,12 @@
+appId: tech.mattb.filmbuddy
+---
+# Helper: Clean launch
+# Clears app state, launches app, and waits for main screen to be ready
+- clearState
+- launchApp:
+    arguments:
+      maestro: true
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 10000

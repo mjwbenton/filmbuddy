@@ -1,0 +1,28 @@
+appId: tech.mattb.filmbuddy
+env:
+  FILM_STOCK: ${FILM_STOCK || "Kodak Gold"}
+  ISO: ${ISO || "200"}
+  CAMERA: ${CAMERA || "Leica M6"}
+---
+# Helper: Create a test roll with configurable values
+# Parameters (all have defaults):
+#   FILM_STOCK: Film stock name (default: "Kodak Gold")
+#   ISO: ISO value - must match an iso-option-{ISO} id (default: "200")
+#   CAMERA: Camera name (default: "Leica M6")
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "film-stock-input"
+- inputText: ${FILM_STOCK}
+- hideKeyboard
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-${ISO}"
+- tapOn:
+    id: "camera-input"
+- inputText: ${CAMERA}
+- hideKeyboard
+- tapOn:
+    id: "save-button"

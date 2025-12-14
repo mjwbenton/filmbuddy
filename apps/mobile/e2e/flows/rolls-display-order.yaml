@@ -1,85 +1,58 @@
 appId: tech.mattb.filmbuddy
 ---
+# =============================================================================
 # Scenario: Rolls display order
+# =============================================================================
 # GIVEN I have multiple active and finished rolls
-# WHEN I view the Rolls screen
-# THEN active rolls appear first (most recently loaded first), followed by finished rolls
-
-- launchApp
-- extendedWaitUntil:
-    visible:
-      id: "add-roll-button"
-    timeout: 10000
+- runFlow:
+    file: ../helpers/launch.yaml
 
 # Create first roll (will be older active)
-- tapOn:
-    id: "add-roll-button"
-    retryTapIfNoChange: true
-- tapOn:
-    id: "film-stock-input"
-- inputText: "First Roll"
-- hideKeyboard
-- tapOn:
-    id: "iso-picker"
-- tapOn:
-    id: "iso-option-100"
-- tapOn:
-    id: "camera-input"
-- inputText: "Camera A"
-- hideKeyboard
-- tapOn:
-    id: "save-button"
+- runFlow:
+    file: ../helpers/create-roll.yaml
+    env:
+      FILM_STOCK: "First Roll"
+      ISO: "100"
+      CAMERA: "Camera A"
+# Wait for sheet to close and roll to appear
+- assertVisible: "First Roll @ 100"
 
 # Create second roll (will be newer active, should appear first)
-- tapOn:
-    id: "add-roll-button"
-- tapOn:
-    id: "film-stock-input"
-- inputText: "Second Roll"
-- hideKeyboard
-- tapOn:
-    id: "iso-picker"
-- tapOn:
-    id: "iso-option-200"
-- tapOn:
-    id: "camera-input"
-- inputText: "Camera B"
-- hideKeyboard
-- tapOn:
-    id: "save-button"
+- runFlow:
+    file: ../helpers/create-roll.yaml
+    env:
+      FILM_STOCK: "Second Roll"
+      ISO: "200"
+      CAMERA: "Camera B"
+# Wait for sheet to close and roll to appear
+- assertVisible: "Second Roll @ 200"
 
 # Create third roll and mark it finished
-- tapOn:
-    id: "add-roll-button"
-- tapOn:
-    id: "film-stock-input"
-- inputText: "Finished Roll"
-- hideKeyboard
-- tapOn:
-    id: "iso-picker"
-- tapOn:
-    id: "iso-option-400"
-- tapOn:
-    id: "camera-input"
-- inputText: "Camera C"
-- hideKeyboard
-- tapOn:
-    id: "save-button"
-- tapOn: "Finished Roll"
+- runFlow:
+    file: ../helpers/create-roll.yaml
+    env:
+      FILM_STOCK: "Finished Roll"
+      ISO: "400"
+      CAMERA: "Camera C"
+# Wait for sheet to close and roll to appear
+- assertVisible: "Finished Roll @ 400"
+- tapOn: "Finished Roll @ 400"
 - tapOn:
     id: "mark-finished-button"
 
-# THEN verify Active section appears first
+# WHEN I view the Rolls screen
+# (already viewing)
+
+# THEN active rolls appear first (most recently loaded first),
+#      followed by finished rolls (most recently finished first)
 - assertVisible:
     id: "active-section-header"
-
-# THEN verify Finished section appears
 - assertVisible:
     id: "finished-section-header"
 
-# THEN verify active rolls are present
-- assertVisible: "Second Roll"
-- assertVisible: "First Roll"
+# Verify active rolls are present
+- assertVisible: "Second Roll @ 200"
+- assertVisible: "First Roll @ 100"
 
-# THEN verify finished roll is in finished section
-- assertVisible: "Finished Roll"
+# Verify finished roll is in finished section
+- assertVisible: "Finished Roll @ 400"

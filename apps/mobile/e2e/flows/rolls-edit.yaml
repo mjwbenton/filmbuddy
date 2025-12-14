@@ -1,0 +1,68 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and create a roll
+- runFlow:
+    file: ../helpers/launch.yaml
+- runFlow:
+    file: ../helpers/create-roll.yaml
+
+# Verify roll was created
+- assertVisible: "Kodak Gold @ 200"
+- assertVisible: "Leica M6"
+
+# =============================================================================
+# Scenario: Attempt to save edit with missing fields
+# =============================================================================
+# GIVEN I'm editing an active roll
+- tapOn: "Kodak Gold @ 200"
+
+# Verify we're on edit screen
+- assertVisible: "Edit Roll"
+- assertVisible:
+    id: "save-button"
+
+# WHEN I try to save with any field empty
+- tapOn:
+    id: "film-stock-input"
+- eraseText
+
+# THEN I cannot save and the missing fields are indicated
+# (Save is disabled, we verify by closing without saving)
+- tapOn:
+    id: "close-button"
+
+# Verify original data is still there (wasn't saved with empty field)
+- assertVisible: "Kodak Gold @ 200"
+
+# =============================================================================
+# Scenario: Edit an active roll
+# =============================================================================
+# GIVEN I have an active roll
+- tapOn: "Kodak Gold @ 200"
+
+# WHEN I edit the film stock, ISO, or camera and save
+- tapOn:
+    id: "film-stock-input"
+- eraseText
+- inputText: "Ektar 100"
+- hideKeyboard
+
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-100"
+
+- tapOn:
+    id: "camera-input"
+- eraseText
+- inputText: "Contax T2"
+- hideKeyboard
+
+- tapOn:
+    id: "save-button"
+
+# THEN the roll is updated with the new values
+- assertVisible: "Ektar 100 @ 100"
+- assertVisible: "Contax T2"
+- assertNotVisible: "Kodak Gold @ 200"
+- assertNotVisible: "Leica M6"

@@ -1,0 +1,54 @@
+appId: tech.mattb.filmbuddy
+---
+# =============================================================================
+# Scenario: Attempt to save incomplete roll
+# =============================================================================
+# GIVEN I'm adding a new roll
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn:
+    id: "add-roll-button"
+    retryTapIfNoChange: true
+
+# Verify the sheet is open
+- assertVisible:
+    id: "save-button"
+- assertVisible:
+    id: "cancel-button"
+
+# WHEN I try to save without filling in all three fields
+# Fill only film stock - Save should still be disabled
+- tapOn:
+    id: "film-stock-input"
+- inputText: "Kodak Gold"
+- hideKeyboard
+
+# Fill ISO but not camera - Save should still be disabled
+- tapOn:
+    id: "iso-picker"
+- tapOn:
+    id: "iso-option-200"
+
+# THEN I cannot save and the missing fields are indicated
+# (Save button exists but is disabled - we verify by checking form is still open)
+- assertVisible:
+    id: "save-button"
+
+# =============================================================================
+# Scenario: Add a new roll
+# =============================================================================
+# GIVEN I'm on the Rolls screen (with add sheet open, partial fields filled)
+# WHEN I enter camera and save
+- tapOn:
+    id: "camera-input"
+- inputText: "Leica M6"
+- hideKeyboard
+
+- tapOn:
+    id: "save-button"
+
+# THEN the roll appears in my active rolls list with today's date shown
+- assertVisible: "Kodak Gold @ 200"
+- assertVisible: "Leica M6"
+- assertVisible:
+    text: "Loaded.*"

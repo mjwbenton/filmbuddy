@@ -1,0 +1,52 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and create a roll
+- runFlow:
+    file: ../helpers/launch.yaml
+- runFlow:
+    file: ../helpers/create-roll.yaml
+
+# Verify roll was created
+- assertVisible: "Kodak Gold @ 200"
+
+# =============================================================================
+# Scenario: Mark a roll as finished
+# =============================================================================
+# GIVEN I have an active roll
+- tapOn: "Kodak Gold @ 200"
+
+# WHEN I mark the roll as finished
+- tapOn:
+    id: "mark-finished-button"
+
+# THEN it moves to the finished section with today's date shown as the finished date
+- assertVisible:
+    id: "finished-section-header"
+- assertVisible: "Kodak Gold @ 200"
+
+# =============================================================================
+# Scenario: Cannot edit finished rolls
+# =============================================================================
+# GIVEN I have a finished roll
+# WHEN I view the roll
+- tapOn: "Kodak Gold @ 200"
+
+# THEN edit options are not available
+- assertVisible: "Finished Roll"
+- assertNotVisible: "Save"
+- assertVisible: "Close"
+- assertVisible:
+    id: "mark-active-button"
+
+# =============================================================================
+# Scenario: Unmark a finished roll
+# =============================================================================
+# GIVEN I have a finished roll (still viewing it)
+# WHEN I unmark it as finished
+- tapOn:
+    id: "mark-active-button"
+
+# THEN it returns to the active rolls list
+- assertVisible:
+    id: "active-section-header"
+- assertVisible: "Kodak Gold @ 200"

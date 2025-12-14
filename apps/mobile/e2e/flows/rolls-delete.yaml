@@ -1,0 +1,58 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and create first roll
+- runFlow:
+    file: ../helpers/launch.yaml
+- runFlow:
+    file: ../helpers/create-roll.yaml
+
+# Verify roll was created
+- assertVisible: "Kodak Gold @ 200"
+
+# =============================================================================
+# Scenario: Delete an active roll
+# =============================================================================
+# GIVEN I have an active roll
+- tapOn: "Kodak Gold @ 200"
+
+# WHEN I delete the roll
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed
+- extendedWaitUntil:
+    notVisible: "Kodak Gold @ 200"
+    timeout: 5000
+
+# Create second roll
+- runFlow:
+    file: ../helpers/create-roll.yaml
+
+# Mark it finished
+- tapOn: "Kodak Gold @ 200"
+- tapOn:
+    id: "mark-finished-button"
+
+# Verify it's in finished section
+- assertVisible:
+    id: "finished-section-header"
+- assertVisible: "Kodak Gold @ 200"
+
+# =============================================================================
+# Scenario: Delete a finished roll
+# =============================================================================
+# GIVEN I have a finished roll
+- tapOn: "Kodak Gold @ 200"
+
+# WHEN I delete the roll
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed
+- extendedWaitUntil:
+    visible:
+      id: "add-roll-button"
+    timeout: 5000
+- assertNotVisible: "Kodak Gold @ 200"
