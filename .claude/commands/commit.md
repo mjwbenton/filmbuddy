@@ -1,6 +1,6 @@
 # Git Commit
 
-Create a git commit for files related to this chat session, or all modified files if requested.
+Create a git commit for specified changes, or files related to this chat session by default.
 
 **Arguments:** $ARGUMENTS
 
@@ -8,8 +8,8 @@ Create a git commit for files related to this chat session, or all modified file
 
 1. Run `git status` to see all modified, added, and deleted files in the working directory
 2. Determine which files to include:
-   - **If arguments contain "all"**: Include ALL modified, added, and deleted files from git status
-   - **Otherwise (default)**: Only include files related to this session:
+   - **If arguments are provided**: Interpret the arguments and include only matching files (could be file paths, patterns like `src/`, or descriptions like "changes related to the Whatever component")
+   - **If arguments are empty (default)**: Only include files related to this session:
      - Files Claude directly created or edited
      - Files the user modified as part of this task
      - Files changed by running code/commands during this session (e.g., build outputs, generated files, lock files)
