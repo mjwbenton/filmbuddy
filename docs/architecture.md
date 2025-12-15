@@ -141,17 +141,25 @@ Zustand provides lightweight, TypeScript-first state management. Store definitio
 ```typescript
 // stores/exampleStore.ts
 import { create } from "zustand";
+import { db } from "@/db";
+import { randomUUID } from "expo-crypto";
 
 interface ExampleStore {
   items: Item[];
-  addItem: (item: Item) => void;
+  addItem: (item: Omit<Item, "id">) => Promise<void>;
 }
 
 export const useExampleStore = create<ExampleStore>((set) => ({
   items: [],
-  addItem: (item) => set((state) => ({ items: [...state.items, item] })),
+  addItem: async (item) => {
+    const newItem = { id: randomUUID(), ...item };
+    await db.insert(items).values(newItem);
+    // reload from db...
+  },
 }));
 ```
+
+Integration tests use `vi.mock` to replace Expo dependencies with test implementations. See [testing.md](testing.md#store-integration-testing) for details.
 
 ### Persistence with Drizzle
 

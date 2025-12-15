@@ -135,6 +135,123 @@ yarn test:unit:watch
 yarn test:unit src/lib/exposure.test.ts
 ```
 
+## Store Integration Testing
+
+Integration tests for Zustand stores that interact with SQLite. Tests use `vi.mock` to replace Expo dependencies with a test database (`better-sqlite3`).
+
+### Architecture
+
+Stores remain simple with no special test infrastructure:
+
+```typescript
+// rollStore.ts
+import { create } from "zustand";
+import { db } from "@/db";
+import { randomUUID } from "expo-crypto";
+
+export const useRollStore = create<RollStore>((set, get) => ({
+  // ... methods use db and randomUUID directly
+}));
+```
+
+Tests mock `expo-crypto` and `@/db` using Vitest's `vi.mock`:
+
+```typescript
+vi.mock("expo-crypto", () => ({
+  randomUUID: () => `test-id-${++idCounter}`,
+}));
+
+vi.mock("@/db", () => ({
+  get db() {
+    return testDb.db;
+  },
+}));
+```
+
+### Test Database Setup
+
+Tests use an in-memory SQLite database via `better-sqlite3`:
+
+```typescript
+import { createTestDb, type TestDbContext } from "@/test/db";
+
+let testDb: TestDbContext;
+let idCounter = 0;
+
+beforeEach(async () => {
+  testDb = createTestDb(); // Fresh database with migrations applied
+  idCounter = 0;
+  vi.resetModules(); // Get fresh store instance
+});
+
+afterEach(() => {
+  testDb.close();
+});
+```
+
+### Example Test
+
+```typescript
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { createTestDb, type TestDbContext } from "@/test/db";
+
+let testDb: TestDbContext;
+let idCounter = 0;
+
+vi.mock("expo-crypto", () => ({
+  randomUUID: () => `test-id-${++idCounter}`,
+}));
+
+vi.mock("@/db", () => ({
+  get db() {
+    return testDb.db;
+  },
+}));
+
+describe("rollStore", () => {
+  beforeEach(async () => {
+    testDb = createTestDb();
+    idCounter = 0;
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    testDb.close();
+  });
+
+  it("adds a roll to the database", async () => {
+    const { useRollStore } = await import("./rollStore");
+
+    await useRollStore.getState().addRoll({
+      filmStock: "Portra 400",
+      iso: 400,
+      camera: "Leica M6",
+    });
+
+    expect(useRollStore.getState().activeRolls).toHaveLength(1);
+  });
+});
+```
+
+### Key Points
+
+- Use `vi.resetModules()` in `beforeEach` to get a fresh store for each test
+- Use dynamic `import()` after `resetModules` to load the store with mocks applied
+- The `get db()` getter in the mock ensures each test uses its own database instance
+
+### What to Integration Test
+
+- Store CRUD operations against real database
+- Query filtering (active vs finished rolls)
+- State transitions (markFinished, markActive)
+- Error handling for database failures
+
+### What NOT to Integration Test
+
+- UI rendering (use Maestro E2E tests)
+- Component hooks consuming stores
+- Database schema/migrations (covered by app usage)
+
 ## GitHub Actions
 
 Tests run on every push and pull request.
