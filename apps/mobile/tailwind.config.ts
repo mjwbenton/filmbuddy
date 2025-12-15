@@ -1,21 +1,20 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from "tailwindcss";
+import { colors } from "./src/theme/colors";
+
+// Transform camelCase to kebab-case for Tailwind
+const tailwindColors = Object.fromEntries(
+  Object.entries(colors).map(([key, value]) => [
+    key.replace(/([A-Z])/g, "-$1").toLowerCase(),
+    value,
+  ])
+);
+
+export default {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./src/**/*.{js,jsx,ts,tsx}"],
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
-      colors: {
-        amber: "#ecc24c",
-        "slate-blue": "#487cab",
-        paper: "#faf9f7",
-        ink: "#1a1a1a",
-        stone: "#6b6b6b",
-        fog: "#e5e5e3",
-        cloud: "#f2f1ef",
-        error: "#c94a4a",
-        success: "#4a9c6b",
-        warning: "#d4915c",
-      },
+      colors: tailwindColors,
       fontFamily: {
         heading: ["Jost_600SemiBold"],
         "heading-medium": ["Jost_500Medium"],
@@ -51,4 +50,4 @@ module.exports = {
     },
   },
   plugins: [],
-};
+} satisfies Config;

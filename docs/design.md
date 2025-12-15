@@ -159,7 +159,7 @@ Use sparingly to maintain clean aesthetic:
 
 ## NativeWind / Tailwind Integration
 
-Design tokens map to Tailwind utilities via `tailwind.config.js`:
+Design tokens map to Tailwind utilities via `tailwind.config.ts` (which imports colors from `src/theme/colors.ts`):
 
 | Design Token           | Tailwind Class                           |
 | ---------------------- | ---------------------------------------- |
