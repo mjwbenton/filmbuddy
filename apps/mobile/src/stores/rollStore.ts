@@ -10,7 +10,7 @@ interface RollStore {
   isLoading: boolean;
   error: Error | null;
   loadRolls: () => Promise<void>;
-  addRoll: (roll: Omit<NewRoll, "id" | "loadedAt">) => Promise<Roll>;
+  addRoll: (roll: Omit<NewRoll, "id" | "loadedAt">) => Promise<void>;
   updateRoll: (
     id: string,
     updates: Partial<Pick<Roll, "filmStock" | "iso" | "camera">>,
@@ -62,7 +62,6 @@ export const useRollStore = create<RollStore>((set, get) => ({
     };
     await db.insert(rolls).values(newRoll);
     await get().loadRolls();
-    return newRoll as Roll;
   },
 
   updateRoll: async (id, updates) => {
