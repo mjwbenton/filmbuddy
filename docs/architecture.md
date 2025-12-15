@@ -7,7 +7,7 @@ Technical architecture for the FilmBuddy iOS application.
 | Layer            | Technology                                    |
 | ---------------- | --------------------------------------------- |
 | Package Manager  | Yarn 4 (Berry) with workspaces                |
-| Framework        | Expo SDK 52 (managed workflow)                |
+| Framework        | Expo SDK 54 (managed workflow)                |
 | Language         | TypeScript                                    |
 | Styling          | NativeWind v4 (Tailwind CSS for React Native) |
 | Navigation       | Expo Router (file-based routing)              |
