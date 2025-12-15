@@ -2,6 +2,10 @@
 
 ## Setup
 
+- [ ] Validation library to use consistently for data entry (Zod?)
+- [ ] Library for date formatting
+- [ ] Integration testing for stores (using a real sqlite?)
+- [ ] Should tailwind.config.js be using theme/colours.ts
 - [ ] Github action for prettier, linting and typechecking
 - [ ] Add OTA setup
 - [ ] Feedback capture system
