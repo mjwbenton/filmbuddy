@@ -6,7 +6,7 @@ const tailwindColors = Object.fromEntries(
   Object.entries(colors).map(([key, value]) => [
     key.replace(/([A-Z])/g, "-$1").toLowerCase(),
     value,
-  ])
+  ]),
 );
 
 export default {

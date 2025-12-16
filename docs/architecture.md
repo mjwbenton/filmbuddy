@@ -152,15 +152,18 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 ### Example: Roll Form
 
 **Schema** (`src/schemas/roll.ts`):
+
 ```typescript
 import { z } from "zod";
 
-export const ISO_VALUES = [25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200] as const;
+export const ISO_VALUES = [
+  25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200,
+] as const;
 export type ISOValue = (typeof ISO_VALUES)[number];
 
 export const rollFormSchema = z.object({
   filmStock: z.string().trim().min(1, "Film stock is required"),
-  iso: z.union([z.literal(100), z.literal(400), /* ... */]),
+  iso: z.union([z.literal(100), z.literal(400) /* ... */]),
   camera: z.string().trim().min(1, "Camera is required"),
 });
 
@@ -168,6 +171,7 @@ export type RollFormData = z.infer<typeof rollFormSchema>;
 ```
 
 **Hook** (`src/hooks/useRollForm.ts`):
+
 ```typescript
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -190,11 +194,21 @@ export function useRollForm({ defaultValues, onSubmit }) {
 ```
 
 **Component** (`src/components/RollForm.tsx`):
+
 ```tsx
 import { Controller, UseFormReturn } from "react-hook-form";
 
-export function RollForm({ form, disabled }: { form: UseFormReturn<RollFormData>; disabled?: boolean }) {
-  const { control, formState: { errors } } = form;
+export function RollForm({
+  form,
+  disabled,
+}: {
+  form: UseFormReturn<RollFormData>;
+  disabled?: boolean;
+}) {
+  const {
+    control,
+    formState: { errors },
+  } = form;
 
   return (
     <View>
@@ -212,6 +226,7 @@ export function RollForm({ form, disabled }: { form: UseFormReturn<RollFormData>
 ```
 
 **Screen** (`app/roll/add.tsx`):
+
 ```tsx
 export default function AddRollScreen() {
   const { form, handleSubmit, canSubmit } = useRollForm({

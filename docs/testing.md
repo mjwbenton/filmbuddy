@@ -8,7 +8,6 @@
 | Unit        | Vitest  | Pure function logic              |
 | Integration | Vitest  | Integration tests for stores     |
 
-
 ## Acceptance Testing with Maestro
 
 Maestro tests describe user flows in readable YAML, serving as executable acceptance criteria. Write these when building features.
