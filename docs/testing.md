@@ -1,54 +1,23 @@
 # FilmBuddy Testing Strategy
 
-Automated testing focused on two levels: acceptance tests for user-facing features, and unit tests for pure functions.
-
 ## Testing Stack
 
-| Layer      | Tool    | Purpose                          |
-| ---------- | ------- | -------------------------------- |
-| Acceptance | Maestro | User flow testing via YAML specs |
-| Unit       | Vitest  | Pure function logic              |
+| Layer       | Tool    | Purpose                          |
+| ----------- | ------- | -------------------------------- |
+| Acceptance  | Maestro | User flow testing via YAML specs |
+| Unit        | Vitest  | Pure function logic              |
+| Integration | Vitest  | Integration tests for stores     |
+
 
 ## Acceptance Testing with Maestro
 
 Maestro tests describe user flows in readable YAML, serving as executable acceptance criteria. Write these when building features.
 
-### Why Maestro
-
-- Simple YAML syntax readable as acceptance criteria
-- Runs on real simulators/emulators
-- Less flaky than Detox
-- Maestro Studio for debugging
-- Free CI option via Maestro Cloud
-
 ### Test Location
 
-```
-e2e/
-├── flows/
-│   ├── load-roll.yaml
-│   ├── log-frame.yaml
-│   ├── light-meter.yaml
-│   └── gear-library.yaml
-└── maestro.config.yaml
-```
+Tests live inside apps/mobile/e2e/flows/.
 
-### Example Test
-
-```yaml
-# e2e/flows/load-roll.yaml
-appId: tech.mattb.filmbuddy
----
-- launchApp
-- tapOn: "Add Roll"
-- tapOn: "Camera"
-- tapOn: "Leica M6"
-- tapOn: "Film Stock"
-- tapOn: "Portra 400"
-- tapOn: "Load Roll"
-- assertVisible: "Active Rolls"
-- assertVisible: "Portra 400 in Leica M6"
-```
+Follow the convention of naming the test ${feature-name}-${scenario}.yaml.
 
 ### Running Locally
 
@@ -100,28 +69,6 @@ src/
 └── frames.test.ts
 ```
 
-### Example Test
-
-```ts
-// src/exposure.test.ts
-import { describe, it, expect } from "vitest";
-import { calculateShutterSpeed } from "./exposure";
-
-describe("calculateShutterSpeed", () => {
-  it("calculates 1/125 at f/8, ISO 400, EV 14", () => {
-    expect(calculateShutterSpeed({ aperture: 8, iso: 400, ev: 14 })).toBe(
-      "1/125",
-    );
-  });
-
-  it("handles half-stop apertures", () => {
-    expect(calculateShutterSpeed({ aperture: 1.7, iso: 400, ev: 12 })).toBe(
-      "1/500",
-    );
-  });
-});
-```
-
 ### Running Locally
 
 ```bash
@@ -135,7 +82,7 @@ yarn test:unit:watch
 yarn test:unit src/lib/exposure.test.ts
 ```
 
-## Store Integration Testing
+## Integration Testing
 
 Integration tests for Zustand stores that interact with SQLite. Tests use `vi.mock` to replace Expo dependencies with a test database (`better-sqlite3`).
 
@@ -186,50 +133,6 @@ beforeEach(async () => {
 
 afterEach(() => {
   testDb.close();
-});
-```
-
-### Example Test
-
-```typescript
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-import { createTestDb, type TestDbContext } from "@/test/db";
-
-let testDb: TestDbContext;
-let idCounter = 0;
-
-vi.mock("expo-crypto", () => ({
-  randomUUID: () => `test-id-${++idCounter}`,
-}));
-
-vi.mock("@/db", () => ({
-  get db() {
-    return testDb.db;
-  },
-}));
-
-describe("rollStore", () => {
-  beforeEach(async () => {
-    testDb = createTestDb();
-    idCounter = 0;
-    vi.resetModules();
-  });
-
-  afterEach(() => {
-    testDb.close();
-  });
-
-  it("adds a roll to the database", async () => {
-    const { useRollStore } = await import("./rollStore");
-
-    await useRollStore.getState().addRoll({
-      filmStock: "Portra 400",
-      iso: 400,
-      camera: "Leica M6",
-    });
-
-    expect(useRollStore.getState().activeRolls).toHaveLength(1);
-  });
 });
 ```
 
@@ -303,10 +206,10 @@ jobs:
 
 When building a feature:
 
-1. Write acceptance test first (Maestro YAML describing the user flow)
-2. Build the feature until the test passes
-3. If you write pure functions with logic, add unit tests
-4. Push — tests run automatically
+1. Identify any pure functions you can separate out for testing. Write those alongside their tests first.
+2. Identify any stores you will need. Write those alongside their integration tests next.
+3. Write acceptance test first (Maestro YAML describing the user flow).
+4. Build the feature until all test pass.
 
 ## Configuration Files
 
