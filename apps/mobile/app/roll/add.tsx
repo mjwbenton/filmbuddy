@@ -1,67 +1,33 @@
-import { useState } from "react";
 import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
-import {
-  RollFormData,
-  ValidationErrors,
-  isValidRoll,
-  getValidationErrors,
-} from "@/lib/roll-validation";
-import { ISOValue } from "@/types/roll";
+import { useRollForm } from "@/hooks/useRollForm";
 
 export default function AddRollScreen() {
   const router = useRouter();
   const { addRoll } = useRollStore();
 
-  const [formData, setFormData] = useState<RollFormData>({
-    filmStock: "",
-    iso: null,
-    camera: "",
+  const { form, handleSubmit, isSubmitting, canSubmit } = useRollForm({
+    onSubmit: async (data) => {
+      try {
+        await addRoll({
+          filmStock: data.filmStock,
+          iso: data.iso,
+          camera: data.camera,
+          finishedAt: null,
+        });
+        router.back();
+      } catch (error) {
+        console.error("Failed to add roll:", error);
+        Alert.alert("Error", "Failed to add roll. Please try again.");
+      }
+    },
   });
-  const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isSaving, setIsSaving] = useState(false);
-
-  const canSave = isValidRoll(formData);
-
-  const handleChange = (
-    field: keyof RollFormData,
-    value: string | ISOValue | null,
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
 
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    const validationErrors = getValidationErrors(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsSaving(true);
-    try {
-      await addRoll({
-        filmStock: formData.filmStock.trim(),
-        iso: formData.iso!,
-        camera: formData.camera.trim(),
-        finishedAt: null,
-      });
-      router.back();
-    } catch (error) {
-      console.error("Failed to add roll:", error);
-      Alert.alert("Error", "Failed to add roll. Please try again.");
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   return (
@@ -78,14 +44,14 @@ export default function AddRollScreen() {
           Add Roll
         </Text>
         <Pressable
-          onPress={handleSave}
-          disabled={!canSave || isSaving}
+          onPress={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
           testID="save-button"
           className="min-h-[44px] min-w-[44px] items-center justify-center"
         >
           <Text
             className={`text-body font-medium ${
-              canSave && !isSaving ? "text-slate-blue" : "text-stone"
+              canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"
             }`}
           >
             Save
@@ -94,7 +60,7 @@ export default function AddRollScreen() {
       </View>
 
       <ScrollView className="flex-1 px-md py-md">
-        <RollForm data={formData} errors={errors} onChange={handleChange} />
+        <RollForm form={form} />
       </ScrollView>
     </SafeAreaView>
   );

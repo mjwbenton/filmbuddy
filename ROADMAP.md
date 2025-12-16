@@ -24,3 +24,6 @@
 ## Other
 
 - [ ] Scrape https://en.wikipedia.org/wiki/List_of_photographic_films for films and ISO
+- [ ] Better ISO validation using Zod in rollsStore.ts
+- [ ] text-sm v.s. text-small (do the design doc and system align?)
+- [ ] Do I like the logic on when a form can be submitted?

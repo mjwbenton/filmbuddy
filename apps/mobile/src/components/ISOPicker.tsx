@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { ISO_VALUES, ISOValue } from "@/types/roll";
+import { ISO_VALUES, ISOValue } from "@/schemas/roll";
 
 interface ISOPickerProps {
-  value: ISOValue | null;
+  value: ISOValue;
   onChange: (iso: ISOValue) => void;
   hasError?: boolean;
   testID?: string;
@@ -31,9 +31,7 @@ export function ISOPicker({
           hasError ? "border-error" : "border-fog"
         }`}
       >
-        <Text className={`text-body ${value ? "text-ink" : "text-stone"}`}>
-          {value ? String(value) : "Select ISO"}
-        </Text>
+        <Text className="text-body text-ink">{value}</Text>
         <Text className="text-stone">{isOpen ? "▲" : "▼"}</Text>
       </Pressable>
 

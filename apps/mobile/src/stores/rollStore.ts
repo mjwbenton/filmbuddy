@@ -2,7 +2,19 @@ import { create } from "zustand";
 import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
-import { rolls, Roll, NewRoll } from "@/db/schema";
+import { rolls, Roll as DbRoll, NewRoll } from "@/db/schema";
+import { ISO_VALUES, ISOValue } from "@/schemas/roll";
+
+// Domain type with properly typed ISO (DB stores as number, we expose as ISOValue)
+export type Roll = Omit<DbRoll, "iso"> & { iso: ISOValue };
+
+// Convert DB row to domain type with runtime ISO validation
+function toRoll(dbRow: DbRoll): Roll {
+  if (!ISO_VALUES.includes(dbRow.iso as ISOValue)) {
+    console.warn(`Invalid ISO value ${dbRow.iso} for roll ${dbRow.id}`);
+  }
+  return dbRow as Roll;
+}
 
 interface RollStore {
   activeRolls: Roll[];
@@ -42,7 +54,11 @@ export const useRollStore = create<RollStore>((set, get) => ({
           .where(isNotNull(rolls.finishedAt))
           .orderBy(desc(rolls.finishedAt)),
       ]);
-      set({ activeRolls: active, finishedRolls: finished, isLoading: false });
+      set({
+        activeRolls: active.map(toRoll),
+        finishedRolls: finished.map(toRoll),
+        isLoading: false,
+      });
     } catch (error) {
       set({
         error: error instanceof Error ? error : new Error(String(error)),

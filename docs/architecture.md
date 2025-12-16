@@ -34,7 +34,7 @@ filmbuddy/
 │       ├── stores/             # Zustand state stores
 │       ├── db/                 # SQLite schema and queries
 │       ├── utils/              # Utility functions
-│       ├── types/              # TypeScript type definitions
+│       ├── schemas/            # Zod validation schemas
 │       ├── assets/             # App-specific assets
 │       ├── app.json            # Expo configuration
 │       ├── babel.config.js     # Babel configuration
@@ -131,6 +131,106 @@ See layout files:
 
 - [app/\_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout with font loading
 - [app/(tabs)/\_layout.tsx](<../apps/mobile/app/(tabs)/_layout.tsx>) - Tab bar configuration
+
+## Form Handling
+
+Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation.
+
+### Why These Libraries
+
+- **react-hook-form**: Minimal re-renders (ref-based), excellent React Native support via `Controller`
+- **Zod**: TypeScript-first validation with type inference, reusable for API validation
+- **@hookform/resolvers**: Connects react-hook-form to Zod
+
+### Pattern Overview
+
+1. **Schema** (`src/schemas/`): Define Zod schema, export inferred TypeScript type
+2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
+3. **Component** (`src/components/`): Presentational form using `Controller` for each field
+4. **Screen** (`app/`): Uses the hook, passes `form` to component
+
+### Example: Roll Form
+
+**Schema** (`src/schemas/roll.ts`):
+```typescript
+import { z } from "zod";
+
+export const ISO_VALUES = [25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200] as const;
+export type ISOValue = (typeof ISO_VALUES)[number];
+
+export const rollFormSchema = z.object({
+  filmStock: z.string().trim().min(1, "Film stock is required"),
+  iso: z.union([z.literal(100), z.literal(400), /* ... */]),
+  camera: z.string().trim().min(1, "Camera is required"),
+});
+
+export type RollFormData = z.infer<typeof rollFormSchema>;
+```
+
+**Hook** (`src/hooks/useRollForm.ts`):
+```typescript
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { rollFormSchema, RollFormData } from "@/schemas/roll";
+
+export function useRollForm({ defaultValues, onSubmit }) {
+  const form = useForm<RollFormData>({
+    resolver: zodResolver(rollFormSchema),
+    defaultValues: { filmStock: "", iso: 100, camera: "", ...defaultValues },
+    mode: "onSubmit", // Validate only when user tries to save
+  });
+
+  return {
+    form,
+    handleSubmit: form.handleSubmit(onSubmit),
+    isSubmitting: form.formState.isSubmitting,
+    canSubmit: form.formState.isValid || !form.formState.isSubmitted,
+  };
+}
+```
+
+**Component** (`src/components/RollForm.tsx`):
+```tsx
+import { Controller, UseFormReturn } from "react-hook-form";
+
+export function RollForm({ form, disabled }: { form: UseFormReturn<RollFormData>; disabled?: boolean }) {
+  const { control, formState: { errors } } = form;
+
+  return (
+    <View>
+      <Controller
+        control={control}
+        name="filmStock"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput value={value} onChangeText={onChange} onBlur={onBlur} />
+        )}
+      />
+      {errors.filmStock && <Text>{errors.filmStock.message}</Text>}
+    </View>
+  );
+}
+```
+
+**Screen** (`app/roll/add.tsx`):
+```tsx
+export default function AddRollScreen() {
+  const { form, handleSubmit, canSubmit } = useRollForm({
+    onSubmit: async (data) => {
+      await addRoll(data);
+      router.back();
+    },
+  });
+
+  return <RollForm form={form} />;
+}
+```
+
+### Adding a New Form
+
+1. Create schema in `src/schemas/[name].ts`
+2. Create hook in `src/hooks/use[Name]Form.ts`
+3. Create or update component in `src/components/[Name]Form.tsx`
+4. Use hook in screen, pass `form` to component
 
 ## State Management
 

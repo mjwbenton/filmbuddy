@@ -1,17 +1,10 @@
-import { useState, useEffect, useRef } from "react";
 import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
-import {
-  RollFormData,
-  ValidationErrors,
-  isValidRoll,
-  getValidationErrors,
-} from "@/lib/roll-validation";
+import { useRollForm } from "@/hooks/useRollForm";
 import { formatRelativeDate } from "@/lib/date-format";
-import { ISOValue } from "@/types/roll";
 
 export default function RollDetailScreen() {
   const router = useRouter();
@@ -20,26 +13,29 @@ export default function RollDetailScreen() {
     useRollStore();
 
   const roll = id ? getRollById(id) : undefined;
-  const isInitialized = useRef(false);
 
-  const [formData, setFormData] = useState<RollFormData>({
-    filmStock: roll?.filmStock ?? "",
-    iso: (roll?.iso as ISOValue) ?? null,
-    camera: roll?.camera ?? "",
+  const { form, handleSubmit, isSubmitting, canSubmit } = useRollForm({
+    defaultValues: roll
+      ? {
+          filmStock: roll.filmStock,
+          iso: roll.iso,
+          camera: roll.camera,
+        }
+      : undefined,
+    onSubmit: async (data) => {
+      if (!id) return;
+      try {
+        await updateRoll(id, {
+          filmStock: data.filmStock,
+          iso: data.iso,
+          camera: data.camera,
+        });
+        router.back();
+      } catch {
+        Alert.alert("Error", "Failed to save roll. Please try again.");
+      }
+    },
   });
-  const [errors, setErrors] = useState<ValidationErrors>({});
-  const [isSaving, setIsSaving] = useState(false);
-
-  useEffect(() => {
-    if (roll && !isInitialized.current) {
-      setFormData({
-        filmStock: roll.filmStock,
-        iso: roll.iso as ISOValue,
-        camera: roll.camera,
-      });
-      isInitialized.current = true;
-    }
-  }, [roll]);
 
   if (!roll || !id) {
     return (
@@ -50,42 +46,9 @@ export default function RollDetailScreen() {
   }
 
   const isFinished = roll.finishedAt !== null;
-  const canSave = isValidRoll(formData);
-
-  const handleChange = (
-    field: keyof RollFormData,
-    value: string | ISOValue | null,
-  ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
 
   const handleClose = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    const validationErrors = getValidationErrors(formData);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setIsSaving(true);
-    try {
-      await updateRoll(id, {
-        filmStock: formData.filmStock.trim(),
-        iso: formData.iso!,
-        camera: formData.camera.trim(),
-      });
-      router.back();
-    } catch {
-      Alert.alert("Error", "Failed to save roll. Please try again.");
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const handleMarkFinished = async () => {
@@ -150,14 +113,14 @@ export default function RollDetailScreen() {
           <View className="min-h-[44px] min-w-[44px]" />
         ) : (
           <Pressable
-            onPress={handleSave}
-            disabled={!canSave || isSaving}
+            onPress={handleSubmit}
+            disabled={!canSubmit || isSubmitting}
             testID="save-button"
             className="min-h-[44px] min-w-[44px] items-center justify-center"
           >
             <Text
               className={`text-body font-medium ${
-                canSave && !isSaving ? "text-slate-blue" : "text-stone"
+                canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"
               }`}
             >
               Save
@@ -167,12 +130,7 @@ export default function RollDetailScreen() {
       </View>
 
       <ScrollView className="flex-1 px-md py-md">
-        <RollForm
-          data={formData}
-          errors={errors}
-          onChange={handleChange}
-          disabled={isFinished}
-        />
+        <RollForm form={form} disabled={isFinished} />
 
         <View className="mt-lg">
           <Text className="text-sm text-stone">
