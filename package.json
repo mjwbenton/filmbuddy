@@ -12,17 +12,17 @@
     "run:ios": "yarn workspace @filmbuddy/mobile run:ios",
     "lint": "eslint .",
     "typecheck": "tsc --build --noEmit",
-    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
+    "format:check": "prettier --ignore-path .gitignore --check \"**/*.{ts,tsx,js,json,md,yml,yaml}\"",
     "test": "yarn workspaces foreach -A run test",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write"
+      "prettier --ignore-path .gitignore --write"
     ],
-    "*.{js,json,md,yml,yaml}": "prettier --write"
+    "*.{js,json,md,yml,yaml}": "prettier --ignore-path .gitignore --write"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
