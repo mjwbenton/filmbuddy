@@ -3,9 +3,6 @@
 ## Setup
 
 - [ ] Validation library to use consistently for data entry (Zod?)
-- [ ] Library for date formatting
-- [ ] Integration testing for stores (using a real sqlite?)
-- [ ] Github action for prettier, linting and typechecking
 - [ ] Add OTA setup
 - [ ] Feedback capture system
 - [ ] Analytics capture system
