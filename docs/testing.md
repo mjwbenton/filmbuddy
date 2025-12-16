@@ -157,50 +157,7 @@ afterEach(() => {
 
 ## GitHub Actions
 
-Tests run on every push and pull request.
-
-```yaml
-# .github/workflows/test.yml
-name: Test
-
-on: [push, pull_request]
-
-jobs:
-  unit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-      - run: npm ci
-      - run: npm run test:unit
-
-  e2e:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: "npm"
-      - run: npm ci
-
-      - name: Build iOS app
-        run: npx expo prebuild --platform ios && cd ios && xcodebuild -workspace FilmBuddy.xcworkspace -scheme FilmBuddy -configuration Debug -sdk iphonesimulator -derivedDataPath build
-
-      - name: Install Maestro
-        run: curl -Ls "https://get.maestro.mobile.dev" | bash
-
-      - name: Boot iOS Simulator
-        run: |
-          xcrun simctl boot "iPhone 15"
-          xcrun simctl install booted ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
-
-      - name: Run E2E tests
-        run: ~/.maestro/bin/maestro test e2e/flows/
-```
+Tests run on every push to main and pull request. See [../.github/workflows/ci.yml](../.github/workflows/ci.yml) for the workflow configuration.
 
 ## Workflow
 

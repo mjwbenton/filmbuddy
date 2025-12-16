@@ -33,3 +33,68 @@ jobs:
 
       - name: Typecheck
         run: yarn typecheck
+
+  unit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Run unit tests
+        run: yarn test:unit
+
+  e2e:
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build iOS app
+        working-directory: apps/mobile
+        run: |
+          npx expo prebuild --platform ios
+          cd ios && xcodebuild -workspace FilmBuddy.xcworkspace -scheme FilmBuddy -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED='NO'
+
+      - name: Boot iOS Simulator
+        uses: futureware-tech/simulator-action@v4
+        with:
+          model: iPhone 15
+
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
+
+      - name: Install app on Simulator
+        run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
+
+      - name: Run E2E tests
+        run: ~/.maestro/bin/maestro test apps/mobile/e2e/flows/
