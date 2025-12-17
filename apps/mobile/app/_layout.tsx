@@ -8,21 +8,10 @@ import {
 } from "@expo-google-fonts/jost";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import { LogBox } from "react-native";
-import { LaunchArguments } from "react-native-launch-arguments";
 import { useDbReady } from "@/db";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
-
-// Disable LogBox warnings when running under Maestro E2E tests
-interface MaestroLaunchArgs {
-  maestro?: boolean;
-}
-const launchArgs = LaunchArguments.value<MaestroLaunchArgs>();
-if (launchArgs.maestro) {
-  LogBox.ignoreAllLogs();
-}
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
