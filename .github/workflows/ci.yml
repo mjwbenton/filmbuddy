@@ -56,6 +56,7 @@ jobs:
         run: yarn test:unit
 
   e2e:
+    needs: [check, unit]
     runs-on: macos-15
 
     steps:
@@ -88,7 +89,7 @@ jobs:
       - name: Boot iOS Simulator
         uses: futureware-tech/simulator-action@v4
         with:
-          model: iPhone 15
+          model: iPhone 16
 
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
@@ -97,4 +98,11 @@ jobs:
         run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
 
       - name: Run E2E tests
-        run: ~/.maestro/bin/maestro test apps/mobile/e2e/flows/
+        run: ~/.maestro/bin/maestro test --output ~/.maestro/reports apps/mobile/e2e/flows/
+
+      - name: Upload Maestro artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-reports
+          path: ~/.maestro/reports/
