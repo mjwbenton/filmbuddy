@@ -57,7 +57,7 @@ jobs:
 
   e2e:
     needs: [check, unit]
-    runs-on: macos-15-large
+    runs-on: macos-15
 
     steps:
       - uses: actions/checkout@v4
