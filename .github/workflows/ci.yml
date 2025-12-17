@@ -57,7 +57,7 @@ jobs:
 
   e2e:
     needs: [check, unit]
-    runs-on: macos-15
+    runs-on: macos-15-large
 
     steps:
       - uses: actions/checkout@v4
@@ -91,6 +91,9 @@ jobs:
         with:
           model: iPhone 16
 
+      - name: Bring Simulator to foreground
+        run: open -a Simulator
+
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
@@ -99,8 +102,22 @@ jobs:
 
       - name: Run E2E tests
         env:
-          MAESTRO_DRIVER_STARTUP_TIMEOUT: 60000
-        run: ~/.maestro/bin/maestro test --output ~/.maestro/reports apps/mobile/e2e/flows/
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
+        run: |
+          # Retry loop - subsequent attempts piggyback off previous driver init
+          for attempt in 1 2 3; do
+            echo "Attempt $attempt of 3"
+            if ~/.maestro/bin/maestro test --output ~/.maestro/reports apps/mobile/e2e/flows/; then
+              echo "Tests passed on attempt $attempt"
+              exit 0
+            fi
+            if [ $attempt -lt 3 ]; then
+              echo "Attempt $attempt failed, retrying in 10s..."
+              sleep 10
+            fi
+          done
+          echo "All attempts failed"
+          exit 1
 
       - name: Upload Maestro artifacts on failure
         if: failure()
