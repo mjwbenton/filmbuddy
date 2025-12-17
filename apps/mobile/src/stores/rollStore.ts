@@ -3,17 +3,16 @@ import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
 import { rolls, Roll as DbRoll, NewRoll } from "@/db/schema";
-import { ISO_VALUES, ISOValue } from "@/schemas/roll";
+import { rollSchema, Roll } from "@/schemas/roll";
 
-// Domain type with properly typed ISO (DB stores as number, we expose as ISOValue)
-export type Roll = Omit<DbRoll, "iso"> & { iso: ISOValue };
-
-// Convert DB row to domain type with runtime ISO validation
+// Convert DB row to domain type with runtime validation
 function toRoll(dbRow: DbRoll): Roll {
-  if (!ISO_VALUES.includes(dbRow.iso as ISOValue)) {
-    console.warn(`Invalid ISO value ${dbRow.iso} for roll ${dbRow.id}`);
+  const result = rollSchema.safeParse(dbRow);
+  if (!result.success) {
+    console.warn(`Invalid roll data for ${dbRow.id}:`, result.error.flatten());
+    return dbRow as Roll;
   }
-  return dbRow as Roll;
+  return result.data;
 }
 
 interface RollStore {

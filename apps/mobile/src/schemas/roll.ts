@@ -11,10 +11,23 @@ const isoLiterals = ISO_VALUES.map((v) => z.literal(v)) as [
   ...z.ZodLiteral<ISOValue>[],
 ];
 
+const isoSchema = z.union(isoLiterals);
+
 export const rollFormSchema = z.object({
   filmStock: z.string().trim().min(1, "Film stock is required"),
-  iso: z.union(isoLiterals, { error: "ISO is required" }),
+  iso: isoSchema,
   camera: z.string().trim().min(1, "Camera is required"),
 });
 
-export type RollFormData = z.infer<typeof rollFormSchema>;
+export type RollForm = z.infer<typeof rollFormSchema>;
+
+export const rollSchema = z.object({
+  id: z.string().min(1),
+  filmStock: z.string().min(1),
+  iso: isoSchema,
+  camera: z.string().min(1),
+  loadedAt: z.date(),
+  finishedAt: z.date().nullable(),
+});
+
+export type Roll = z.infer<typeof rollSchema>;

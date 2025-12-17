@@ -144,12 +144,21 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 ### Pattern Overview
 
-1. **Schema** (`src/schemas/`): Define Zod schema, export inferred TypeScript type
+1. **Schema** (`src/schemas/`): Define Zod schemas for forms and DB rows, export inferred types
 2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
 3. **Component** (`src/components/`): Presentational form using `Controller` for each field
 4. **Screen** (`app/`): Uses the hook, passes `form` to component
 
-### Example: Roll Form
+### Schema Pattern
+
+Each domain has two related schemas:
+
+- **Form schema** (`xxxFormSchema`): Validates user input, may use `.trim()` and user-friendly error messages. Exports `XxxForm` type.
+- **Domain schema** (`xxxSchema`): Validates database rows, includes all fields like `id` and timestamps. Exports `Xxx` type.
+
+Shared primitive schemas (like `isoSchema`) are defined once and reused by both.
+
+### Example: Roll Schema
 
 **Schema** (`src/schemas/roll.ts`):
 
@@ -161,13 +170,27 @@ export const ISO_VALUES = [
 ] as const;
 export type ISOValue = (typeof ISO_VALUES)[number];
 
+// Shared primitive schema
+const isoSchema = z.union(/* literals from ISO_VALUES */);
+
+// Form validation (user input)
 export const rollFormSchema = z.object({
   filmStock: z.string().trim().min(1, "Film stock is required"),
-  iso: z.union([z.literal(100), z.literal(400) /* ... */]),
+  iso: isoSchema,
   camera: z.string().trim().min(1, "Camera is required"),
 });
+export type RollForm = z.infer<typeof rollFormSchema>;
 
-export type RollFormData = z.infer<typeof rollFormSchema>;
+// Domain validation (database rows)
+export const rollSchema = z.object({
+  id: z.string().min(1),
+  filmStock: z.string().min(1),
+  iso: isoSchema,
+  camera: z.string().min(1),
+  loadedAt: z.date(),
+  finishedAt: z.date().nullable(),
+});
+export type Roll = z.infer<typeof rollSchema>;
 ```
 
 **Hook** (`src/hooks/useRollForm.ts`):
@@ -175,10 +198,10 @@ export type RollFormData = z.infer<typeof rollFormSchema>;
 ```typescript
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollFormData } from "@/schemas/roll";
+import { rollFormSchema, RollForm } from "@/schemas/roll";
 
 export function useRollForm({ defaultValues, onSubmit }) {
-  const form = useForm<RollFormData>({
+  const form = useForm<RollForm>({
     resolver: zodResolver(rollFormSchema),
     defaultValues: { filmStock: "", iso: 100, camera: "", ...defaultValues },
     mode: "onSubmit", // Validate only when user tries to save
@@ -197,12 +220,13 @@ export function useRollForm({ defaultValues, onSubmit }) {
 
 ```tsx
 import { Controller, UseFormReturn } from "react-hook-form";
+import { RollForm as RollFormType } from "@/schemas/roll";
 
 export function RollForm({
   form,
   disabled,
 }: {
-  form: UseFormReturn<RollFormData>;
+  form: UseFormReturn<RollFormType>;
   disabled?: boolean;
 }) {
   const {

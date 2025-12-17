@@ -1,14 +1,14 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollFormData } from "@/schemas/roll";
+import { rollFormSchema, RollForm } from "@/schemas/roll";
 
 interface UseRollFormOptions {
-  defaultValues?: Partial<RollFormData>;
-  onSubmit: (data: RollFormData) => Promise<void>;
+  defaultValues?: Partial<RollForm>;
+  onSubmit: (data: RollForm) => Promise<void>;
 }
 
 interface UseRollFormReturn {
-  form: UseFormReturn<RollFormData>;
+  form: UseFormReturn<RollForm>;
   handleSubmit: () => Promise<void>;
   isSubmitting: boolean;
   canSubmit: boolean;
@@ -18,7 +18,7 @@ export function useRollForm({
   defaultValues,
   onSubmit,
 }: UseRollFormOptions): UseRollFormReturn {
-  const form = useForm<RollFormData>({
+  const form = useForm<RollForm>({
     resolver: zodResolver(rollFormSchema),
     defaultValues: {
       filmStock: "",
