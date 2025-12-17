@@ -361,6 +361,50 @@ Generate migrations after schema changes:
 npx drizzle-kit generate
 ```
 
+## Logging & Error Handling
+
+A lightweight logger provides development-time visibility without production overhead.
+
+### Logger Utility
+
+The logger (`src/lib/logger.ts`) wraps console methods and only outputs in development:
+
+```typescript
+import { logger } from "@/lib/logger";
+
+// In catch blocks
+try {
+  await saveData();
+} catch (error) {
+  logger.error("Failed to save data", error);
+  Alert.alert("Error", "Failed to save. Please try again.");
+}
+
+// For warnings (e.g., validation issues)
+logger.warn("Invalid data format", { id, details });
+```
+
+### Error Handling Pattern
+
+All catch blocks should:
+
+1. **Capture the error** - Use `catch (error)` not empty `catch {}`
+2. **Log with context** - Include a descriptive message and the error object
+3. **Show user feedback** - Display a generic Alert for user-facing errors
+
+```typescript
+// Good
+catch (error) {
+  logger.error("Failed to mark roll as finished", error);
+  Alert.alert("Error", "Failed to mark roll as finished. Please try again.");
+}
+
+// Bad - error details lost
+catch {
+  Alert.alert("Error", "Something went wrong.");
+}
+```
+
 ## Development Workflow
 
 ### Initial Setup

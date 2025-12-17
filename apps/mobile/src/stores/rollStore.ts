@@ -4,12 +4,13 @@ import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
 import { rolls, Roll as DbRoll, NewRoll } from "@/db/schema";
 import { rollSchema, Roll } from "@/schemas/roll";
+import { logger } from "@/lib/logger";
 
 // Convert DB row to domain type with runtime validation
 function toRoll(dbRow: DbRoll): Roll {
   const result = rollSchema.safeParse(dbRow);
   if (!result.success) {
-    console.warn(`Invalid roll data for ${dbRow.id}:`, result.error.flatten());
+    logger.warn(`Invalid roll data for ${dbRow.id}`, result.error.flatten());
     return dbRow as Roll;
   }
   return result.data;

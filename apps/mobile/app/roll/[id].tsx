@@ -5,6 +5,7 @@ import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
 import { useRollForm } from "@/hooks/useRollForm";
 import { formatRelativeDate } from "@/lib/date-format";
+import { logger } from "@/lib/logger";
 
 export default function RollDetailScreen() {
   const router = useRouter();
@@ -31,7 +32,8 @@ export default function RollDetailScreen() {
           camera: data.camera,
         });
         router.back();
-      } catch {
+      } catch (error) {
+        logger.error("Failed to save roll", error);
         Alert.alert("Error", "Failed to save roll. Please try again.");
       }
     },
@@ -55,7 +57,8 @@ export default function RollDetailScreen() {
     try {
       await markFinished(id);
       router.back();
-    } catch {
+    } catch (error) {
+      logger.error("Failed to mark roll as finished", error);
       Alert.alert(
         "Error",
         "Failed to mark roll as finished. Please try again.",
@@ -67,7 +70,8 @@ export default function RollDetailScreen() {
     try {
       await markActive(id);
       router.back();
-    } catch {
+    } catch (error) {
+      logger.error("Failed to mark roll as active", error);
       Alert.alert("Error", "Failed to mark roll as active. Please try again.");
     }
   };
@@ -85,7 +89,8 @@ export default function RollDetailScreen() {
             try {
               await deleteRoll(id);
               router.back();
-            } catch {
+            } catch (error) {
+              logger.error("Failed to delete roll", error);
               Alert.alert("Error", "Failed to delete roll. Please try again.");
             }
           },

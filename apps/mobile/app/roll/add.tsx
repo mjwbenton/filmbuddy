@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
 import { useRollForm } from "@/hooks/useRollForm";
+import { logger } from "@/lib/logger";
 
 export default function AddRollScreen() {
   const router = useRouter();
@@ -19,7 +20,8 @@ export default function AddRollScreen() {
           finishedAt: null,
         });
         router.back();
-      } catch {
+      } catch (error) {
+        logger.error("Failed to add roll", error);
         Alert.alert("Error", "Failed to add roll. Please try again.");
       }
     },
