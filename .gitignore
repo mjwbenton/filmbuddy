@@ -45,6 +45,7 @@ android/
 
 # Test output
 apps/mobile/e2e/output/
+maestro-reports/
 
 # Other
 .playwright-mcp

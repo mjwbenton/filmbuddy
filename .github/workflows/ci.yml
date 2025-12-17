@@ -100,6 +100,13 @@ jobs:
       - name: Install app on Simulator
         run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
 
+      - name: Debug - Launch app and screenshot
+        run: |
+          xcrun simctl launch booted tech.mattb.filmbuddy
+          sleep 5
+          xcrun simctl io booted screenshot app-launch.png
+          echo "Screenshot saved to app-launch.png"
+
       - name: Run E2E tests
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
@@ -107,7 +114,7 @@ jobs:
           # Retry loop - subsequent attempts piggyback off previous driver init
           for attempt in 1 2 3; do
             echo "Attempt $attempt of 3"
-            if ~/.maestro/bin/maestro test --output ~/.maestro/reports apps/mobile/e2e/flows/; then
+            if ~/.maestro/bin/maestro test --output maestro-reports apps/mobile/e2e/flows/; then
               echo "Tests passed on attempt $attempt"
               exit 0
             fi
@@ -124,4 +131,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: maestro-reports
-          path: ~/.maestro/reports/
+          path: |
+            app-launch.png
+            maestro-reports/
