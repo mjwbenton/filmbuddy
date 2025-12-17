@@ -98,6 +98,8 @@ jobs:
         run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
 
       - name: Run E2E tests
+        env:
+          MAESTRO_DRIVER_STARTUP_TIMEOUT: 60000
         run: ~/.maestro/bin/maestro test --output ~/.maestro/reports apps/mobile/e2e/flows/
 
       - name: Upload Maestro artifacts on failure
