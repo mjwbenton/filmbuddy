@@ -1,34 +1,36 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestDb, type TestDbContext } from "@/test/db";
 
-// Track test state
-let testDb: TestDbContext;
-let idCounter = 0;
+// Track test state using object to avoid let
+const testState: { db: TestDbContext | null; idCounter: number } = {
+  db: null,
+  idCounter: 0,
+};
 
 // Mock expo-crypto
 vi.mock("expo-crypto", () => ({
-  randomUUID: () => `test-id-${++idCounter}`,
+  randomUUID: () => `test-id-${++testState.idCounter}`,
 }));
 
 // Mock @/db to use test database
 vi.mock("@/db", () => ({
   get db() {
-    return testDb.db;
+    return testState.db?.db;
   },
 }));
 
 describe("rollStore", () => {
   beforeEach(async () => {
     // Reset state for each test
-    testDb = createTestDb();
-    idCounter = 0;
+    testState.db = createTestDb();
+    testState.idCounter = 0;
 
     // Clear module cache to get fresh store instance
     vi.resetModules();
   });
 
   afterEach(() => {
-    testDb.close();
+    testState.db?.close();
   });
 
   describe("loadRolls", () => {
@@ -203,7 +205,7 @@ describe("rollStore", () => {
   describe("error handling", () => {
     it("sets error state when database query fails", async () => {
       // Close the database to force an error
-      testDb.close();
+      testState.db?.close();
 
       const { useRollStore } = await import("./rollStore");
 

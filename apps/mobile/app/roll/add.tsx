@@ -19,8 +19,7 @@ export default function AddRollScreen() {
           finishedAt: null,
         });
         router.back();
-      } catch (error) {
-        console.error("Failed to add roll:", error);
+      } catch {
         Alert.alert("Error", "Failed to add roll. Please try again.");
       }
     },

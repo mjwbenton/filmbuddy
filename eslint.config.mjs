@@ -28,7 +28,7 @@ export default tseslint.config(
     ignores: [
       "node_modules/",
       "dist/",
-      ".expo/",
+      "**/.expo/",
       "**/drizzle/",
       "**/*.config.{js,ts}",
     ],

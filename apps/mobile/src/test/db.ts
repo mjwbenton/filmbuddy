@@ -19,13 +19,13 @@ export function createTestDb(): TestDbContext {
   const db = drizzle(sqlite, { schema });
 
   // Apply all migrations from journal in order
-  for (const entry of journal.entries) {
+  journal.entries.forEach((entry) => {
     const sql = readFileSync(
       join(__dirname, `../../drizzle/${entry.tag}.sql`),
       "utf-8",
     );
     sqlite.exec(sql);
-  }
+  });
 
   return {
     db,

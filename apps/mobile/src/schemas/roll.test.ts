@@ -13,9 +13,9 @@ describe("rollFormSchema", () => {
       expect(result.success).toBe(true);
     });
 
-    it("passes with all valid ISO values", () => {
-      const validISOs = [25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200];
-      for (const iso of validISOs) {
+    it.each([25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200])(
+      "passes with ISO %i",
+      (iso) => {
         const data = {
           filmStock: "Test Film",
           iso,
@@ -23,8 +23,8 @@ describe("rollFormSchema", () => {
         };
         const result = rollFormSchema.safeParse(data);
         expect(result.success).toBe(true);
-      }
-    });
+      },
+    );
 
     it("trims whitespace from filmStock", () => {
       const data = {
