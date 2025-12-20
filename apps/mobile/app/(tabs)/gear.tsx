@@ -1,48 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
-import { View, Text, Pressable, ScrollView, Alert } from "react-native";
+import { useEffect } from "react";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGearStore, DuplicateNameError } from "@/stores/gearStore";
+import { useRouter } from "expo-router";
+import { useGearStore } from "@/stores/gearStore";
 import { GearCard } from "@/components/GearCard";
-import { GearSheet } from "@/components/GearSheet";
 import { SectionHeader } from "@/components/SectionHeader";
-import { GearType, Camera, Lens, FilmStock } from "@/schemas/gear";
-import { logger } from "@/lib/logger";
-
-type SheetState =
-  | { visible: false }
-  | {
-      visible: true;
-      gearType: GearType;
-      mode: "add";
-    }
-  | {
-      visible: true;
-      gearType: GearType;
-      mode: "edit";
-      itemId: string;
-      initialName: string;
-    };
 
 export default function GearScreen() {
-  const {
-    cameras,
-    lenses,
-    filmStocks,
-    loadGear,
-    isLoading,
-    addCamera,
-    updateCamera,
-    deleteCamera,
-    addLens,
-    updateLens,
-    deleteLens,
-    addFilmStock,
-    updateFilmStock,
-    deleteFilmStock,
-  } = useGearStore();
-
-  const [sheetState, setSheetState] = useState<SheetState>({ visible: false });
-  const [sheetError, setSheetError] = useState<string | null>(null);
+  const router = useRouter();
+  const { cameras, lenses, filmStocks, loadGear, isLoading } = useGearStore();
 
   useEffect(() => {
     loadGear();
@@ -50,99 +16,6 @@ export default function GearScreen() {
 
   const isEmpty =
     cameras.length === 0 && lenses.length === 0 && filmStocks.length === 0;
-
-  const openAddSheet = useCallback((gearType: GearType) => {
-    setSheetError(null);
-    setSheetState({ visible: true, gearType, mode: "add" });
-  }, []);
-
-  const openEditSheet = useCallback(
-    (gearType: GearType, item: Camera | Lens | FilmStock) => {
-      setSheetError(null);
-      setSheetState({
-        visible: true,
-        gearType,
-        mode: "edit",
-        itemId: item.id,
-        initialName: item.name,
-      });
-    },
-    [],
-  );
-
-  const closeSheet = useCallback(() => {
-    setSheetState({ visible: false });
-    setSheetError(null);
-  }, []);
-
-  const handleSave = useCallback(
-    async (name: string) => {
-      if (!sheetState.visible) return;
-
-      try {
-        const { gearType, mode } = sheetState;
-
-        if (mode === "add") {
-          if (gearType === "camera") {
-            await addCamera(name);
-          } else if (gearType === "lens") {
-            await addLens(name);
-          } else {
-            await addFilmStock(name);
-          }
-        } else {
-          const { itemId } = sheetState;
-          if (gearType === "camera") {
-            await updateCamera(itemId, name);
-          } else if (gearType === "lens") {
-            await updateLens(itemId, name);
-          } else {
-            await updateFilmStock(itemId, name);
-          }
-        }
-
-        closeSheet();
-      } catch (error) {
-        if (error instanceof DuplicateNameError) {
-          setSheetError(error.message);
-        } else {
-          logger.error("Failed to save gear item", error);
-          Alert.alert("Error", "Failed to save. Please try again.");
-        }
-      }
-    },
-    [
-      sheetState,
-      addCamera,
-      addLens,
-      addFilmStock,
-      updateCamera,
-      updateLens,
-      updateFilmStock,
-      closeSheet,
-    ],
-  );
-
-  const handleDelete = useCallback(async () => {
-    if (!sheetState.visible || sheetState.mode !== "edit") return;
-
-    try {
-      const { gearType, itemId } = sheetState;
-
-      if (gearType === "camera") {
-        await deleteCamera(itemId);
-      } else if (gearType === "lens") {
-        await deleteLens(itemId);
-      } else {
-        await deleteFilmStock(itemId);
-      }
-
-      closeSheet();
-    } catch (error) {
-      logger.error("Failed to delete gear item", error);
-      Alert.alert("Error", "Failed to delete. Please try again.");
-    }
-  }, [sheetState, deleteCamera, deleteLens, deleteFilmStock, closeSheet]);
 
   return (
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
@@ -172,7 +45,7 @@ export default function GearScreen() {
             <View className="flex-row items-center justify-between">
               <SectionHeader title="Cameras" />
               <Pressable
-                onPress={() => openAddSheet("camera")}
+                onPress={() => router.push("/gear/camera/add")}
                 testID="add-camera-button"
                 className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
               >
@@ -185,7 +58,7 @@ export default function GearScreen() {
               <GearCard
                 key={camera.id}
                 name={camera.name}
-                onPress={() => openEditSheet("camera", camera)}
+                onPress={() => router.push(`/gear/camera/${camera.id}`)}
                 testID={`camera-card-${camera.id}`}
               />
             ))}
@@ -194,7 +67,7 @@ export default function GearScreen() {
             <View className="flex-row items-center justify-between">
               <SectionHeader title="Lenses" />
               <Pressable
-                onPress={() => openAddSheet("lens")}
+                onPress={() => router.push("/gear/lens/add")}
                 testID="add-lens-button"
                 className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
               >
@@ -207,7 +80,7 @@ export default function GearScreen() {
               <GearCard
                 key={lens.id}
                 name={lens.name}
-                onPress={() => openEditSheet("lens", lens)}
+                onPress={() => router.push(`/gear/lens/${lens.id}`)}
                 testID={`lens-card-${lens.id}`}
               />
             ))}
@@ -216,7 +89,7 @@ export default function GearScreen() {
             <View className="flex-row items-center justify-between">
               <SectionHeader title="Film Stocks" />
               <Pressable
-                onPress={() => openAddSheet("filmStock")}
+                onPress={() => router.push("/gear/film-stock/add")}
                 testID="add-film-stock-button"
                 className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
               >
@@ -229,7 +102,7 @@ export default function GearScreen() {
               <GearCard
                 key={filmStock.id}
                 name={filmStock.name}
-                onPress={() => openEditSheet("filmStock", filmStock)}
+                onPress={() => router.push(`/gear/film-stock/${filmStock.id}`)}
                 testID={`film-stock-card-${filmStock.id}`}
               />
             ))}
@@ -239,26 +112,6 @@ export default function GearScreen() {
           </>
         )}
       </ScrollView>
-
-      {/* Gear Sheet */}
-      <GearSheet
-        visible={sheetState.visible}
-        gearType={sheetState.visible ? sheetState.gearType : "camera"}
-        mode={sheetState.visible ? sheetState.mode : "add"}
-        initialName={
-          sheetState.visible && sheetState.mode === "edit"
-            ? sheetState.initialName
-            : ""
-        }
-        onSave={handleSave}
-        onDelete={
-          sheetState.visible && sheetState.mode === "edit"
-            ? handleDelete
-            : undefined
-        }
-        onClose={closeSheet}
-        error={sheetError}
-      />
     </SafeAreaView>
   );
 }

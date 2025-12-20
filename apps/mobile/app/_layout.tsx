@@ -41,6 +41,30 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="roll/add" options={{ presentation: "modal" }} />
         <Stack.Screen name="roll/[id]" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="gear/camera/add"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="gear/camera/[id]"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="gear/lens/add"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="gear/lens/[id]"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="gear/film-stock/add"
+          options={{ presentation: "modal" }}
+        />
+        <Stack.Screen
+          name="gear/film-stock/[id]"
+          options={{ presentation: "modal" }}
+        />
       </Stack>
     </SafeAreaProvider>
   );
