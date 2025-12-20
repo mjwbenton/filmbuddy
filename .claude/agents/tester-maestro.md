@@ -24,6 +24,94 @@ Always read `docs/testing.md` for the full testing strategy.
 
 ---
 
+## Reading Feature Plans
+
+When invoked with a feature plan path, work autonomously:
+
+### 1. Read the Plan Document
+
+Read the plan file (e.g., `docs/plans/gear-v1.md`) and extract:
+
+- Feature name (for file naming prefix)
+- All scenarios with GIVEN/WHEN/THEN steps
+- Wireframe links (read wireframes to understand UI structure)
+
+### 2. Analyze Scenario Relationships
+
+Group scenarios that can be tested together efficiently.
+
+**Combine scenarios when:**
+
+- B's GIVEN is A's THEN (e.g., "Add roll" → "Edit roll" - the added roll IS the precondition)
+- Same form with validation error + happy path (e.g., "Empty form error" → "Complete and save")
+- Empty state → Add first item → Item appears (natural flow)
+- State transitions that chain naturally (e.g., Active → Finished → Active again)
+
+**Keep scenarios separate when:**
+
+- Completely independent features
+- Would create flow > 50 steps (too fragile)
+- Destructive actions (delete) that would break subsequent tests
+- Conflicting preconditions (e.g., "has data" vs "empty state")
+
+### 3. Scenario Combination Guide
+
+| Pattern                               | Decision |
+| ------------------------------------- | -------- |
+| Empty state → Add item → Item visible | COMBINE  |
+| Add → Edit same entity                | COMBINE  |
+| Validation error → Successful submit  | COMBINE  |
+| Add → Delete                          | SEPARATE |
+| Multiple independent CRUD             | SEPARATE |
+| State transition chain                | COMBINE  |
+
+### 4. Design Flow Structure
+
+For each flow file:
+
+- Name: `{feature-slug}-{flow-description}.yaml`
+- Include comment headers marking each scenario being tested
+- Use helper files for reusable setup
+
+Example combined flow structure:
+
+```yaml
+appId: tech.mattb.filmbuddy
+---
+# Setup
+- runFlow:
+    file: ../helpers/launch.yaml
+
+# =============================================================================
+# Scenario: Empty gear library
+# =============================================================================
+# GIVEN I have no gear added
+# WHEN I view the Gear screen
+- tapOn: "Gear"
+
+# THEN I see an empty state
+- assertVisible: "No cameras yet"
+
+# =============================================================================
+# Scenario: Add a camera
+# =============================================================================
+# GIVEN I'm on the Gear screen (continuing from above)
+# WHEN I tap to add a camera, enter a name, and save
+- tapOn:
+    id: "add-camera-button"
+- tapOn:
+    id: "camera-name-input"
+- inputText: "Leica M6"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the camera appears in my cameras list
+- assertVisible: "Leica M6"
+```
+
+---
+
 ## Writing Tests from Scenarios
 
 When given scenarios in Given/When/Then format, convert them to Maestro YAML.
@@ -290,7 +378,48 @@ Use Maestro Studio to inspect the view hierarchy and find correct selectors.
 
 ---
 
-## Output Format
+## Output Contract
+
+After creating all flow files, output a structured report:
+
+### Flow Files Created
+
+List each file with the scenarios it covers:
+
+```
+## Flow Files Created
+
+| File | Scenarios Covered |
+|------|-------------------|
+| `e2e/flows/gear-cameras.yaml` | Empty state, Add camera, Edit camera |
+| `e2e/flows/gear-lenses.yaml` | Add lens, Edit lens |
+| `e2e/flows/gear-delete.yaml` | Delete gear item |
+```
+
+### Required testIDs
+
+List every testID used in the flows, grouped by component/screen:
+
+```
+## Required testIDs
+
+The implementation MUST add these testIDs to components:
+
+### Gear Screen (`app/(tabs)/gear.tsx`)
+- `add-camera-button` - FAB for adding camera
+- `empty-cameras-state` - Empty state view when no cameras
+
+### Camera Sheet (`app/gear/camera-sheet.tsx`)
+- `camera-name-input` - TextInput for camera name
+- `save-button` - Save button in sheet header
+- `delete-button` - Delete button (edit mode only)
+```
+
+This format ensures the implement-feature skill knows exactly what testIDs to include during implementation.
+
+---
+
+## Output Format (for individual test requests)
 
 ### When Writing Tests
 
@@ -313,6 +442,9 @@ Use Maestro Studio to inspect the view hierarchy and find correct selectors.
 1. **Be explicit about state**: Don't assume app state; verify with assertions
 2. **Wait for stability**: Use `waitForAnimationToEnd` after navigation
 3. **Prefer text over coordinates**: Text selectors are more maintainable
-4. **Keep flows focused**: One scenario per flow, use `runFlow` for shared setup
+4. **Combine related scenarios**: Use the combination guide to reduce test count and setup overhead
 5. **Add testIDs for critical paths**: Suggest testID additions when text is unreliable
 6. **Handle both platforms**: Note if behavior differs between iOS and Android
+7. **Test empty states first**: When a feature has an empty state scenario, test it BEFORE adding data
+8. **Chain logically**: Order combined scenarios so each builds on the previous state
+9. **Comment scenario boundaries**: Use clear `# ====` headers to mark where each scenario begins
