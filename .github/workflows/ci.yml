@@ -83,31 +83,25 @@ jobs:
 
       - name: Build iOS app
         working-directory: apps/mobile
-        timeout-minutes: 30
         run: |
           npx expo prebuild --platform ios
           cd ios && xcodebuild -workspace FilmBuddy.xcworkspace -scheme FilmBuddy -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED='NO'
 
       - name: Boot iOS Simulator
         uses: futureware-tech/simulator-action@v4
-        timeout-minutes: 5
         with:
           model: iPhone 16
 
       - name: Bring Simulator to foreground
         run: open -a Simulator
-        timeout-minutes: 1
 
       - name: Install Maestro
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
-        timeout-minutes: 3
 
       - name: Install app on Simulator
         run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
-        timeout-minutes: 2
 
       - name: Debug - Launch app and screenshot
-        timeout-minutes: 2
         run: |
           xcrun simctl launch booted tech.mattb.filmbuddy
           sleep 5
@@ -115,14 +109,13 @@ jobs:
           echo "Screenshot saved to app-launch.png"
 
       - name: Run E2E tests
-        timeout-minutes: 15
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
         run: |
           # Retry loop - subsequent attempts piggyback off previous driver init
           for attempt in 1 2 3; do
             echo "Attempt $attempt of 3"
-            if ~/.maestro/bin/maestro test --output maestro-reports apps/mobile/e2e/flows/; then
+            if ~/.maestro/bin/maestro test --test-output-dir=maestro-reports apps/mobile/e2e/flows/; then
               echo "Tests passed on attempt $attempt"
               exit 0
             fi
@@ -137,7 +130,6 @@ jobs:
       - name: Upload Maestro artifacts on failure
         if: failure()
         uses: actions/upload-artifact@v4
-        timeout-minutes: 2
         with:
           name: maestro-reports
           path: |
