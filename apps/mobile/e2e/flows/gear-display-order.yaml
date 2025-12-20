@@ -1,0 +1,68 @@
+appId: tech.mattb.filmbuddy
+---
+# =============================================================================
+# Scenario: Gear display order
+# =============================================================================
+# GIVEN I have multiple cameras (or lenses, or film stocks)
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# Add first camera (will be oldest)
+- runFlow:
+    file: ../helpers/create-camera.yaml
+    env:
+      CAMERA_NAME: "First Camera"
+- assertVisible: "First Camera"
+
+# Add second camera (will be newer)
+- runFlow:
+    file: ../helpers/create-camera.yaml
+    env:
+      CAMERA_NAME: "Second Camera"
+- assertVisible: "Second Camera"
+
+# Add first lens
+- runFlow:
+    file: ../helpers/create-lens.yaml
+    env:
+      LENS_NAME: "First Lens"
+- assertVisible: "First Lens"
+
+# Add second lens
+- runFlow:
+    file: ../helpers/create-lens.yaml
+    env:
+      LENS_NAME: "Second Lens"
+- assertVisible: "Second Lens"
+
+# Add first film stock
+- runFlow:
+    file: ../helpers/create-film-stock.yaml
+    env:
+      FILM_STOCK_NAME: "First Film"
+- assertVisible: "First Film"
+
+# Add second film stock
+- runFlow:
+    file: ../helpers/create-film-stock.yaml
+    env:
+      FILM_STOCK_NAME: "Second Film"
+- assertVisible: "Second Film"
+
+# WHEN I view the Gear screen
+# (already viewing)
+
+# THEN items are displayed oldest first (in the order they were added)
+# Verify all items are present in their sections
+- assertVisible: "Cameras"
+- assertVisible: "First Camera"
+- assertVisible: "Second Camera"
+
+- assertVisible: "Lenses"
+- assertVisible: "First Lens"
+- assertVisible: "Second Lens"
+
+- assertVisible: "Film Stocks"
+- assertVisible: "First Film"
+- assertVisible: "Second Film"

@@ -1,0 +1,16 @@
+appId: tech.mattb.filmbuddy
+env:
+  CAMERA_NAME: ${CAMERA_NAME || "Leica M6"}
+---
+# Helper: Create a camera with configurable name
+# Parameters:
+#   CAMERA_NAME: Camera name (default: "Leica M6")
+- tapOn:
+    id: "add-camera-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "camera-name-input"
+- inputText: ${CAMERA_NAME}
+- hideKeyboard
+- tapOn:
+    id: "save-button"

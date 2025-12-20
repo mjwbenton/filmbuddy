@@ -1,0 +1,16 @@
+appId: tech.mattb.filmbuddy
+env:
+  FILM_STOCK_NAME: ${FILM_STOCK_NAME || "Kodak Portra 400"}
+---
+# Helper: Create a film stock with configurable name
+# Parameters:
+#   FILM_STOCK_NAME: Film stock name (default: "Kodak Portra 400")
+- tapOn:
+    id: "add-film-stock-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "film-stock-name-input"
+- inputText: ${FILM_STOCK_NAME}
+- hideKeyboard
+- tapOn:
+    id: "save-button"

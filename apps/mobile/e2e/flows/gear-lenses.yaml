@@ -1,0 +1,54 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and navigate to Gear tab
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# =============================================================================
+# Scenario: Add a lens
+# =============================================================================
+# GIVEN I'm on the Gear screen
+# WHEN I tap to add a lens, enter a name, and save
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+# Verify sheet is open
+- assertVisible: "Add Lens"
+
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Summicron 50mm f/2"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the lens appears in my lenses list
+- assertVisible: "Summicron 50mm f/2"
+
+# =============================================================================
+# Scenario: Edit a lens
+# =============================================================================
+# GIVEN I have a lens in my gear library
+- tapOn: "Summicron 50mm f/2"
+
+# Verify edit sheet is open
+- assertVisible: "Edit Lens"
+- assertVisible:
+    id: "save-button"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I tap it, change the name, and save
+- tapOn:
+    id: "lens-name-input"
+- eraseText
+- inputText: "Summilux 35mm f/1.4"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the lens is updated with the new name
+- assertVisible: "Summilux 35mm f/1.4"
+- assertNotVisible: "Summicron 50mm f/2"

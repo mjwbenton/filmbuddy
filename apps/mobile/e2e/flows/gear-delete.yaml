@@ -1,0 +1,91 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app, navigate to Gear, and create items
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# Create a camera, lens, and film stock
+- runFlow:
+    file: ../helpers/create-camera.yaml
+    env:
+      CAMERA_NAME: "Camera To Delete"
+- assertVisible: "Camera To Delete"
+
+- runFlow:
+    file: ../helpers/create-lens.yaml
+    env:
+      LENS_NAME: "Lens To Delete"
+- assertVisible: "Lens To Delete"
+
+- runFlow:
+    file: ../helpers/create-film-stock.yaml
+    env:
+      FILM_STOCK_NAME: "Film To Delete"
+- assertVisible: "Film To Delete"
+
+# =============================================================================
+# Scenario: Delete a gear item (camera)
+# =============================================================================
+# GIVEN I have a gear item (camera)
+- tapOn: "Camera To Delete"
+
+# Verify edit sheet with delete button
+- assertVisible: "Edit Camera"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I delete it
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed from my library
+- extendedWaitUntil:
+    notVisible: "Camera To Delete"
+    timeout: 5000
+
+# =============================================================================
+# Scenario: Delete a gear item (lens)
+# =============================================================================
+# GIVEN I have a gear item (lens)
+- tapOn: "Lens To Delete"
+
+# Verify edit sheet with delete button
+- assertVisible: "Edit Lens"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I delete it
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed from my library
+- extendedWaitUntil:
+    notVisible: "Lens To Delete"
+    timeout: 5000
+
+# =============================================================================
+# Scenario: Delete a gear item (film stock)
+# =============================================================================
+# GIVEN I have a gear item (film stock)
+- tapOn: "Film To Delete"
+
+# Verify edit sheet with delete button
+- assertVisible: "Edit Film Stock"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I delete it
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed from my library
+- extendedWaitUntil:
+    notVisible: "Film To Delete"
+    timeout: 5000
+
+# Verify empty state returns after all items deleted
+- assertVisible: "No gear yet"

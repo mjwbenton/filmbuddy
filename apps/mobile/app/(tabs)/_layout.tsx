@@ -1,6 +1,8 @@
 import { Tabs } from "expo-router";
 import RollsActive from "@assets/icons/rolls-active.svg";
 import RollsInactive from "@assets/icons/rolls-inactive.svg";
+import GearActive from "@assets/icons/gear-active.svg";
+import GearInactive from "@assets/icons/gear-inactive.svg";
 import { colors } from "@/theme/colors";
 
 export default function TabLayout() {
@@ -25,6 +27,19 @@ export default function TabLayout() {
               <RollsActive width={24} height={24} />
             ) : (
               <RollsInactive width={24} height={24} />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="gear"
+        options={{
+          title: "Gear",
+          tabBarAccessibilityLabel: "gear-tab",
+          tabBarIcon: ({ focused }) =>
+            focused ? (
+              <GearActive width={24} height={24} />
+            ) : (
+              <GearInactive width={24} height={24} />
             ),
         }}
       />

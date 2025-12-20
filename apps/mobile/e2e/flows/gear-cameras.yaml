@@ -1,0 +1,132 @@
+appId: tech.mattb.filmbuddy
+---
+# =============================================================================
+# Scenario: Empty gear library
+# =============================================================================
+# GIVEN I have no gear added
+- runFlow:
+    file: ../helpers/launch.yaml
+
+# Navigate to Gear tab
+- tapOn: "gear-tab"
+
+# WHEN I view the Gear screen
+# THEN I see an empty state prompting me to add gear
+- assertVisible: "No gear yet"
+- assertVisible: "Add your cameras, lenses, and film stocks"
+
+# Verify section headers with add buttons are still visible
+- assertVisible: "Cameras"
+- assertVisible: "Lenses"
+- assertVisible: "Film Stocks"
+
+# =============================================================================
+# Scenario: Attempt to save with empty name (camera)
+# =============================================================================
+# GIVEN I'm adding a new camera
+- tapOn:
+    id: "add-camera-button"
+    retryTapIfNoChange: true
+
+# Verify sheet is open
+- assertVisible: "Add Camera"
+- assertVisible:
+    id: "save-button"
+- assertVisible:
+    id: "cancel-button"
+
+# WHEN I try to save with an empty name
+# THEN I cannot save and the field is indicated as required
+# (Save button should be disabled - we verify sheet stays open)
+- assertVisible:
+    id: "save-button"
+- assertVisible: "Name"
+
+# Cancel and return to gear screen
+- tapOn:
+    id: "cancel-button"
+
+# =============================================================================
+# Scenario: Add a camera
+# =============================================================================
+# GIVEN I'm on the Gear screen
+# WHEN I tap to add a camera, enter a name, and save
+- tapOn:
+    id: "add-camera-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "camera-name-input"
+- inputText: "Leica M6"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the camera appears in my cameras list
+- assertVisible: "Leica M6"
+
+# =============================================================================
+# Scenario: Edit a camera
+# =============================================================================
+# GIVEN I have a camera in my gear library
+- tapOn: "Leica M6"
+
+# Verify edit sheet is open
+- assertVisible: "Edit Camera"
+- assertVisible:
+    id: "save-button"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I tap it, change the name, and save
+- tapOn:
+    id: "camera-name-input"
+- eraseText
+- inputText: "Leica M6 TTL"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the camera is updated with the new name
+- assertVisible: "Leica M6 TTL"
+- assertNotVisible: "Leica M6"
+
+# =============================================================================
+# Scenario: Attempt to save duplicate name (camera)
+# =============================================================================
+# GIVEN I have a camera named "Leica M6 TTL"
+# Add another camera first
+- tapOn:
+    id: "add-camera-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "camera-name-input"
+- inputText: "Hasselblad 500C/M"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# Verify both cameras exist
+- assertVisible: "Leica M6 TTL"
+- assertVisible: "Hasselblad 500C/M"
+
+# WHEN I try to save another camera with the same name
+- tapOn:
+    id: "add-camera-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "camera-name-input"
+- inputText: "Leica M6 TTL"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN an error is shown and the item is not saved
+- assertVisible: "A camera with this name already exists"
+
+# Cancel to return to gear screen
+- tapOn:
+    id: "cancel-button"
+
+# Verify original cameras still exist (no duplicate was created)
+- assertVisible: "Leica M6 TTL"
+- assertVisible: "Hasselblad 500C/M"

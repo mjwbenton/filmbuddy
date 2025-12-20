@@ -1,0 +1,54 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and navigate to Gear tab
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# =============================================================================
+# Scenario: Add a film stock
+# =============================================================================
+# GIVEN I'm on the Gear screen
+# WHEN I tap to add a film stock, enter a name, and save
+- tapOn:
+    id: "add-film-stock-button"
+    retryTapIfNoChange: true
+
+# Verify sheet is open
+- assertVisible: "Add Film Stock"
+
+- tapOn:
+    id: "film-stock-name-input"
+- inputText: "Kodak Portra 400"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the film stock appears in my film stocks list
+- assertVisible: "Kodak Portra 400"
+
+# =============================================================================
+# Scenario: Edit a film stock
+# =============================================================================
+# GIVEN I have a film stock in my gear library
+- tapOn: "Kodak Portra 400"
+
+# Verify edit sheet is open
+- assertVisible: "Edit Film Stock"
+- assertVisible:
+    id: "save-button"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I tap it, change the name, and save
+- tapOn:
+    id: "film-stock-name-input"
+- eraseText
+- inputText: "Kodak Tri-X 400"
+- hideKeyboard
+- tapOn:
+    id: "save-button"
+
+# THEN the film stock is updated with the new name
+- assertVisible: "Kodak Tri-X 400"
+- assertNotVisible: "Kodak Portra 400"

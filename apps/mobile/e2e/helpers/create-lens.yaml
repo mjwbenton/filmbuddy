@@ -1,0 +1,16 @@
+appId: tech.mattb.filmbuddy
+env:
+  LENS_NAME: ${LENS_NAME || "Summicron 50mm f/2"}
+---
+# Helper: Create a lens with configurable name
+# Parameters:
+#   LENS_NAME: Lens name (default: "Summicron 50mm f/2")
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+- tapOn:
+    id: "lens-name-input"
+- inputText: ${LENS_NAME}
+- hideKeyboard
+- tapOn:
+    id: "save-button"
