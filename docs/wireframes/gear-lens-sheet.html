@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lens Sheet - FilmBuddy Wireframes</title>
+    <link rel="stylesheet" href="wireframe.css" />
+  </head>
+  <body>
+    <!-- Add Lens -->
+    <div class="screen">
+      <!-- iOS Status Bar -->
+      <div class="status-bar">9:41 AM</div>
+
+      <!-- Dimmed background representing the gear list behind -->
+      <div class="sheet-backdrop"></div>
+
+      <!-- Sheet -->
+      <div class="sheet">
+        <div class="sheet-header">
+          <a href="gear.html" class="sheet-cancel">Cancel</a>
+          <h2>Add Lens</h2>
+          <a href="gear.html" class="sheet-action disabled">Save</a>
+        </div>
+
+        <div class="sheet-content">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="input" placeholder="e.g., Summicron 50mm f/2" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Save button is disabled until name has a value. Duplicate names show an
+      error and prevent saving.
+    </div>
+
+    <!-- Edit Lens -->
+    <div class="screen" style="margin-top: 40px;">
+      <!-- iOS Status Bar -->
+      <div class="status-bar">9:41 AM</div>
+
+      <!-- Dimmed background representing the gear list behind -->
+      <div class="sheet-backdrop"></div>
+
+      <!-- Sheet -->
+      <div class="sheet">
+        <div class="sheet-header">
+          <a href="gear.html" class="sheet-cancel">Cancel</a>
+          <h2>Edit Lens</h2>
+          <a href="gear.html" class="sheet-action">Save</a>
+        </div>
+
+        <div class="sheet-content">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="input" value="Summicron 50mm f/2" />
+          </div>
+        </div>
+
+        <div class="sheet-footer">
+          <a href="gear.html" class="button sheet-button-delete">Delete Lens</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Edit sheet shows current name. Delete button at bottom permanently removes
+      the lens.
+    </div>
+  </body>
+</html>

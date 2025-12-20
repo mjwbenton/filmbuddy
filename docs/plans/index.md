@@ -10,7 +10,7 @@
 
 ## Gear
 
-<!-- Plans for gear library features -->
+- [Gear V1](gear-v1.md) - Manage cameras, lenses, and film stocks
 
 ## Archive
 
