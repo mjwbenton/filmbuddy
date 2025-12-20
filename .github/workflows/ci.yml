@@ -85,7 +85,7 @@ jobs:
         working-directory: apps/mobile
         run: |
           npx expo prebuild --platform ios
-          cd ios && xcodebuild -workspace FilmBuddy.xcworkspace -scheme FilmBuddy -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED='NO'
+          cd ios && xcodebuild -workspace FilmBuddy.xcworkspace -scheme FilmBuddy -configuration Release -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED='NO'
 
       - name: Boot iOS Simulator
         uses: futureware-tech/simulator-action@v4
@@ -99,7 +99,7 @@ jobs:
         run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
       - name: Install app on Simulator
-        run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Debug-iphonesimulator/FilmBuddy.app
+        run: xcrun simctl install booted apps/mobile/ios/build/Build/Products/Release-iphonesimulator/FilmBuddy.app
 
       - name: Debug - Launch app and screenshot
         run: |
