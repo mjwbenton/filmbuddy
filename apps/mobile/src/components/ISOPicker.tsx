@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
-import { ISO_VALUES, ISOValue } from "@/schemas/roll";
+// Common ISO values for film photography
+const ISO_VALUES = [25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200] as const;
 
 interface ISOPickerProps {
-  value: ISOValue;
-  onChange: (iso: ISOValue) => void;
+  value: number;
+  onChange: (iso: number) => void;
   hasError?: boolean;
   testID?: string;
 }
@@ -17,7 +18,7 @@ export function ISOPicker({
 }: ISOPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (iso: ISOValue) => {
+  const handleSelect = (iso: number) => {
     onChange(iso);
     setIsOpen(false);
   };

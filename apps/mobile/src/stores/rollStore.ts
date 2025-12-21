@@ -3,12 +3,12 @@ import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
 import { rolls, Roll as DbRoll, NewRoll } from "@/db/schema";
-import { rollSchema, Roll } from "@/schemas/roll";
+import { rollSelectSchema, Roll } from "@/db/schemas";
 import { logger } from "@/lib/logger";
 
 // Convert DB row to domain type with runtime validation
 function toRoll(dbRow: DbRoll): Roll {
-  const result = rollSchema.safeParse(dbRow);
+  const result = rollSelectSchema.safeParse(dbRow);
   if (!result.success) {
     logger.warn(`Invalid roll data for ${dbRow.id}`, result.error.flatten());
     return dbRow as Roll;

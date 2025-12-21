@@ -11,19 +11,19 @@ import {
   FilmStock as DbFilmStock,
 } from "@/db/schema";
 import {
-  cameraSchema,
-  lensSchema,
-  filmStockSchema,
+  cameraSelectSchema,
+  lensSelectSchema,
+  filmStockSelectSchema,
   Camera,
   Lens,
   FilmStock,
-} from "@/schemas/gear";
+} from "@/db/schemas";
 import { logger } from "@/lib/logger";
 import { UserFacingError } from "@/lib/errors";
 
 // Convert DB rows to domain types with runtime validation
 function toCamera(dbRow: DbCamera): Camera {
-  const result = cameraSchema.safeParse(dbRow);
+  const result = cameraSelectSchema.safeParse(dbRow);
   if (!result.success) {
     logger.warn(`Invalid camera data for ${dbRow.id}`, result.error.flatten());
     return dbRow as Camera;
@@ -32,7 +32,7 @@ function toCamera(dbRow: DbCamera): Camera {
 }
 
 function toLens(dbRow: DbLens): Lens {
-  const result = lensSchema.safeParse(dbRow);
+  const result = lensSelectSchema.safeParse(dbRow);
   if (!result.success) {
     logger.warn(`Invalid lens data for ${dbRow.id}`, result.error.flatten());
     return dbRow as Lens;
@@ -41,7 +41,7 @@ function toLens(dbRow: DbLens): Lens {
 }
 
 function toFilmStock(dbRow: DbFilmStock): FilmStock {
-  const result = filmStockSchema.safeParse(dbRow);
+  const result = filmStockSelectSchema.safeParse(dbRow);
   if (!result.success) {
     logger.warn(
       `Invalid film stock data for ${dbRow.id}`,

@@ -32,9 +32,8 @@ filmbuddy/
 │       ├── components/         # Reusable UI components
 │       ├── hooks/              # Custom React hooks
 │       ├── stores/             # Zustand state stores
-│       ├── db/                 # SQLite schema and queries
+│       ├── db/                 # Drizzle schema, migrations, and Zod schemas
 │       ├── utils/              # Utility functions
-│       ├── schemas/            # Zod validation schemas
 │       ├── assets/             # App-specific assets
 │       ├── app.json            # Expo configuration
 │       ├── babel.config.js     # Babel configuration
@@ -144,67 +143,58 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 ### Pattern Overview
 
-1. **Schema** (`src/schemas/`): Define Zod schemas for forms and DB rows, export inferred types
+1. **Schema** (`src/db/schemas.ts`): Generate Zod schemas from Drizzle tables using drizzle-zod
 2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
 3. **Component** (`src/components/`): Presentational form using `Controller` for each field
 4. **Screen** (`app/`): Uses the hook, passes `form` to component
 
 ### Schema Pattern
 
-Each domain has two related schemas:
+Zod schemas are generated from Drizzle table definitions using [drizzle-zod](https://orm.drizzle.team/docs/zod). This eliminates duplication between database schema and validation.
 
-- **Form schema** (`xxxFormSchema`): Validates user input, may use `.trim()` and user-friendly error messages. Exports `XxxForm` type.
-- **Domain schema** (`xxxSchema`): Validates database rows, includes all fields like `id` and timestamps. Exports `Xxx` type.
-
-Shared primitive schemas (like `isoSchema`) are defined once and reused by both.
-
-### Example: Roll Schema
-
-**Schema** (`src/schemas/roll.ts`):
+**`src/db/schemas.ts`:**
 
 ```typescript
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
+import { rolls } from "./schema";
 
-export const ISO_VALUES = [
-  25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200,
-] as const;
-export type ISOValue = (typeof ISO_VALUES)[number];
+// Select schema - validates data from database
+export const rollSelectSchema = createSelectSchema(rolls);
 
-// Shared primitive schema
-const isoSchema = z.union(/* literals from ISO_VALUES */);
-
-// Form validation (user input)
-export const rollFormSchema = z.object({
+// Insert schema - validates data before insertion, with custom refinements
+export const rollInsertSchema = createInsertSchema(rolls, {
   filmStock: z.string().trim().min(1, "Film stock is required"),
-  iso: isoSchema,
   camera: z.string().trim().min(1, "Camera is required"),
+  iso: z.number().int().positive(),
 });
-export type RollForm = z.infer<typeof rollFormSchema>;
 
-// Domain validation (database rows)
-export const rollSchema = z.object({
-  id: z.string().min(1),
-  filmStock: z.string().min(1),
-  iso: isoSchema,
-  camera: z.string().min(1),
-  loadedAt: z.date(),
-  finishedAt: z.date().nullable(),
+// Form schema - subset of insert schema for form validation
+export const rollFormSchema = rollInsertSchema.pick({
+  filmStock: true,
+  iso: true,
+  camera: true,
 });
-export type Roll = z.infer<typeof rollSchema>;
+
+// Types inferred from schemas
+export type Roll = z.infer<typeof rollSelectSchema>;
+export type RollForm = z.infer<typeof rollFormSchema>;
 ```
 
-**Hook** (`src/hooks/useRollForm.ts`):
+### Example: Form Hook
+
+**`src/hooks/useRollForm.ts`:**
 
 ```typescript
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollForm } from "@/schemas/roll";
+import { rollFormSchema, RollForm } from "@/db/schemas";
 
 export function useRollForm({ defaultValues, onSubmit }) {
   const form = useForm<RollForm>({
     resolver: zodResolver(rollFormSchema),
     defaultValues: { filmStock: "", iso: 100, camera: "", ...defaultValues },
-    mode: "onSubmit", // Validate only when user tries to save
+    mode: "onSubmit",
   });
 
   return {
@@ -216,60 +206,13 @@ export function useRollForm({ defaultValues, onSubmit }) {
 }
 ```
 
-**Component** (`src/components/RollForm.tsx`):
-
-```tsx
-import { Controller, UseFormReturn } from "react-hook-form";
-import { RollForm as RollFormType } from "@/schemas/roll";
-
-export function RollForm({
-  form,
-  disabled,
-}: {
-  form: UseFormReturn<RollFormType>;
-  disabled?: boolean;
-}) {
-  const {
-    control,
-    formState: { errors },
-  } = form;
-
-  return (
-    <View>
-      <Controller
-        control={control}
-        name="filmStock"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput value={value} onChangeText={onChange} onBlur={onBlur} />
-        )}
-      />
-      {errors.filmStock && <Text>{errors.filmStock.message}</Text>}
-    </View>
-  );
-}
-```
-
-**Screen** (`app/roll/add.tsx`):
-
-```tsx
-export default function AddRollScreen() {
-  const { form, handleSubmit, canSubmit } = useRollForm({
-    onSubmit: async (data) => {
-      await addRoll(data);
-      router.back();
-    },
-  });
-
-  return <RollForm form={form} />;
-}
-```
-
 ### Adding a New Form
 
-1. Create schema in `src/schemas/[name].ts`
-2. Create hook in `src/hooks/use[Name]Form.ts`
-3. Create or update component in `src/components/[Name]Form.tsx`
-4. Use hook in screen, pass `form` to component
+1. Add Drizzle table in `src/db/schema.ts`
+2. Generate Zod schemas in `src/db/schemas.ts` using `createSelectSchema`/`createInsertSchema`
+3. Create hook in `src/hooks/use[Name]Form.ts`
+4. Create component in `src/components/[Name]Form.tsx`
+5. Use hook in screen, pass `form` to component
 
 ## State Management
 
@@ -315,8 +258,9 @@ Drizzle ORM provides type-safe database access over expo-sqlite.
 
 See configuration files:
 
-- [db/index.ts](../apps/mobile/db/index.ts) - Database initialization
-- [db/schema.ts](../apps/mobile/db/schema.ts) - Schema definitions
+- [db/index.ts](../apps/mobile/src/db/index.ts) - Database initialization
+- [db/schema.ts](../apps/mobile/src/db/schema.ts) - Drizzle table definitions
+- [db/schemas.ts](../apps/mobile/src/db/schemas.ts) - Zod schemas generated via drizzle-zod
 - [drizzle.config.ts](../apps/mobile/drizzle.config.ts) - Drizzle Kit configuration
 
 ### Schema Pattern
