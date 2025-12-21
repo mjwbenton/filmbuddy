@@ -19,5 +19,10 @@ export const cameraInsertSchema = createInsertSchema(cameras, {
   name: z.string().trim().min(1, "Name is required"),
 });
 
+export const cameraFormSchema = cameraInsertSchema.pick({
+  name: true,
+});
+
 // Zod-inferred types (for validation)
 export type Camera = z.infer<typeof cameraSelectSchema>;
+export type CameraForm = z.infer<typeof cameraFormSchema>;

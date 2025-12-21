@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { View, Text, Pressable, TextInput, Alert } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
-import { colors } from "@/theme/colors";
+import { useFilmStockForm } from "@/hooks/useFilmStockForm";
+import { FilmStockForm } from "@/components/FilmStockForm";
 import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
+import { FilmStockForm as FilmStockFormType } from "@/db/schema";
 
 export default function EditFilmStockScreen() {
   const router = useRouter();
@@ -13,9 +14,23 @@ export default function EditFilmStockScreen() {
   const { getFilmStockById, updateFilmStock, deleteFilmStock } = useGearStore();
 
   const filmStock = id ? getFilmStockById(id) : undefined;
-  const [name, setName] = useState(filmStock?.name ?? "");
-  const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+
+  const { form, handleSubmit, isSubmitting, canSubmit } = useFilmStockForm({
+    defaultValues: { name: filmStock?.name ?? "" },
+    onSubmit: async (data: FilmStockFormType) => {
+      if (!id) return;
+      try {
+        await updateFilmStock(id, data.name);
+        router.back();
+      } catch (err) {
+        if (err instanceof UserFacingError) {
+          form.setError("name", { message: err.message });
+        } else {
+          handleError(err, "Failed to save film stock. Please try again.");
+        }
+      }
+    },
+  });
 
   if (!filmStock || !id) {
     return (
@@ -25,29 +40,8 @@ export default function EditFilmStockScreen() {
     );
   }
 
-  const canSave = name.trim().length > 0 && !isSaving;
-
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    if (!canSave) return;
-    setIsSaving(true);
-    setError(null);
-
-    try {
-      await updateFilmStock(id, name.trim());
-      router.back();
-    } catch (err) {
-      if (err instanceof UserFacingError) {
-        setError(err.message);
-      } else {
-        handleError(err, "Failed to save film stock. Please try again.");
-      }
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const handleDelete = () => {
@@ -91,15 +85,15 @@ export default function EditFilmStockScreen() {
           Edit Film Stock
         </Text>
         <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
+          onPress={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
           className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
-            className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
+            className={`text-body font-medium ${canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"}`}
           >
             Save
           </Text>
@@ -107,19 +101,7 @@ export default function EditFilmStockScreen() {
       </View>
 
       <View className="flex-1 px-md pt-lg">
-        <Text className="mb-sm text-caption font-medium text-stone">Name</Text>
-        <TextInput
-          testID="film-stock-name-input"
-          value={name}
-          onChangeText={setName}
-          placeholder="e.g., Kodak Portra 400"
-          placeholderTextColor={colors.stone}
-          autoFocus
-          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
-        />
-        {error && (
-          <Text className="mt-sm text-caption text-error">{error}</Text>
-        )}
+        <FilmStockForm form={form} disabled={isSubmitting} />
       </View>
 
       <View className="px-md pb-lg">

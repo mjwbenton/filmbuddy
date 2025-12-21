@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { View, Text, Pressable, TextInput, Alert } from "react-native";
+import { View, Text, Pressable, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
-import { colors } from "@/theme/colors";
+import { useCameraForm } from "@/hooks/useCameraForm";
+import { CameraForm } from "@/components/CameraForm";
 import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
+import { CameraForm as CameraFormType } from "@/db/schema";
 
 export default function EditCameraScreen() {
   const router = useRouter();
@@ -13,9 +14,23 @@ export default function EditCameraScreen() {
   const { getCameraById, updateCamera, deleteCamera } = useGearStore();
 
   const camera = id ? getCameraById(id) : undefined;
-  const [name, setName] = useState(camera?.name ?? "");
-  const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
+
+  const { form, handleSubmit, isSubmitting, canSubmit } = useCameraForm({
+    defaultValues: { name: camera?.name ?? "" },
+    onSubmit: async (data: CameraFormType) => {
+      if (!id) return;
+      try {
+        await updateCamera(id, data.name);
+        router.back();
+      } catch (err) {
+        if (err instanceof UserFacingError) {
+          form.setError("name", { message: err.message });
+        } else {
+          handleError(err, "Failed to save camera. Please try again.");
+        }
+      }
+    },
+  });
 
   if (!camera || !id) {
     return (
@@ -25,29 +40,8 @@ export default function EditCameraScreen() {
     );
   }
 
-  const canSave = name.trim().length > 0 && !isSaving;
-
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    if (!canSave) return;
-    setIsSaving(true);
-    setError(null);
-
-    try {
-      await updateCamera(id, name.trim());
-      router.back();
-    } catch (err) {
-      if (err instanceof UserFacingError) {
-        setError(err.message);
-      } else {
-        handleError(err, "Failed to save camera. Please try again.");
-      }
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const handleDelete = () => {
@@ -88,15 +82,15 @@ export default function EditCameraScreen() {
           Edit Camera
         </Text>
         <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
+          onPress={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
           className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
-            className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
+            className={`text-body font-medium ${canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"}`}
           >
             Save
           </Text>
@@ -104,19 +98,7 @@ export default function EditCameraScreen() {
       </View>
 
       <View className="flex-1 px-md pt-lg">
-        <Text className="mb-sm text-caption font-medium text-stone">Name</Text>
-        <TextInput
-          testID="camera-name-input"
-          value={name}
-          onChangeText={setName}
-          placeholder="e.g., Leica M6"
-          placeholderTextColor={colors.stone}
-          autoFocus
-          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
-        />
-        {error && (
-          <Text className="mt-sm text-caption text-error">{error}</Text>
-        )}
+        <CameraForm form={form} disabled={isSubmitting} />
       </View>
 
       <View className="px-md pb-lg">

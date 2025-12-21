@@ -19,5 +19,10 @@ export const lensInsertSchema = createInsertSchema(lenses, {
   name: z.string().trim().min(1, "Name is required"),
 });
 
+export const lensFormSchema = lensInsertSchema.pick({
+  name: true,
+});
+
 // Zod-inferred types (for validation)
 export type Lens = z.infer<typeof lensSelectSchema>;
+export type LensForm = z.infer<typeof lensFormSchema>;

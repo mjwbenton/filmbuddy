@@ -1,42 +1,34 @@
-import { useState } from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
-import { colors } from "@/theme/colors";
+import { useCameraForm } from "@/hooks/useCameraForm";
+import { CameraForm } from "@/components/CameraForm";
 import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
+import { CameraForm as CameraFormType } from "@/db/schema";
 
 export default function AddCameraScreen() {
   const router = useRouter();
   const { addCamera } = useGearStore();
-  const [name, setName] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
 
-  const canSave = name.trim().length > 0 && !isSaving;
+  const { form, handleSubmit, isSubmitting, canSubmit } = useCameraForm({
+    onSubmit: async (data: CameraFormType) => {
+      try {
+        await addCamera(data.name);
+        router.back();
+      } catch (err) {
+        if (err instanceof UserFacingError) {
+          form.setError("name", { message: err.message });
+        } else {
+          handleError(err, "Failed to add camera. Please try again.");
+        }
+      }
+    },
+  });
 
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    if (!canSave) return;
-    setIsSaving(true);
-    setError(null);
-
-    try {
-      await addCamera(name.trim());
-      router.back();
-    } catch (err) {
-      if (err instanceof UserFacingError) {
-        setError(err.message);
-      } else {
-        handleError(err, "Failed to add camera. Please try again.");
-      }
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   return (
@@ -55,15 +47,15 @@ export default function AddCameraScreen() {
           Add Camera
         </Text>
         <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
+          onPress={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
           className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
-            className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
+            className={`text-body font-medium ${canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"}`}
           >
             Save
           </Text>
@@ -71,19 +63,7 @@ export default function AddCameraScreen() {
       </View>
 
       <View className="flex-1 px-md pt-lg">
-        <Text className="mb-sm text-caption font-medium text-stone">Name</Text>
-        <TextInput
-          testID="camera-name-input"
-          value={name}
-          onChangeText={setName}
-          placeholder="e.g., Leica M6"
-          placeholderTextColor={colors.stone}
-          autoFocus
-          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
-        />
-        {error && (
-          <Text className="mt-sm text-caption text-error">{error}</Text>
-        )}
+        <CameraForm form={form} disabled={isSubmitting} />
       </View>
     </SafeAreaView>
   );

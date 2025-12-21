@@ -1,42 +1,34 @@
-import { useState } from "react";
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
-import { colors } from "@/theme/colors";
+import { useLensForm } from "@/hooks/useLensForm";
+import { LensForm } from "@/components/LensForm";
 import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
+import { LensForm as LensFormType } from "@/db/schema";
 
 export default function AddLensScreen() {
   const router = useRouter();
   const { addLens } = useGearStore();
-  const [name, setName] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
 
-  const canSave = name.trim().length > 0 && !isSaving;
+  const { form, handleSubmit, isSubmitting, canSubmit } = useLensForm({
+    onSubmit: async (data: LensFormType) => {
+      try {
+        await addLens(data.name);
+        router.back();
+      } catch (err) {
+        if (err instanceof UserFacingError) {
+          form.setError("name", { message: err.message });
+        } else {
+          handleError(err, "Failed to add lens. Please try again.");
+        }
+      }
+    },
+  });
 
   const handleCancel = () => {
     router.back();
-  };
-
-  const handleSave = async () => {
-    if (!canSave) return;
-    setIsSaving(true);
-    setError(null);
-
-    try {
-      await addLens(name.trim());
-      router.back();
-    } catch (err) {
-      if (err instanceof UserFacingError) {
-        setError(err.message);
-      } else {
-        handleError(err, "Failed to add lens. Please try again.");
-      }
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   return (
@@ -55,15 +47,15 @@ export default function AddLensScreen() {
           Add Lens
         </Text>
         <Pressable
-          onPress={handleSave}
-          disabled={!canSave}
+          onPress={handleSubmit}
+          disabled={!canSubmit || isSubmitting}
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
           className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
-            className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
+            className={`text-body font-medium ${canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"}`}
           >
             Save
           </Text>
@@ -71,19 +63,7 @@ export default function AddLensScreen() {
       </View>
 
       <View className="flex-1 px-md pt-lg">
-        <Text className="mb-sm text-caption font-medium text-stone">Name</Text>
-        <TextInput
-          testID="lens-name-input"
-          value={name}
-          onChangeText={setName}
-          placeholder="e.g., Summicron 50mm f/2"
-          placeholderTextColor={colors.stone}
-          autoFocus
-          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
-        />
-        {error && (
-          <Text className="mt-sm text-caption text-error">{error}</Text>
-        )}
+        <LensForm form={form} disabled={isSubmitting} />
       </View>
     </SafeAreaView>
   );
