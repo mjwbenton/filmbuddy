@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { View, Text, Pressable, TextInput, Alert } from "react-native";
+import { View, Text, Pressable, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { useGearStore, DuplicateNameError } from "@/stores/gearStore";
+import { useGearStore } from "@/stores/gearStore";
 import { colors } from "@/theme/colors";
-import { logger } from "@/lib/logger";
+import { UserFacingError } from "@/lib/errors";
+import { handleError } from "@/lib/handleError";
 
 export default function AddLensScreen() {
   const router = useRouter();
@@ -28,11 +29,10 @@ export default function AddLensScreen() {
       await addLens(name.trim());
       router.back();
     } catch (err) {
-      if (err instanceof DuplicateNameError) {
+      if (err instanceof UserFacingError) {
         setError(err.message);
       } else {
-        logger.error("Failed to add lens", err);
-        Alert.alert("Error", "Failed to add lens. Please try again.");
+        handleError(err, "Failed to add lens. Please try again.");
       }
     } finally {
       setIsSaving(false);

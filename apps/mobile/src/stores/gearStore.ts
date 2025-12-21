@@ -19,6 +19,7 @@ import {
   FilmStock,
 } from "@/schemas/gear";
 import { logger } from "@/lib/logger";
+import { UserFacingError } from "@/lib/errors";
 
 // Convert DB rows to domain types with runtime validation
 function toCamera(dbRow: DbCamera): Camera {
@@ -49,15 +50,6 @@ function toFilmStock(dbRow: DbFilmStock): FilmStock {
     return dbRow as FilmStock;
   }
   return result.data;
-}
-
-export class DuplicateNameError extends Error {
-  constructor(type: "camera" | "lens" | "filmStock") {
-    const typeLabel =
-      type === "filmStock" ? "film stock" : type === "lens" ? "lens" : "camera";
-    super(`A ${typeLabel} with this name already exists`);
-    this.name = "DuplicateNameError";
-  }
 }
 
 interface GearStore {
@@ -117,7 +109,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (c) => c.name.toLowerCase() === trimmedName.toLowerCase(),
     );
     if (existing) {
-      throw new DuplicateNameError("camera");
+      throw new UserFacingError("A camera with this name already exists");
     }
     await db.insert(cameras).values({
       id: randomUUID(),
@@ -133,7 +125,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (c) => c.name.toLowerCase() === trimmedName.toLowerCase() && c.id !== id,
     );
     if (existing) {
-      throw new DuplicateNameError("camera");
+      throw new UserFacingError("A camera with this name already exists");
     }
     await db
       .update(cameras)
@@ -158,7 +150,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (l) => l.name.toLowerCase() === trimmedName.toLowerCase(),
     );
     if (existing) {
-      throw new DuplicateNameError("lens");
+      throw new UserFacingError("A lens with this name already exists");
     }
     await db.insert(lenses).values({
       id: randomUUID(),
@@ -174,7 +166,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (l) => l.name.toLowerCase() === trimmedName.toLowerCase() && l.id !== id,
     );
     if (existing) {
-      throw new DuplicateNameError("lens");
+      throw new UserFacingError("A lens with this name already exists");
     }
     await db.update(lenses).set({ name: trimmedName }).where(eq(lenses.id, id));
     await get().loadGear();
@@ -196,7 +188,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (f) => f.name.toLowerCase() === trimmedName.toLowerCase(),
     );
     if (existing) {
-      throw new DuplicateNameError("filmStock");
+      throw new UserFacingError("A film stock with this name already exists");
     }
     await db.insert(filmStocks).values({
       id: randomUUID(),
@@ -212,7 +204,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       (f) => f.name.toLowerCase() === trimmedName.toLowerCase() && f.id !== id,
     );
     if (existing) {
-      throw new DuplicateNameError("filmStock");
+      throw new UserFacingError("A film stock with this name already exists");
     }
     await db
       .update(filmStocks)

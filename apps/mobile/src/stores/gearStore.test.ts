@@ -77,26 +77,26 @@ describe("gearStore", () => {
         expect(cameras[0].name).toBe("Leica M6");
       });
 
-      it("throws DuplicateNameError for duplicate name", async () => {
-        const { useGearStore, DuplicateNameError } =
-          await import("./gearStore");
+      it("throws UserFacingError for duplicate name", async () => {
+        const { UserFacingError } = await import("@/lib/errors");
+        const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addCamera("Leica M6");
 
         await expect(
           useGearStore.getState().addCamera("Leica M6"),
-        ).rejects.toThrow(DuplicateNameError);
+        ).rejects.toThrow(UserFacingError);
       });
 
-      it("throws DuplicateNameError for case-insensitive duplicate", async () => {
-        const { useGearStore, DuplicateNameError } =
-          await import("./gearStore");
+      it("throws UserFacingError for case-insensitive duplicate", async () => {
+        const { UserFacingError } = await import("@/lib/errors");
+        const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addCamera("Leica M6");
 
         await expect(
           useGearStore.getState().addCamera("leica m6"),
-        ).rejects.toThrow(DuplicateNameError);
+        ).rejects.toThrow(UserFacingError);
       });
     });
 
@@ -111,16 +111,16 @@ describe("gearStore", () => {
         expect(cameras[0].name).toBe("Leica M6 TTL");
       });
 
-      it("throws DuplicateNameError when updating to existing name", async () => {
-        const { useGearStore, DuplicateNameError } =
-          await import("./gearStore");
+      it("throws UserFacingError when updating to existing name", async () => {
+        const { UserFacingError } = await import("@/lib/errors");
+        const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addCamera("Leica M6");
         await useGearStore.getState().addCamera("Hasselblad 500C/M");
 
         await expect(
           useGearStore.getState().updateCamera("test-id-2", "Leica M6"),
-        ).rejects.toThrow(DuplicateNameError);
+        ).rejects.toThrow(UserFacingError);
       });
 
       it("allows updating to same name (no change)", async () => {
@@ -178,15 +178,15 @@ describe("gearStore", () => {
         expect(lenses[0].name).toBe("Summicron 50mm f/2");
       });
 
-      it("throws DuplicateNameError for duplicate name", async () => {
-        const { useGearStore, DuplicateNameError } =
-          await import("./gearStore");
+      it("throws UserFacingError for duplicate name", async () => {
+        const { UserFacingError } = await import("@/lib/errors");
+        const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addLens("Summicron 50mm f/2");
 
         await expect(
           useGearStore.getState().addLens("Summicron 50mm f/2"),
-        ).rejects.toThrow(DuplicateNameError);
+        ).rejects.toThrow(UserFacingError);
       });
     });
 
@@ -241,15 +241,15 @@ describe("gearStore", () => {
         expect(filmStocks[0].name).toBe("Kodak Portra 400");
       });
 
-      it("throws DuplicateNameError for duplicate name", async () => {
-        const { useGearStore, DuplicateNameError } =
-          await import("./gearStore");
+      it("throws UserFacingError for duplicate name", async () => {
+        const { UserFacingError } = await import("@/lib/errors");
+        const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addFilmStock("Kodak Portra 400");
 
         await expect(
           useGearStore.getState().addFilmStock("Kodak Portra 400"),
-        ).rejects.toThrow(DuplicateNameError);
+        ).rejects.toThrow(UserFacingError);
       });
     });
 

@@ -2,9 +2,10 @@ import { useState } from "react";
 import { View, Text, Pressable, TextInput, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { useGearStore, DuplicateNameError } from "@/stores/gearStore";
+import { useGearStore } from "@/stores/gearStore";
 import { colors } from "@/theme/colors";
-import { logger } from "@/lib/logger";
+import { UserFacingError } from "@/lib/errors";
+import { handleError } from "@/lib/handleError";
 
 export default function EditFilmStockScreen() {
   const router = useRouter();
@@ -39,11 +40,10 @@ export default function EditFilmStockScreen() {
       await updateFilmStock(id, name.trim());
       router.back();
     } catch (err) {
-      if (err instanceof DuplicateNameError) {
+      if (err instanceof UserFacingError) {
         setError(err.message);
       } else {
-        logger.error("Failed to update film stock", err);
-        Alert.alert("Error", "Failed to save film stock. Please try again.");
+        handleError(err, "Failed to save film stock. Please try again.");
       }
     } finally {
       setIsSaving(false);
@@ -64,9 +64,8 @@ export default function EditFilmStockScreen() {
               await deleteFilmStock(id);
               router.back();
             } catch (err) {
-              logger.error("Failed to delete film stock", err);
-              Alert.alert(
-                "Error",
+              handleError(
+                err,
                 "Failed to delete film stock. Please try again.",
               );
             }
