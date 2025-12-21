@@ -13,7 +13,7 @@ export function GearCard({ name, onPress, testID }: GearCardProps) {
       testID={testID}
       accessibilityLabel={name}
       accessibilityRole="button"
-      className="mb-sm min-h-[44px] rounded-md bg-cloud p-md shadow-sm"
+      className="mb-sm min-h-touch rounded-md bg-cloud p-md shadow-sm"
     >
       <Text className="font-heading text-subheading font-medium text-ink">
         {name}

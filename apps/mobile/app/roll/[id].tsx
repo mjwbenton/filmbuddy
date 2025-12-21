@@ -105,7 +105,7 @@ export default function RollDetailScreen() {
         <Pressable
           onPress={handleClose}
           testID="close-button"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text className="text-body text-slate-blue">
             {isFinished ? "Close" : "Cancel"}
@@ -115,13 +115,13 @@ export default function RollDetailScreen() {
           {isFinished ? "Finished Roll" : "Edit Roll"}
         </Text>
         {isFinished ? (
-          <View className="min-h-[44px] min-w-[44px]" />
+          <View className="min-h-touch min-w-touch" />
         ) : (
           <Pressable
             onPress={handleSubmit}
             disabled={!canSubmit || isSubmitting}
             testID="save-button"
-            className="min-h-[44px] min-w-[44px] items-center justify-center"
+            className="min-h-touch min-w-touch items-center justify-center"
           >
             <Text
               className={`text-body font-medium ${
@@ -153,7 +153,7 @@ export default function RollDetailScreen() {
             <Pressable
               onPress={handleMarkActive}
               testID="mark-active-button"
-              className="min-h-[44px] items-center justify-center rounded-md border border-slate-blue"
+              className="min-h-touch items-center justify-center rounded-md border border-slate-blue"
             >
               <Text className="text-body font-medium text-slate-blue">
                 Mark as Active
@@ -163,7 +163,7 @@ export default function RollDetailScreen() {
             <Pressable
               onPress={handleMarkFinished}
               testID="mark-finished-button"
-              className="min-h-[44px] items-center justify-center rounded-md border border-slate-blue"
+              className="min-h-touch items-center justify-center rounded-md border border-slate-blue"
             >
               <Text className="text-body font-medium text-slate-blue">
                 Mark as Finished
@@ -174,7 +174,7 @@ export default function RollDetailScreen() {
           <Pressable
             onPress={handleDelete}
             testID="delete-button"
-            className="min-h-[44px] items-center justify-center rounded-md border border-error"
+            className="min-h-touch items-center justify-center rounded-md border border-error"
           >
             <Text className="text-body font-medium text-error">
               Delete Roll

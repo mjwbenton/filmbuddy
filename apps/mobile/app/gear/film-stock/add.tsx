@@ -47,7 +47,7 @@ export default function AddFilmStockScreen() {
           testID="cancel-button"
           accessibilityRole="button"
           accessibilityLabel="Cancel"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text className="text-body text-slate-blue">Cancel</Text>
         </Pressable>
@@ -60,7 +60,7 @@ export default function AddFilmStockScreen() {
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
             className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
@@ -79,7 +79,7 @@ export default function AddFilmStockScreen() {
           placeholder="e.g., Kodak Portra 400"
           placeholderTextColor={colors.stone}
           autoFocus
-          className="min-h-[44px] rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
+          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
         />
         {error && (
           <Text className="mt-sm text-caption text-error">{error}</Text>

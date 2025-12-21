@@ -76,7 +76,7 @@ export default function EditLensScreen() {
           testID="cancel-button"
           accessibilityRole="button"
           accessibilityLabel="Cancel"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text className="text-body text-slate-blue">Cancel</Text>
         </Pressable>
@@ -89,7 +89,7 @@ export default function EditLensScreen() {
           testID="save-button"
           accessibilityRole="button"
           accessibilityLabel="Save"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
             className={`text-body font-medium ${canSave ? "text-slate-blue" : "text-stone"}`}
@@ -108,7 +108,7 @@ export default function EditLensScreen() {
           placeholder="e.g., Summicron 50mm f/2"
           placeholderTextColor={colors.stone}
           autoFocus
-          className="min-h-[44px] rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
+          className="min-h-touch rounded-md border border-fog bg-white px-md py-sm text-body text-ink"
         />
         {error && (
           <Text className="mt-sm text-caption text-error">{error}</Text>
@@ -121,7 +121,7 @@ export default function EditLensScreen() {
           testID="delete-button"
           accessibilityRole="button"
           accessibilityLabel="Delete lens"
-          className="min-h-[44px] items-center justify-center rounded-md border border-error"
+          className="min-h-touch items-center justify-center rounded-md border border-error"
         >
           <Text className="text-body font-medium text-error">Delete Lens</Text>
         </Pressable>

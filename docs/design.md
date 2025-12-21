@@ -171,6 +171,7 @@ Design tokens map to Tailwind utilities via `tailwind.config.ts` (which imports 
 | Fog                    | `border-fog`, `bg-fog`                   |
 | Cloud                  | `bg-cloud`                               |
 | Spacing md (16px)      | `p-md`, `m-md`, `gap-md`                 |
+| Touch target (44px)    | `min-h-touch`, `min-w-touch`             |
 | Border radius md (8px) | `rounded-md`                             |
 
 ### Component Example
@@ -204,10 +205,10 @@ export function Card({ title, children, active }: CardProps) {
 
 ### Touch Targets
 
-iOS requires 44x44pt minimum touch targets. Use `min-h-[44px] min-w-[44px]` for interactive elements:
+iOS requires 44x44pt minimum touch targets. Use `min-h-touch min-w-touch` for interactive elements:
 
 ```tsx
-<Pressable className="min-h-[44px] min-w-[44px] items-center justify-center">
+<Pressable className="min-h-touch min-w-touch items-center justify-center">
   <Text>Tap me</Text>
 </Pressable>
 ```

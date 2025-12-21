@@ -37,7 +37,7 @@ export default function AddRollScreen() {
         <Pressable
           onPress={handleCancel}
           testID="cancel-button"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text className="text-body text-slate-blue">Cancel</Text>
         </Pressable>
@@ -48,7 +48,7 @@ export default function AddRollScreen() {
           onPress={handleSubmit}
           disabled={!canSubmit || isSubmitting}
           testID="save-button"
-          className="min-h-[44px] min-w-[44px] items-center justify-center"
+          className="min-h-touch min-w-touch items-center justify-center"
         >
           <Text
             className={`text-body font-medium ${

@@ -47,7 +47,7 @@ export default function GearScreen() {
               <Pressable
                 onPress={() => router.push("/gear/camera/add")}
                 testID="add-camera-button"
-                className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
+                className="min-h-touch min-w-touch items-center justify-center rounded-sm bg-slate-blue"
               >
                 <Text className="text-subheading font-medium text-white">
                   +
@@ -69,7 +69,7 @@ export default function GearScreen() {
               <Pressable
                 onPress={() => router.push("/gear/lens/add")}
                 testID="add-lens-button"
-                className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
+                className="min-h-touch min-w-touch items-center justify-center rounded-sm bg-slate-blue"
               >
                 <Text className="text-subheading font-medium text-white">
                   +
@@ -91,7 +91,7 @@ export default function GearScreen() {
               <Pressable
                 onPress={() => router.push("/gear/film-stock/add")}
                 testID="add-film-stock-button"
-                className="min-h-[44px] min-w-[44px] items-center justify-center rounded-sm bg-slate-blue"
+                className="min-h-touch min-w-touch items-center justify-center rounded-sm bg-slate-blue"
               >
                 <Text className="text-subheading font-medium text-white">
                   +

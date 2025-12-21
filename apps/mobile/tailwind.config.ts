@@ -36,6 +36,7 @@ export default {
         lg: "24px",
         xl: "32px",
         "2xl": "48px",
+        touch: "44px",
       },
       borderRadius: {
         sm: "4px",

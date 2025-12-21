@@ -27,7 +27,7 @@ export function ISOPicker({
       <Pressable
         onPress={() => setIsOpen(!isOpen)}
         testID={testID}
-        className={`min-h-[44px] flex-row items-center justify-between rounded-md border bg-white px-md py-sm ${
+        className={`min-h-touch flex-row items-center justify-between rounded-md border bg-white px-md py-sm ${
           hasError ? "border-error" : "border-fog"
         }`}
       >
@@ -45,7 +45,7 @@ export function ISOPicker({
               accessible={true}
               accessibilityRole="button"
               accessibilityLabel={`ISO ${item}`}
-              className={`min-h-[44px] flex-row items-center justify-between border-b border-fog px-md py-sm last:border-b-0 ${
+              className={`min-h-touch flex-row items-center justify-between border-b border-fog px-md py-sm last:border-b-0 ${
                 value === item ? "bg-cloud" : ""
               }`}
             >

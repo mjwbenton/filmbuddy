@@ -31,7 +31,7 @@ export default function RollsScreen() {
         <Pressable
           onPress={handleAddRoll}
           testID="add-roll-button"
-          className="min-h-[44px] min-w-[44px] items-center justify-center rounded-md bg-slate-blue"
+          className="min-h-touch min-w-touch items-center justify-center rounded-md bg-slate-blue"
         >
           <Text className="text-2xl font-medium text-white">+</Text>
         </Pressable>

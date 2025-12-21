@@ -32,7 +32,7 @@ export function RollForm({ form, disabled }: RollFormProps) {
               placeholder="e.g., Portra 400"
               editable={!disabled}
               testID="film-stock-input"
-              className={`min-h-[44px] rounded-md border bg-white px-md py-sm text-body ${
+              className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
                 errors.filmStock ? "border-error" : "border-fog"
               } ${disabled ? "opacity-50" : ""}`}
               placeholderTextColor={colors.stone}
@@ -53,7 +53,7 @@ export function RollForm({ form, disabled }: RollFormProps) {
           name="iso"
           render={({ field: { onChange, value } }) =>
             disabled ? (
-              <View className="min-h-[44px] justify-center rounded-md border border-fog bg-white px-md py-sm opacity-50">
+              <View className="min-h-touch justify-center rounded-md border border-fog bg-white px-md py-sm opacity-50">
                 <Text className="text-body text-ink">{value}</Text>
               </View>
             ) : (
@@ -86,7 +86,7 @@ export function RollForm({ form, disabled }: RollFormProps) {
               placeholder="e.g., Leica M6"
               editable={!disabled}
               testID="camera-input"
-              className={`min-h-[44px] rounded-md border bg-white px-md py-sm text-body ${
+              className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
                 errors.camera ? "border-error" : "border-fog"
               } ${disabled ? "opacity-50" : ""}`}
               placeholderTextColor={colors.stone}
