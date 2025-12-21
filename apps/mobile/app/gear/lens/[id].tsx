@@ -4,7 +4,6 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { useLensForm } from "@/hooks/useLensForm";
 import { LensForm } from "@/components/LensForm";
-import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
 import { LensForm as LensFormType } from "@/db/schema";
 
@@ -23,11 +22,7 @@ export default function EditLensScreen() {
         await updateLens(id, data.name);
         router.back();
       } catch (err) {
-        if (err instanceof UserFacingError) {
-          form.setError("name", { message: err.message });
-        } else {
-          handleError(err, "Failed to save lens. Please try again.");
-        }
+        handleError(err, "Failed to save lens. Please try again.");
       }
     },
   });

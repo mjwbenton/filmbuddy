@@ -4,7 +4,6 @@ import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { useFilmStockForm } from "@/hooks/useFilmStockForm";
 import { FilmStockForm } from "@/components/FilmStockForm";
-import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
 import { FilmStockForm as FilmStockFormType } from "@/db/schema";
 
@@ -18,11 +17,7 @@ export default function AddFilmStockScreen() {
         await addFilmStock(data.name);
         router.back();
       } catch (err) {
-        if (err instanceof UserFacingError) {
-          form.setError("name", { message: err.message });
-        } else {
-          handleError(err, "Failed to add film stock. Please try again.");
-        }
+        handleError(err, "Failed to add film stock. Please try again.");
       }
     },
   });

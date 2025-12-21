@@ -122,6 +122,7 @@ appId: tech.mattb.filmbuddy
 
 # THEN an error is shown and the item is not saved
 - assertVisible: "A camera with this name already exists"
+- tapOn: "OK"
 
 # Cancel to return to gear screen
 - tapOn:

@@ -4,7 +4,6 @@ import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { useCameraForm } from "@/hooks/useCameraForm";
 import { CameraForm } from "@/components/CameraForm";
-import { UserFacingError } from "@/lib/errors";
 import { handleError } from "@/lib/handleError";
 import { CameraForm as CameraFormType } from "@/db/schema";
 
@@ -18,11 +17,7 @@ export default function AddCameraScreen() {
         await addCamera(data.name);
         router.back();
       } catch (err) {
-        if (err instanceof UserFacingError) {
-          form.setError("name", { message: err.message });
-        } else {
-          handleError(err, "Failed to add camera. Please try again.");
-        }
+        handleError(err, "Failed to add camera. Please try again.");
       }
     },
   });
