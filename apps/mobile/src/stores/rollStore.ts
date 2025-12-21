@@ -2,8 +2,7 @@ import { create } from "zustand";
 import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
-import { rolls, Roll as DbRoll, NewRoll } from "@/db/schema";
-import { rollSelectSchema, Roll } from "@/db/schemas";
+import { rolls, DbRoll, NewRoll, rollSelectSchema, Roll } from "@/db/schema";
 import { logger } from "@/lib/logger";
 
 // Convert DB row to domain type with runtime validation

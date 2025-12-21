@@ -1,6 +1,6 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollForm } from "@/db/schemas";
+import { rollFormSchema, RollForm } from "@/db/schema";
 
 interface UseRollFormOptions {
   defaultValues?: Partial<RollForm>;

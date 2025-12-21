@@ -6,18 +6,16 @@ import {
   cameras,
   lenses,
   filmStocks,
-  Camera as DbCamera,
-  Lens as DbLens,
-  FilmStock as DbFilmStock,
-} from "@/db/schema";
-import {
+  DbCamera,
+  DbLens,
+  DbFilmStock,
   cameraSelectSchema,
   lensSelectSchema,
   filmStockSelectSchema,
   Camera,
   Lens,
   FilmStock,
-} from "@/db/schemas";
+} from "@/db/schema";
 import { logger } from "@/lib/logger";
 import { UserFacingError } from "@/lib/errors";
 

@@ -143,43 +143,10 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 ### Pattern Overview
 
-1. **Schema** (`src/db/schemas.ts`): Generate Zod schemas from Drizzle tables using drizzle-zod
+1. **Schema** (`src/db/[domain].ts`): Define Drizzle table + Zod schemas using drizzle-zod
 2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
 3. **Component** (`src/components/`): Presentational form using `Controller` for each field
 4. **Screen** (`app/`): Uses the hook, passes `form` to component
-
-### Schema Pattern
-
-Zod schemas are generated from Drizzle table definitions using [drizzle-zod](https://orm.drizzle.team/docs/zod). This eliminates duplication between database schema and validation.
-
-**`src/db/schemas.ts`:**
-
-```typescript
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
-import { rolls } from "./schema";
-
-// Select schema - validates data from database
-export const rollSelectSchema = createSelectSchema(rolls);
-
-// Insert schema - validates data before insertion, with custom refinements
-export const rollInsertSchema = createInsertSchema(rolls, {
-  filmStock: z.string().trim().min(1, "Film stock is required"),
-  camera: z.string().trim().min(1, "Camera is required"),
-  iso: z.number().int().positive(),
-});
-
-// Form schema - subset of insert schema for form validation
-export const rollFormSchema = rollInsertSchema.pick({
-  filmStock: true,
-  iso: true,
-  camera: true,
-});
-
-// Types inferred from schemas
-export type Roll = z.infer<typeof rollSelectSchema>;
-export type RollForm = z.infer<typeof rollFormSchema>;
-```
 
 ### Example: Form Hook
 
@@ -188,7 +155,7 @@ export type RollForm = z.infer<typeof rollFormSchema>;
 ```typescript
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollForm } from "@/db/schemas";
+import { rollFormSchema, RollForm } from "@/db/schema";
 
 export function useRollForm({ defaultValues, onSubmit }) {
   const form = useForm<RollForm>({
@@ -208,8 +175,8 @@ export function useRollForm({ defaultValues, onSubmit }) {
 
 ### Adding a New Form
 
-1. Add Drizzle table in `src/db/schema.ts`
-2. Generate Zod schemas in `src/db/schemas.ts` using `createSelectSchema`/`createInsertSchema`
+1. Create domain file `src/db/[name].ts` with Drizzle table + Zod schemas
+2. Export from `src/db/schema.ts`
 3. Create hook in `src/hooks/use[Name]Form.ts`
 4. Create component in `src/components/[Name]Form.tsx`
 5. Use hook in screen, pass `form` to component
@@ -256,28 +223,55 @@ For simple cases, use Drizzle's `useLiveQuery` directly in components. For compl
 
 Drizzle ORM provides type-safe database access over expo-sqlite.
 
-See configuration files:
+### File Structure
 
-- [db/index.ts](../apps/mobile/src/db/index.ts) - Database initialization
-- [db/schema.ts](../apps/mobile/src/db/schema.ts) - Drizzle table definitions
-- [db/schemas.ts](../apps/mobile/src/db/schemas.ts) - Zod schemas generated via drizzle-zod
-- [drizzle.config.ts](../apps/mobile/drizzle.config.ts) - Drizzle Kit configuration
+Each domain has its own file containing both Drizzle table and Zod schemas:
 
-### Schema Pattern
+```
+db/
+├── index.ts      # DB instance (expo-sqlite)
+├── schema.ts     # Re-exports all tables and Zod schemas
+├── roll.ts       # rolls table + Zod schemas
+├── camera.ts     # cameras table + Zod schemas
+├── lens.ts       # lenses table + Zod schemas
+└── filmStock.ts  # filmStocks table + Zod schemas
+```
 
-Define tables using Drizzle's schema builder, then infer types:
+Import patterns:
+
+- `import { db } from "@/db"` - database instance
+- `import { rolls, Roll, rollFormSchema } from "@/db/schema"` - tables, types, schemas
+
+See also: [drizzle.config.ts](../apps/mobile/drizzle.config.ts) for Drizzle Kit configuration.
+
+### Domain File Pattern
+
+Each domain file contains Drizzle table + Zod schemas generated via drizzle-zod:
 
 ```typescript
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { z } from "zod";
 
+// Drizzle table
 export const items = sqliteTable("items", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
-export type Item = typeof items.$inferSelect;
+// Drizzle-inferred types (for DB operations)
+export type DbItem = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
+
+// Zod schemas (for validation)
+export const itemSelectSchema = createSelectSchema(items);
+export const itemInsertSchema = createInsertSchema(items, {
+  name: z.string().trim().min(1, "Name is required"),
+});
+
+// Zod-inferred types (for validation)
+export type Item = z.infer<typeof itemSelectSchema>;
 ```
 
 ### Live Queries
@@ -286,8 +280,8 @@ Use `useLiveQuery` for reactive data that updates when the database changes:
 
 ```tsx
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { db } from "../db";
-import { items } from "../db/schema";
+import { db } from "@/db";
+import { items } from "@/db/schema";
 
 export function ItemList() {
   const { data, error } = useLiveQuery(
