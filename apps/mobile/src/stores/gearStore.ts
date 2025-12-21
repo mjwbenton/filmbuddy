@@ -6,49 +6,11 @@ import {
   cameras,
   lenses,
   filmStocks,
-  DbCamera,
-  DbLens,
-  DbFilmStock,
-  cameraSelectSchema,
-  lensSelectSchema,
-  filmStockSelectSchema,
   Camera,
   Lens,
   FilmStock,
 } from "@/db/schema";
-import { logger } from "@/lib/logger";
 import { UserFacingError } from "@/lib/errors";
-
-// Convert DB rows to domain types with runtime validation
-function toCamera(dbRow: DbCamera): Camera {
-  const result = cameraSelectSchema.safeParse(dbRow);
-  if (!result.success) {
-    logger.warn(`Invalid camera data for ${dbRow.id}`, result.error.flatten());
-    return dbRow as Camera;
-  }
-  return result.data;
-}
-
-function toLens(dbRow: DbLens): Lens {
-  const result = lensSelectSchema.safeParse(dbRow);
-  if (!result.success) {
-    logger.warn(`Invalid lens data for ${dbRow.id}`, result.error.flatten());
-    return dbRow as Lens;
-  }
-  return result.data;
-}
-
-function toFilmStock(dbRow: DbFilmStock): FilmStock {
-  const result = filmStockSelectSchema.safeParse(dbRow);
-  if (!result.success) {
-    logger.warn(
-      `Invalid film stock data for ${dbRow.id}`,
-      result.error.flatten(),
-    );
-    return dbRow as FilmStock;
-  }
-  return result.data;
-}
 
 interface GearStore {
   cameras: Camera[];
@@ -87,9 +49,9 @@ export const useGearStore = create<GearStore>((set, get) => ({
         db.select().from(filmStocks).orderBy(asc(filmStocks.createdAt)),
       ]);
       set({
-        cameras: cameraRows.map(toCamera),
-        lenses: lensRows.map(toLens),
-        filmStocks: filmStockRows.map(toFilmStock),
+        cameras: cameraRows,
+        lenses: lensRows,
+        filmStocks: filmStockRows,
         isLoading: false,
       });
     } catch (error) {

@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Drizzle table
@@ -9,12 +9,11 @@ export const filmStocks = sqliteTable("film_stocks", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
-// Drizzle-inferred types (for DB operations)
-export type DbFilmStock = typeof filmStocks.$inferSelect;
+// Types
+export type FilmStock = typeof filmStocks.$inferSelect;
 export type NewFilmStock = typeof filmStocks.$inferInsert;
 
-// Zod schemas
-export const filmStockSelectSchema = createSelectSchema(filmStocks);
+// Zod schemas (for form validation)
 export const filmStockInsertSchema = createInsertSchema(filmStocks, {
   name: z.string().trim().min(1, "Name is required"),
 });
@@ -23,6 +22,4 @@ export const filmStockFormSchema = filmStockInsertSchema.pick({
   name: true,
 });
 
-// Zod-inferred types (for validation)
-export type FilmStock = z.infer<typeof filmStockSelectSchema>;
 export type FilmStockForm = z.infer<typeof filmStockFormSchema>;

@@ -246,11 +246,11 @@ See also: [drizzle.config.ts](../apps/mobile/drizzle.config.ts) for Drizzle Kit 
 
 ### Domain File Pattern
 
-Each domain file contains Drizzle table + Zod schemas generated via drizzle-zod:
+Each domain file contains a Drizzle table, types inferred from it, and Zod schemas for form validation:
 
 ```typescript
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Drizzle table
@@ -260,19 +260,21 @@ export const items = sqliteTable("items", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
-// Drizzle-inferred types (for DB operations)
-export type DbItem = typeof items.$inferSelect;
+// Types (inferred from Drizzle)
+export type Item = typeof items.$inferSelect;
 export type NewItem = typeof items.$inferInsert;
 
-// Zod schemas (for validation)
-export const itemSelectSchema = createSelectSchema(items);
+// Zod schemas (for form validation only)
 export const itemInsertSchema = createInsertSchema(items, {
   name: z.string().trim().min(1, "Name is required"),
 });
 
-// Zod-inferred types (for validation)
-export type Item = z.infer<typeof itemSelectSchema>;
+export const itemFormSchema = itemInsertSchema.pick({ name: true });
+
+export type ItemForm = z.infer<typeof itemFormSchema>;
 ```
+
+**Why no select schema?** Data from our own database already matches the schema we used to write it. Zod validation is only needed at input boundaries (forms, APIs), not for trusted internal data.
 
 ### Live Queries
 

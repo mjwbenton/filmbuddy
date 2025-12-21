@@ -2,18 +2,7 @@ import { create } from "zustand";
 import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
-import { rolls, DbRoll, NewRoll, rollSelectSchema, Roll } from "@/db/schema";
-import { logger } from "@/lib/logger";
-
-// Convert DB row to domain type with runtime validation
-function toRoll(dbRow: DbRoll): Roll {
-  const result = rollSelectSchema.safeParse(dbRow);
-  if (!result.success) {
-    logger.warn(`Invalid roll data for ${dbRow.id}`, result.error.flatten());
-    return dbRow as Roll;
-  }
-  return result.data;
-}
+import { rolls, NewRoll, Roll } from "@/db/schema";
 
 interface RollStore {
   activeRolls: Roll[];
@@ -54,8 +43,8 @@ export const useRollStore = create<RollStore>((set, get) => ({
           .orderBy(desc(rolls.finishedAt)),
       ]);
       set({
-        activeRolls: active.map(toRoll),
-        finishedRolls: finished.map(toRoll),
+        activeRolls: active,
+        finishedRolls: finished,
         isLoading: false,
       });
     } catch (error) {

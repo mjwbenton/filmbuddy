@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Drizzle table
@@ -9,12 +9,11 @@ export const lenses = sqliteTable("lenses", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
-// Drizzle-inferred types (for DB operations)
-export type DbLens = typeof lenses.$inferSelect;
+// Types
+export type Lens = typeof lenses.$inferSelect;
 export type NewLens = typeof lenses.$inferInsert;
 
-// Zod schemas
-export const lensSelectSchema = createSelectSchema(lenses);
+// Zod schemas (for form validation)
 export const lensInsertSchema = createInsertSchema(lenses, {
   name: z.string().trim().min(1, "Name is required"),
 });
@@ -23,6 +22,4 @@ export const lensFormSchema = lensInsertSchema.pick({
   name: true,
 });
 
-// Zod-inferred types (for validation)
-export type Lens = z.infer<typeof lensSelectSchema>;
 export type LensForm = z.infer<typeof lensFormSchema>;
