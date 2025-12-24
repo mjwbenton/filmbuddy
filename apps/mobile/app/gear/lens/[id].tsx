@@ -6,6 +6,11 @@ import { useLensForm } from "@/hooks/useLensForm";
 import { LensForm } from "@/components/LensForm";
 import { handleError } from "@/lib/handleError";
 import { LensForm as LensFormType } from "@/db/schema";
+import {
+  ScreenHeader,
+  HeaderCancelButton,
+  HeaderSaveButton,
+} from "@/components/ui";
 
 export default function EditLensScreen() {
   const router = useRouter();
@@ -35,10 +40,6 @@ export default function EditLensScreen() {
     );
   }
 
-  const handleCancel = () => {
-    router.back();
-  };
-
   const handleDelete = () => {
     Alert.alert("Delete Lens", "Are you sure you want to delete this lens?", [
       { text: "Cancel", style: "cancel" },
@@ -59,34 +60,16 @@ export default function EditLensScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
-      <View className="flex-row items-center justify-between border-b border-fog px-md py-sm">
-        <Pressable
-          onPress={handleCancel}
-          testID="cancel-button"
-          accessibilityRole="button"
-          accessibilityLabel="Cancel"
-          className="min-h-touch min-w-touch items-center justify-center"
-        >
-          <Text className="text-body text-slate-blue">Cancel</Text>
-        </Pressable>
-        <Text className="font-heading text-subheading font-medium text-ink">
-          Edit Lens
-        </Text>
-        <Pressable
-          onPress={handleSubmit}
-          disabled={!canSubmit || isSubmitting}
-          testID="save-button"
-          accessibilityRole="button"
-          accessibilityLabel="Save"
-          className="min-h-touch min-w-touch items-center justify-center"
-        >
-          <Text
-            className={`text-body font-medium ${canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"}`}
-          >
-            Save
-          </Text>
-        </Pressable>
-      </View>
+      <ScreenHeader
+        title="Edit Lens"
+        left={<HeaderCancelButton onPress={() => router.back()} />}
+        right={
+          <HeaderSaveButton
+            onPress={handleSubmit}
+            disabled={!canSubmit || isSubmitting}
+          />
+        }
+      />
 
       <View className="flex-1 px-md pt-lg">
         <LensForm form={form} disabled={isSubmitting} />

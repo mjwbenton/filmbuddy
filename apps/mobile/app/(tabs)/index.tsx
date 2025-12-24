@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, Href } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollCard } from "@/components/RollCard";
-import { SectionHeader } from "@/components/SectionHeader";
+import { SectionHeader } from "@/components/ui";
 
 export default function RollsScreen() {
   const router = useRouter();

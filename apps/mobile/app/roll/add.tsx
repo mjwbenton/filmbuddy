@@ -1,10 +1,15 @@
-import { View, Text, Pressable, ScrollView, Alert } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
 import { useRollForm } from "@/hooks/useRollForm";
-import { logger } from "@/lib/logger";
+import { handleError } from "@/lib/handleError";
+import {
+  ScreenHeader,
+  HeaderCancelButton,
+  HeaderSaveButton,
+} from "@/components/ui";
 
 export default function AddRollScreen() {
   const router = useRouter();
@@ -21,44 +26,23 @@ export default function AddRollScreen() {
         });
         router.back();
       } catch (error) {
-        logger.error("Failed to add roll", error);
-        Alert.alert("Error", "Failed to add roll. Please try again.");
+        handleError(error, "Failed to add roll. Please try again.");
       }
     },
   });
 
-  const handleCancel = () => {
-    router.back();
-  };
-
   return (
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
-      <View className="flex-row items-center justify-between border-b border-fog px-md py-sm">
-        <Pressable
-          onPress={handleCancel}
-          testID="cancel-button"
-          className="min-h-touch min-w-touch items-center justify-center"
-        >
-          <Text className="text-body text-slate-blue">Cancel</Text>
-        </Pressable>
-        <Text className="font-heading text-subheading font-medium text-ink">
-          Add Roll
-        </Text>
-        <Pressable
-          onPress={handleSubmit}
-          disabled={!canSubmit || isSubmitting}
-          testID="save-button"
-          className="min-h-touch min-w-touch items-center justify-center"
-        >
-          <Text
-            className={`text-body font-medium ${
-              canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"
-            }`}
-          >
-            Save
-          </Text>
-        </Pressable>
-      </View>
+      <ScreenHeader
+        title="Add Roll"
+        left={<HeaderCancelButton onPress={() => router.back()} />}
+        right={
+          <HeaderSaveButton
+            onPress={handleSubmit}
+            disabled={!canSubmit || isSubmitting}
+          />
+        }
+      />
 
       <ScrollView className="flex-1 px-md py-md">
         <RollForm form={form} />

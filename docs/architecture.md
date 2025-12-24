@@ -30,6 +30,7 @@ filmbuddy/
 │       │   │   ├── [tab].tsx   # Additional tabs
 │       │   └── _layout.tsx     # Root layout
 │       ├── components/         # Reusable UI components
+│       │   └── ui/             # Generic UI primitives (Button, Card, etc.)
 │       ├── hooks/              # Custom React hooks
 │       ├── stores/             # Zustand state stores
 │       ├── db/                 # Drizzle schema, migrations, and Zod schemas
@@ -131,6 +132,73 @@ See layout files:
 - [app/\_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout with font loading
 - [app/(tabs)/\_layout.tsx](<../apps/mobile/app/(tabs)/_layout.tsx>) - Tab bar configuration
 
+## UI Components
+
+Generic UI primitives live in `src/components/ui/` and provide consistent styling across the app.
+
+### Available Components
+
+| Component            | Purpose                                                                                 |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| `Button`             | Interactive button with `primary`, `secondary`, `destructive` variants                  |
+| `Card`               | Container with optional `active` state and pressable behavior                           |
+| `Text`               | Typography with `display`, `heading`, `subheading`, `body`, `caption`, `small` variants |
+| `TextInput`          | React-hook-form aware input with integrated label and error display                     |
+| `Label`              | Form field label for custom inputs                                                      |
+| `ErrorMessage`       | Form validation error display                                                           |
+| `SectionHeader`      | Uppercase section title for list groupings                                              |
+| `ScreenHeader`       | Form screen header with left/title/right slots                                          |
+| `HeaderCancelButton` | Cancel button for screen headers                                                        |
+| `HeaderCloseButton`  | Close button for screen headers                                                         |
+| `HeaderSaveButton`   | Save button with disabled state for screen headers                                      |
+
+### Usage
+
+```tsx
+import {
+  Button,
+  Card,
+  Text,
+  TextInput,
+  ScreenHeader,
+  HeaderCancelButton,
+  HeaderSaveButton,
+} from "@/components/ui";
+
+// Button variants
+<Button onPress={handleSave}>Save</Button>
+<Button variant="secondary" onPress={handleCancel}>Cancel</Button>
+<Button variant="destructive" onPress={handleDelete}>Delete</Button>
+
+// Card with active state
+<Card active={isActive} onPress={handlePress}>
+  <Text variant="subheading">Title</Text>
+  <Text variant="caption" color="stone">Subtitle</Text>
+</Card>
+
+// Form input (react-hook-form aware)
+<TextInput
+  label="Name"
+  name="name"
+  control={form.control}
+  placeholder="Enter name"
+/>
+
+// Screen header with Cancel/Save buttons
+<ScreenHeader
+  title="Add Item"
+  left={<HeaderCancelButton onPress={() => router.back()} />}
+  right={<HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />}
+/>
+```
+
+### Design Principles
+
+- **No app logic**: Components are purely presentational
+- **Design system aligned**: Styling matches `docs/design.md` tokens
+- **Accessible**: Proper touch targets (44pt minimum), accessibility roles
+- **Composable**: Simple props, combine to build complex UI
+
 ## Form Handling
 
 Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation.
@@ -145,8 +213,10 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 1. **Schema** (`src/db/[domain].ts`): Define Drizzle table + Zod schemas using drizzle-zod
 2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
-3. **Component** (`src/components/`): Presentational form using `Controller` for each field
+3. **Component** (`src/components/`): Presentational form using `TextInput` from `@/components/ui`
 4. **Screen** (`app/`): Uses the hook, passes `form` to component
+
+The `TextInput` component handles `Controller` integration internally, simplifying form components.
 
 ### Example: Form Hook
 

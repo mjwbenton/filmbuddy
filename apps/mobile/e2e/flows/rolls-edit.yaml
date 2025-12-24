@@ -27,9 +27,9 @@ appId: tech.mattb.filmbuddy
 - eraseText
 
 # THEN I cannot save and the missing fields are indicated
-# (Save is disabled, we verify by closing without saving)
+# (Save is disabled, we verify by canceling without saving)
 - tapOn:
-    id: "close-button"
+    id: "cancel-button"
 
 # Verify original data is still there (wasn't saved with empty field)
 - assertVisible: "Kodak Gold @ 200"

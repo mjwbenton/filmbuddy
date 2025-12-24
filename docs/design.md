@@ -92,7 +92,8 @@ Hover states: subtle lift with `translateY(-1px)` and shadow increase.
 
 - **Primary**: Slate Blue background, white text
 - **Secondary**: Transparent with Slate Blue border and text
-- **Destructive**: Error color background, white text
+- **Primary Destructive**: Error color background, white text
+- **Secondary Destructive**: Transparent with Error border and text
 - Minimum touch target: 44x44pt
 
 ### Inputs
@@ -174,34 +175,57 @@ Design tokens map to Tailwind utilities via `tailwind.config.ts` (which imports 
 | Touch target (44px)    | `min-h-touch`, `min-w-touch`             |
 | Border radius md (8px) | `rounded-md`                             |
 
-### Component Example
+### UI Component Library
+
+The app includes a UI component library at `src/components/ui/` that implements these design guidelines. Import components from `@/components/ui`:
 
 ```tsx
-// components/Card.tsx
-import { View, Text } from "react-native";
+import {
+  Button,
+  Card,
+  Text,
+  TextInput,
+  ScreenHeader,
+  HeaderCancelButton,
+  HeaderSaveButton,
+} from "@/components/ui";
 
-interface CardProps {
-  title: string;
-  children: React.ReactNode;
-  active?: boolean;
-}
+// Cards with active state
+<Card active={isActive} onPress={handlePress}>
+  <Text variant="subheading">Card Title</Text>
+  <Text variant="body" color="stone">Card content</Text>
+</Card>
 
-export function Card({ title, children, active }: CardProps) {
-  return (
-    <View
-      className={`
-        bg-cloud rounded-md p-md shadow-sm
-        ${active ? "border-l-[3px] border-l-amber" : ""}
-      `}
-    >
-      <Text className="font-heading text-subheading text-ink mb-sm">
-        {title}
-      </Text>
-      {children}
-    </View>
-  );
-}
+// Button variants
+<Button onPress={handleSave}>Save</Button>
+<Button variant="secondary" onPress={handleCancel}>Cancel</Button>
+<Button variant="primary-destructive" onPress={handleDelete}>Delete</Button>
+<Button variant="secondary-destructive" onPress={handleRemove}>Remove</Button>
+
+// Typography
+<Text variant="display">Display Text</Text>
+<Text variant="heading">Heading Text</Text>
+<Text variant="subheading">Subheading Text</Text>
+<Text variant="body">Body text</Text>
+<Text variant="caption" color="stone">Caption text</Text>
+
+// Form inputs (react-hook-form integrated)
+<TextInput
+  label="Email"
+  name="email"
+  control={form.control}
+  placeholder="Enter email"
+/>
+
+// Screen header
+<ScreenHeader
+  title="Add Item"
+  left={<HeaderCancelButton onPress={() => router.back()} />}
+  right={<HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />}
+/>
 ```
+
+See [architecture.md](architecture.md#ui-components) for the full component API.
 
 ### Touch Targets
 

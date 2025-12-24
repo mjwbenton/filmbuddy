@@ -1,11 +1,19 @@
-import { View, Text, Pressable, ScrollView, Alert } from "react-native";
+import { View, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useRollStore } from "@/stores/rollStore";
 import { RollForm } from "@/components/RollForm";
 import { useRollForm } from "@/hooks/useRollForm";
 import { formatRelativeDate } from "@/lib/date-format";
-import { logger } from "@/lib/logger";
+import { handleError } from "@/lib/handleError";
+import {
+  ScreenHeader,
+  HeaderCancelButton,
+  HeaderCloseButton,
+  HeaderSaveButton,
+  Text,
+  Button,
+} from "@/components/ui";
 
 export default function RollDetailScreen() {
   const router = useRouter();
@@ -33,8 +41,7 @@ export default function RollDetailScreen() {
         });
         router.back();
       } catch (error) {
-        logger.error("Failed to save roll", error);
-        Alert.alert("Error", "Failed to save roll. Please try again.");
+        handleError(error, "Failed to save roll. Please try again.");
       }
     },
   });
@@ -42,27 +49,19 @@ export default function RollDetailScreen() {
   if (!roll || !id) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-paper">
-        <Text className="text-body text-stone">Roll not found</Text>
+        <Text color="stone">Roll not found</Text>
       </SafeAreaView>
     );
   }
 
   const isFinished = roll.finishedAt !== null;
 
-  const handleClose = () => {
-    router.back();
-  };
-
   const handleMarkFinished = async () => {
     try {
       await markFinished(id);
       router.back();
     } catch (error) {
-      logger.error("Failed to mark roll as finished", error);
-      Alert.alert(
-        "Error",
-        "Failed to mark roll as finished. Please try again.",
-      );
+      handleError(error, "Failed to mark roll as finished. Please try again.");
     }
   };
 
@@ -71,8 +70,7 @@ export default function RollDetailScreen() {
       await markActive(id);
       router.back();
     } catch (error) {
-      logger.error("Failed to mark roll as active", error);
-      Alert.alert("Error", "Failed to mark roll as active. Please try again.");
+      handleError(error, "Failed to mark roll as active. Please try again.");
     }
   };
 
@@ -90,8 +88,7 @@ export default function RollDetailScreen() {
               await deleteRoll(id);
               router.back();
             } catch (error) {
-              logger.error("Failed to delete roll", error);
-              Alert.alert("Error", "Failed to delete roll. Please try again.");
+              handleError(error, "Failed to delete roll. Please try again.");
             }
           },
         },
@@ -101,48 +98,34 @@ export default function RollDetailScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
-      <View className="flex-row items-center justify-between border-b border-fog px-md py-sm">
-        <Pressable
-          onPress={handleClose}
-          testID="close-button"
-          className="min-h-touch min-w-touch items-center justify-center"
-        >
-          <Text className="text-body text-slate-blue">
-            {isFinished ? "Close" : "Cancel"}
-          </Text>
-        </Pressable>
-        <Text className="font-heading text-subheading font-medium text-ink">
-          {isFinished ? "Finished Roll" : "Edit Roll"}
-        </Text>
-        {isFinished ? (
-          <View className="min-h-touch min-w-touch" />
-        ) : (
-          <Pressable
-            onPress={handleSubmit}
-            disabled={!canSubmit || isSubmitting}
-            testID="save-button"
-            className="min-h-touch min-w-touch items-center justify-center"
-          >
-            <Text
-              className={`text-body font-medium ${
-                canSubmit && !isSubmitting ? "text-slate-blue" : "text-stone"
-              }`}
-            >
-              Save
-            </Text>
-          </Pressable>
-        )}
-      </View>
+      <ScreenHeader
+        title={isFinished ? "Finished Roll" : "Edit Roll"}
+        left={
+          isFinished ? (
+            <HeaderCloseButton onPress={() => router.back()} />
+          ) : (
+            <HeaderCancelButton onPress={() => router.back()} />
+          )
+        }
+        right={
+          isFinished ? null : (
+            <HeaderSaveButton
+              onPress={handleSubmit}
+              disabled={!canSubmit || isSubmitting}
+            />
+          )
+        }
+      />
 
       <ScrollView className="flex-1 px-md py-md">
         <RollForm form={form} disabled={isFinished} />
 
         <View className="mt-lg">
-          <Text className="text-sm text-stone">
+          <Text variant="small" color="stone">
             {formatRelativeDate(roll.loadedAt, "Loaded")}
           </Text>
           {roll.finishedAt && (
-            <Text className="mt-xs text-sm text-stone">
+            <Text variant="small" color="stone" className="mt-xs">
               {formatRelativeDate(roll.finishedAt, "Finished")}
             </Text>
           )}
@@ -150,36 +133,30 @@ export default function RollDetailScreen() {
 
         <View className="mt-xl gap-sm">
           {isFinished ? (
-            <Pressable
+            <Button
+              variant="secondary"
               onPress={handleMarkActive}
               testID="mark-active-button"
-              className="min-h-touch items-center justify-center rounded-md border border-slate-blue"
             >
-              <Text className="text-body font-medium text-slate-blue">
-                Mark as Active
-              </Text>
-            </Pressable>
+              Mark as Active
+            </Button>
           ) : (
-            <Pressable
+            <Button
+              variant="secondary"
               onPress={handleMarkFinished}
               testID="mark-finished-button"
-              className="min-h-touch items-center justify-center rounded-md border border-slate-blue"
             >
-              <Text className="text-body font-medium text-slate-blue">
-                Mark as Finished
-              </Text>
-            </Pressable>
+              Mark as Finished
+            </Button>
           )}
 
-          <Pressable
+          <Button
+            variant="secondary-destructive"
             onPress={handleDelete}
             testID="delete-button"
-            className="min-h-touch items-center justify-center rounded-md border border-error"
           >
-            <Text className="text-body font-medium text-error">
-              Delete Roll
-            </Text>
-          </Pressable>
+            Delete Roll
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>

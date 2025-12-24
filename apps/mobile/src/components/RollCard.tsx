@@ -1,6 +1,6 @@
-import { Pressable, Text } from "react-native";
 import { Roll } from "@/db/schema";
 import { formatRelativeDate } from "@/lib/date-format";
+import { Card, Text } from "./ui";
 
 interface RollCardProps {
   roll: Roll;
@@ -15,33 +15,34 @@ export function RollCard({ roll, onPress, testID }: RollCardProps) {
     : formatRelativeDate(roll.loadedAt, "Loaded");
 
   return (
-    <Pressable
+    <Card
+      active={!isFinished}
       onPress={onPress}
       testID={testID}
       accessibilityLabel={`${roll.filmStock} @ ${roll.iso}, ${roll.camera}, ${dateText}`}
-      accessibilityRole="button"
-      className={`mb-sm rounded-md bg-cloud p-md shadow-sm ${
-        !isFinished ? "border-l-[3px] border-l-amber" : ""
-      }`}
     >
       <Text
+        variant="subheading"
         testID={testID ? `${testID}-title` : undefined}
-        className="font-heading text-subheading font-medium text-ink"
       >
         {roll.filmStock} @ {roll.iso}
       </Text>
       <Text
+        variant="body"
+        color="stone"
+        className="mt-xs"
         testID={testID ? `${testID}-camera` : undefined}
-        className="mt-xs text-body text-stone"
       >
         {roll.camera}
       </Text>
       <Text
+        variant="small"
+        color="stone"
+        className="mt-xs"
         testID={testID ? `${testID}-date` : undefined}
-        className="mt-xs text-sm text-stone"
       >
         {dateText}
       </Text>
-    </Pressable>
+    </Card>
   );
 }

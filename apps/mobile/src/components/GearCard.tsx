@@ -1,4 +1,4 @@
-import { Pressable, Text } from "react-native";
+import { Card, Text } from "./ui";
 
 interface GearCardProps {
   name: string;
@@ -8,16 +8,8 @@ interface GearCardProps {
 
 export function GearCard({ name, onPress, testID }: GearCardProps) {
   return (
-    <Pressable
-      onPress={onPress}
-      testID={testID}
-      accessibilityLabel={name}
-      accessibilityRole="button"
-      className="mb-sm min-h-touch rounded-md bg-cloud p-md shadow-sm"
-    >
-      <Text className="font-heading text-subheading font-medium text-ink">
-        {name}
-      </Text>
-    </Pressable>
+    <Card onPress={onPress} testID={testID} accessibilityLabel={name}>
+      <Text variant="subheading">{name}</Text>
+    </Card>
   );
 }

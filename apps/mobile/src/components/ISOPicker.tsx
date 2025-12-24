@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+
 // Common ISO values for film photography
 const ISO_VALUES = [25, 50, 80, 100, 160, 200, 400, 800, 1600, 3200] as const;
 

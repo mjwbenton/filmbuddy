@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { GearCard } from "@/components/GearCard";
-import { SectionHeader } from "@/components/SectionHeader";
+import { SectionHeader } from "@/components/ui";
 
 export default function GearScreen() {
   const router = useRouter();
