@@ -47,6 +47,9 @@ android/
 apps/mobile/e2e/output/
 maestro-reports/
 
+# Worktrees
+trees/
+
 # Other
 .playwright-mcp
 install-state.gz
