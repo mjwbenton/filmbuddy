@@ -280,15 +280,6 @@ export const useExampleStore = create<ExampleStore>((set) => ({
 
 Integration tests use `vi.mock` to replace Expo dependencies with test implementations. See [testing.md](testing.md#store-integration-testing) for details.
 
-### Persistence with Drizzle
-
-For simple cases, use Drizzle's `useLiveQuery` directly in components. For complex state that combines multiple data sources or derived state, Zustand stores can wrap Drizzle queries.
-
-**When to use each approach:**
-
-- `useLiveQuery`: Simple list/detail views that display database data directly
-- Zustand + Drizzle: Complex UI state, optimistic updates, combining multiple queries
-
 ## Data Layer
 
 Drizzle ORM provides type-safe database access over expo-sqlite.
@@ -345,23 +336,6 @@ export type ItemForm = z.infer<typeof itemFormSchema>;
 ```
 
 **Why no select schema?** Data from our own database already matches the schema we used to write it. Zod validation is only needed at input boundaries (forms, APIs), not for trusted internal data.
-
-### Live Queries
-
-Use `useLiveQuery` for reactive data that updates when the database changes:
-
-```tsx
-import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { db } from "@/db";
-import { items } from "@/db/schema";
-
-export function ItemList() {
-  const { data, error } = useLiveQuery(
-    db.select().from(items).orderBy(desc(items.createdAt)),
-  );
-  // ...
-}
-```
 
 ### Migrations
 
