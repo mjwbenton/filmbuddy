@@ -1,6 +1,6 @@
 ---
 name: wireframe
-description: Use this skill when creating or editing wireframes for FilmBuddy screens. Provides HTML templates, CSS classes, and conventions for sketchy Balsamiq-style iOS wireframes.
+description: Create sketchy Balsamiq-style iOS wireframes in HTML. Use when designing screens, creating mockups, sketching UI, or making wireframes.
 ---
 
 # Wireframe Mode
@@ -63,37 +63,9 @@ Wireframes live in `docs/wireframes/`:
 
 3. Add the new wireframe to `index.html`
 
-## Available CSS Classes
+## CSS Classes
 
-**Layout:**
-
-- `.screen` - iOS-sized container (375x812px)
-- `.status-bar` - iOS status bar
-- `.nav-bar` - Top navigation with title
-- `.tab-bar` - Bottom tab navigation
-- `.content` - Scrollable main content area
-
-**Components:**
-
-- `.card` - Tappable content card
-- `.card-title`, `.card-subtitle`, `.card-meta` - Card text hierarchy
-- `.button`, `.button.primary` - Buttons
-- `.button-icon` - Icon-only button content
-- `.list-item` - List row
-- `.input` - Text input field
-- `.section-header` - Section divider with label
-- `.tab-item`, `.tab-item.active` - Tab bar items
-- `.tab-icon` - Placeholder for tab icons
-
-**States:**
-
-- `.empty-state` - Empty state container
-- `.empty-state-icon`, `.empty-state-text`, `.empty-state-hint`
-
-**Annotations:**
-
-- `.note` - Yellow sticky note for design comments
-- `.placeholder` - Gray dashed box for images/icons
+See [css-reference.md](css-reference.md) for the full list of available classes.
 
 ## Linking Screens
 

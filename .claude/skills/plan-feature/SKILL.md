@@ -1,6 +1,6 @@
 ---
 name: plan-feature
-description: Use this skill when creating or refining feature plans for FilmBuddy. Provides a structured process for defining features with user stories, GIVEN/WHEN/THEN scenarios, and wireframe links.
+description: Create or refine feature plans with user stories and GIVEN/WHEN/THEN scenarios. Use when planning a feature, writing scenarios, defining user stories, or creating a feature spec.
 ---
 
 # Feature Planning Mode
@@ -74,71 +74,11 @@ For the scenarios defined:
 
 ### 6. Generate Plan
 
-Create or update `docs/plans/{feature-name}.md` using this template:
-
-```markdown
-# Feature: [Name]
-
-## Summary
-
-[One sentence description]
-
-## Dependencies
-
-<!-- Remove this section if no dependencies -->
-
-- [Other Feature](other-feature.md) - [brief reason why needed]
-
-## User Story
-
-As a film photographer, I want to [goal] so that [benefit].
-
-## Scenarios
-
-### Scenario: [Descriptive Name]
-
-- **GIVEN** [precondition]
-- **WHEN** [action]
-- **THEN** [outcome]
-
-<!-- Repeat for each scenario -->
-
-## Wireframes
-
-- [Screen Name](../wireframes/screen.html) - used in [scenario names]
-
-## Open Questions
-
-<!-- Remove this section if no open questions -->
-
-- [Any unresolved decisions or unknowns]
-```
+Create or update `docs/plans/{feature-name}.md` using the template in [plan-template.md](plan-template.md).
 
 ### 7. Update Plans Index
 
-Ensure `docs/plans/index.md` exists and includes this plan. Create if needed:
-
-```markdown
-# Feature Plans
-
-## Rolls
-
-- [Feature Name](feature-name.md)
-
-## Meter
-
-- [Feature Name](feature-name.md)
-
-## Gear
-
-- [Feature Name](feature-name.md)
-
-## Archive
-
-- [Feature Name](feature-name.md)
-```
-
-Group plans by app area. A plan can appear in multiple sections if it spans areas.
+Ensure `docs/plans/index.md` exists and includes this plan. See [plan-template.md](plan-template.md) for index format.
 
 ## Iteration Mode
 
