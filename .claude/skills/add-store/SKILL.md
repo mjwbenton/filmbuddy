@@ -1,22 +1,11 @@
 ---
 name: add-store
-description: Add Zustand stores for state management. Use when creating a store, managing state, or building data logic that persists to SQLite.
+description: Add Zustand stores for database access and state management. Use when creating a store, accessing data, or adding CRUD operations.
 ---
 
 # Adding Zustand Stores
 
-Zustand provides lightweight, TypeScript-first state management.
-
-## When to Use Stores
-
-Use a Zustand store when you need:
-
-- CRUD operations on database entities
-- State that combines multiple data sources
-- Optimistic updates
-- Complex derived state
-
-For simple list/detail views that just display database data, you may not need a store.
+Zustand stores are the standard way to access the database. Each domain entity gets its own store for CRUD operations.
 
 ## Store Location
 
