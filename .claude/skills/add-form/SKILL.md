@@ -16,27 +16,12 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 ## Step 1: Define Schema
 
-In `db/[domain].ts`, create a form schema from the Drizzle table:
+See the **add-domain** skill for creating the Drizzle table and Zod form schema.
 
-```typescript
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
+Your domain file should export:
 
-export const items = sqliteTable("items", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-});
-
-// Form schema (picks fields user edits, adds validation)
-export const itemFormSchema = createInsertSchema(items, {
-  name: z.string().trim().min(1, "Name is required"),
-}).pick({ name: true });
-
-export type ItemForm = z.infer<typeof itemFormSchema>;
-```
-
-Export from `db/schema.ts`.
+- `itemFormSchema` - Zod schema with `.pick()` for user-editable fields
+- `ItemForm` - TypeScript type inferred from the schema
 
 ## Step 2: Create Form Hook
 
@@ -154,8 +139,7 @@ The `TextInput` component from `@/components/ui` handles `Controller` integratio
 
 ## Checklist
 
-- [ ] Schema in `db/[domain].ts` with Zod validation
-- [ ] Export from `db/schema.ts`
+- [ ] Schema defined (see **add-domain** skill)
 - [ ] Hook in `hooks/use[Name]Form.ts`
 - [ ] Component in `components/[Name]Form.tsx`
 - [ ] Screen uses hook and component
