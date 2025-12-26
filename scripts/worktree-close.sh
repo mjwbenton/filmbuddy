@@ -3,8 +3,10 @@
 
 set -e
 
-# Get the repo root
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# Get the main repo root (works from worktree or main repo)
+GIT_COMMON_DIR="$(git rev-parse --git-common-dir)"
+MAIN_REPO="$(cd "$GIT_COMMON_DIR/.." && pwd)"
+TREES_DIR="$MAIN_REPO/trees"
 
 # Determine worktree path - use argument or try to detect from cwd
 if [ -n "$1" ]; then
@@ -12,10 +14,10 @@ if [ -n "$1" ]; then
 else
   # Check if current directory is inside a worktree
   CURRENT_DIR="$(pwd)"
-  if [[ "$CURRENT_DIR" == "$REPO_ROOT/trees/"* ]]; then
+  if [[ "$CURRENT_DIR" == "$TREES_DIR/"* ]]; then
     # Extract the worktree name from the path
-    WORKTREE_NAME=$(echo "$CURRENT_DIR" | sed "s|$REPO_ROOT/trees/||" | cut -d'/' -f1)
-    WORKTREE_PATH="$REPO_ROOT/trees/$WORKTREE_NAME"
+    WORKTREE_NAME=$(echo "$CURRENT_DIR" | sed "s|$TREES_DIR/||" | cut -d'/' -f1)
+    WORKTREE_PATH="$TREES_DIR/$WORKTREE_NAME"
   else
     echo "Error: Not in a worktree and no worktree path provided" >&2
     exit 1
@@ -43,7 +45,7 @@ if ! git -C "$WORKTREE_PATH" diff --quiet || ! git -C "$WORKTREE_PATH" diff --ca
 fi
 
 # Count commits on this branch since diverging from main
-COMMIT_COUNT=$(git -C "$REPO_ROOT" rev-list --count main.."$BRANCH_NAME")
+COMMIT_COUNT=$(git -C "$MAIN_REPO" rev-list --count main.."$BRANCH_NAME")
 
 echo "Branch has $COMMIT_COUNT commit(s) since main..."
 
@@ -51,24 +53,24 @@ if [ "$COMMIT_COUNT" -eq 1 ]; then
   # Single commit - rebase onto main and fast-forward
   echo "Rebasing single commit onto main..."
   git -C "$WORKTREE_PATH" rebase main
-  git -C "$REPO_ROOT" checkout main
-  git -C "$REPO_ROOT" merge --ff-only "$BRANCH_NAME"
+  git -C "$MAIN_REPO" checkout main
+  git -C "$MAIN_REPO" merge --ff-only "$BRANCH_NAME"
 else
   # Multiple commits - create a merge commit
   echo "Merging $BRANCH_NAME into main..."
-  git -C "$REPO_ROOT" checkout main
-  git -C "$REPO_ROOT" merge "$BRANCH_NAME" --no-edit
+  git -C "$MAIN_REPO" checkout main
+  git -C "$MAIN_REPO" merge "$BRANCH_NAME" --no-edit
 fi
 
 # Remove the worktree
 echo "Removing worktree..."
-git -C "$REPO_ROOT" worktree remove "$WORKTREE_PATH"
+git -C "$MAIN_REPO" worktree remove "$WORKTREE_PATH"
 
 # Delete the branch
 echo "Deleting branch $BRANCH_NAME..."
-git -C "$REPO_ROOT" branch -d "$BRANCH_NAME"
+git -C "$MAIN_REPO" branch -d "$BRANCH_NAME"
 
 echo "Done. Worktree closed and branch merged."
 
 # Output the main repo path for the caller
-echo "$REPO_ROOT"
+echo "$MAIN_REPO"
