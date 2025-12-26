@@ -42,10 +42,23 @@ if ! git -C "$WORKTREE_PATH" diff --quiet || ! git -C "$WORKTREE_PATH" diff --ca
   exit 1
 fi
 
-# Merge the branch into main
-echo "Merging $BRANCH_NAME into main..."
-git -C "$REPO_ROOT" checkout main
-git -C "$REPO_ROOT" merge "$BRANCH_NAME" --no-edit
+# Count commits on this branch since diverging from main
+COMMIT_COUNT=$(git -C "$REPO_ROOT" rev-list --count main.."$BRANCH_NAME")
+
+echo "Branch has $COMMIT_COUNT commit(s) since main..."
+
+if [ "$COMMIT_COUNT" -eq 1 ]; then
+  # Single commit - rebase onto main and fast-forward
+  echo "Rebasing single commit onto main..."
+  git -C "$WORKTREE_PATH" rebase main
+  git -C "$REPO_ROOT" checkout main
+  git -C "$REPO_ROOT" merge --ff-only "$BRANCH_NAME"
+else
+  # Multiple commits - create a merge commit
+  echo "Merging $BRANCH_NAME into main..."
+  git -C "$REPO_ROOT" checkout main
+  git -C "$REPO_ROOT" merge "$BRANCH_NAME" --no-edit
+fi
 
 # Remove the worktree
 echo "Removing worktree..."

@@ -41,5 +41,9 @@ mkdir -p "$TREES_DIR"
 # Create the worktree with a new branch of the same name
 git -C "$REPO_ROOT" worktree add "$WORKTREE_PATH" -b "$NAME"
 
+# Install dependencies
+echo "Installing dependencies..." >&2
+(cd "$WORKTREE_PATH" && yarn install)
+
 # Output the path for the caller to use
 echo "$WORKTREE_PATH"
