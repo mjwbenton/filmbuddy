@@ -15,14 +15,20 @@ Merge the current worktree branch back to main and clean up.
    - Stash them
    - Discard them
 
-3. Once the working directory is clean, run the close script:
+3. Once the working directory is clean, get the paths and change to the main repo BEFORE closing:
 
    ```bash
-   ./scripts/worktree-close.sh
+   WORKTREE_PATH="$(pwd)"
+   MAIN_REPO="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)"
+   cd "$MAIN_REPO"
    ```
 
-4. The script merges the branch to main, removes the worktree, and deletes the branch. It outputs the main repo path.
+4. Run the close script with the worktree path:
 
-5. Use `cd` to change back to the main repo directory.
+   ```bash
+   ./scripts/worktree-close.sh "$WORKTREE_PATH"
+   ```
+
+5. The script merges the branch to main, removes the worktree, and deletes the branch.
 
 6. Confirm to the user that the worktree has been closed and the branch merged.
