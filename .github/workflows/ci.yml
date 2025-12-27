@@ -111,21 +111,7 @@ jobs:
       - name: Run E2E tests
         env:
           MAESTRO_DRIVER_STARTUP_TIMEOUT: 120000
-        run: |
-          # Retry loop - subsequent attempts piggyback off previous driver init
-          for attempt in 1 2 3; do
-            echo "Attempt $attempt of 3"
-            if ~/.maestro/bin/maestro test --test-output-dir=maestro-reports apps/mobile/e2e/flows/; then
-              echo "Tests passed on attempt $attempt"
-              exit 0
-            fi
-            if [ $attempt -lt 3 ]; then
-              echo "Attempt $attempt failed, retrying in 10s..."
-              sleep 10
-            fi
-          done
-          echo "All attempts failed"
-          exit 1
+        run: ~/.maestro/bin/maestro test --test-output-dir=maestro-reports apps/mobile/e2e/flows/
 
       - name: Upload Maestro artifacts on failure
         if: failure()
