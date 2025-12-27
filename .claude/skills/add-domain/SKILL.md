@@ -89,41 +89,6 @@ import { items, Item, NewItem, itemFormSchema } from "@/db/schema";
 import { eq, desc, and } from "drizzle-orm";
 ```
 
-## Common Queries
-
-```typescript
-// Select all
-const allItems = await db.select().from(items);
-
-// Select with filter
-const activeItems = await db
-  .select()
-  .from(items)
-  .where(eq(items.isActive, true));
-
-// Select with ordering
-const recentItems = await db
-  .select()
-  .from(items)
-  .orderBy(desc(items.createdAt));
-
-// Insert
-await db.insert(items).values({
-  id: randomUUID(),
-  name: "New Item",
-  createdAt: new Date(),
-});
-
-// Update
-await db
-  .update(items)
-  .set({ name: "Updated Name" })
-  .where(eq(items.id, itemId));
-
-// Delete
-await db.delete(items).where(eq(items.id, itemId));
-```
-
 ## Why No Select Schema?
 
 Data from our own database already matches the schema we used to write it. Zod validation is only needed at input boundaries (forms, APIs), not for trusted internal data.

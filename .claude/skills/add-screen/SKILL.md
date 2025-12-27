@@ -51,7 +51,7 @@ export default function GearScreen() {
 />
 ```
 
-## Adding a Push Screen
+## Adding other Screens
 
 Group screens by entity in `app/[entity]/`:
 
