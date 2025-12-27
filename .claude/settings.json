@@ -15,5 +15,27 @@
   },
   "enabledPlugins": {
     "plugin-dev@claude-plugins-official": true
+  },
+  "permissions": {
+    "allow": [
+      "Bash(./scripts/worktree-close.sh:*)",
+      "Bash(./scripts/worktree-create.sh:*)",
+      "Bash(./scripts/worktree-rename.sh:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(git:*)",
+      "Bash(tree:*)",
+      "Bash(xargs ls:*)",
+      "Bash(yarn add:*)",
+      "Bash(yarn lint:*)",
+      "Bash(yarn test:*)",
+      "Bash(yarn typecheck:*)",
+      "Skill",
+      "WebFetch(domain:docs.maestro.dev)",
+      "WebFetch(domain:github.com)",
+      "WebSearch"
+    ],
+    "ask": ["Bash(git push:*)"],
+    "defaultMode": "acceptEdits"
   }
 }
