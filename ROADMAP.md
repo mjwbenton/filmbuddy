@@ -8,12 +8,11 @@
 
 ## Workflow
 
-- [ ] Handle issues with git -C
+- [ ] Logging skill
+- [ ] Error handling skill
 - [ ] Break down skills into more skills that use progressive disclosure (e.g. maestro skill w/planning, writing and debugging)
-- [ ] Break documentation down into skills
 - [ ] Make code review agent only run relevant agents for the change
 - [ ] Create verification agent
-- [ ] Implementation skills are too specific to adding?
 
 ## Features
 
