@@ -5,18 +5,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lens Sheet - FilmBuddy Wireframes</title>
     <link rel="stylesheet" href="wireframe.css" />
+    <style>
+      .mode-tabs {
+        display: flex;
+        border: 2px solid #333;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .mode-tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background: #f0f0f0;
+        border: none;
+        font-family: inherit;
+        font-size: 16px;
+        cursor: pointer;
+        border-right: 2px solid #333;
+      }
+      .mode-tab:last-child {
+        border-right: none;
+      }
+      .mode-tab.active {
+        background: #4a90d9;
+        color: #fff;
+      }
+      .increment-tabs {
+        display: flex;
+        gap: 8px;
+      }
+      .increment-tab {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+        background: #fff;
+        border: 2px solid #333;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .increment-tab.active {
+        background: #4a90d9;
+        color: #fff;
+        border-color: #4a90d9;
+      }
+      .aperture-preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 12px;
+        background: #f8f8f8;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        min-height: 60px;
+      }
+      .aperture-chip {
+        padding: 6px 12px;
+        background: #fff;
+        border: 2px solid #333;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+      .aperture-chip.deletable {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .delete-btn {
+        color: #d9534f;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .add-aperture-btn {
+        padding: 6px 12px;
+        background: #fff;
+        border: 2px dashed #666;
+        border-radius: 16px;
+        font-size: 14px;
+        color: #666;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <!-- Add Lens -->
     <div class="screen">
-      <!-- iOS Status Bar -->
       <div class="status-bar">9:41 AM</div>
 
-      <!-- Dimmed background representing the gear list behind -->
       <div class="sheet-backdrop"></div>
 
-      <!-- Sheet -->
-      <div class="sheet">
+      <div class="sheet" style="min-height: 600px">
         <div class="sheet-header">
           <a href="gear.html" class="sheet-cancel">Cancel</a>
           <h2>Add Lens</h2>
@@ -26,27 +106,148 @@
         <div class="sheet-content">
           <div class="form-group">
             <label class="form-label">Name</label>
-            <input type="text" class="input" placeholder="e.g., Summicron 50mm f/2" />
+            <input
+              type="text"
+              class="input"
+              placeholder="e.g., Voigtlander 35mm f/1.5 Nokton"
+            />
+          </div>
+
+          <div class="section-header">Apertures</div>
+
+          <div class="mode-tabs">
+            <button class="mode-tab active">Standard</button>
+            <button class="mode-tab">Custom</button>
+          </div>
+
+          <!-- Standard Mode -->
+          <div class="form-group">
+            <label class="form-label">Maximum Aperture</label>
+            <div class="picker">
+              <span class="picker-value">f/1.5</span>
+              <span class="picker-arrow">▼</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Stop Increments</label>
+            <div class="increment-tabs">
+              <button class="increment-tab">Whole</button>
+              <button class="increment-tab active">Half</button>
+              <button class="increment-tab">Third</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Minimum Aperture</label>
+            <div class="picker">
+              <span class="picker-value">f/16</span>
+              <span class="picker-arrow">▼</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preview</label>
+            <div class="aperture-preview">
+              <span class="aperture-chip">f/1.5</span>
+              <span class="aperture-chip">f/2</span>
+              <span class="aperture-chip">f/2.8</span>
+              <span class="aperture-chip">f/4</span>
+              <span class="aperture-chip">f/5.6</span>
+              <span class="aperture-chip">f/8</span>
+              <span class="aperture-chip">f/11</span>
+              <span class="aperture-chip">f/16</span>
+            </div>
+            <p class="form-label-meta">
+              Increments from f/1.4 (nearest half stop to f/1.5)
+            </p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="note">
-      Save button is disabled until name has a value. Duplicate names show an
-      error and prevent saving.
+      Standard mode: Select max/min aperture and stop increments. Non-standard
+      max apertures (like f/1.5) are kept exactly; subsequent values increment
+      from the nearest standard stop. Save is disabled until name is filled.
+    </div>
+
+    <!-- Custom Mode -->
+    <div class="screen">
+      <div class="status-bar">9:41 AM</div>
+
+      <div class="sheet-backdrop"></div>
+
+      <div class="sheet" style="min-height: 500px">
+        <div class="sheet-header">
+          <a href="gear.html" class="sheet-cancel">Cancel</a>
+          <h2>Add Lens</h2>
+          <a href="gear.html" class="sheet-action">Save</a>
+        </div>
+
+        <div class="sheet-content">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input
+              type="text"
+              class="input"
+              value="Voigtlander 35mm f/1.5 Nokton"
+            />
+          </div>
+
+          <div class="section-header">Apertures</div>
+
+          <div class="mode-tabs">
+            <button class="mode-tab">Standard</button>
+            <button class="mode-tab active">Custom</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Aperture Values</label>
+            <div class="aperture-preview">
+              <span class="aperture-chip deletable"
+                >f/1.5 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/2 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/2.8 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/4 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/5.6 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/8 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/11 <span class="delete-btn">×</span></span
+              >
+              <span class="aperture-chip deletable"
+                >f/16 <span class="delete-btn">×</span></span
+              >
+              <span class="add-aperture-btn">+ Add</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      Custom mode: Add or remove individual aperture values. Useful for lenses
+      with unusual aperture rings. Cannot save with empty list.
     </div>
 
     <!-- Edit Lens -->
-    <div class="screen" style="margin-top: 40px;">
-      <!-- iOS Status Bar -->
+    <div class="screen">
       <div class="status-bar">9:41 AM</div>
 
-      <!-- Dimmed background representing the gear list behind -->
       <div class="sheet-backdrop"></div>
 
-      <!-- Sheet -->
-      <div class="sheet">
+      <div class="sheet" style="min-height: 600px">
         <div class="sheet-header">
           <a href="gear.html" class="sheet-cancel">Cancel</a>
           <h2>Edit Lens</h2>
@@ -58,6 +259,51 @@
             <label class="form-label">Name</label>
             <input type="text" class="input" value="Summicron 50mm f/2" />
           </div>
+
+          <div class="section-header">Apertures</div>
+
+          <div class="mode-tabs">
+            <button class="mode-tab active">Standard</button>
+            <button class="mode-tab">Custom</button>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Maximum Aperture</label>
+            <div class="picker">
+              <span class="picker-value">f/2</span>
+              <span class="picker-arrow">▼</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Stop Increments</label>
+            <div class="increment-tabs">
+              <button class="increment-tab active">Whole</button>
+              <button class="increment-tab">Half</button>
+              <button class="increment-tab">Third</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Minimum Aperture</label>
+            <div class="picker">
+              <span class="picker-value">f/16</span>
+              <span class="picker-arrow">▼</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preview</label>
+            <div class="aperture-preview">
+              <span class="aperture-chip">f/2</span>
+              <span class="aperture-chip">f/2.8</span>
+              <span class="aperture-chip">f/4</span>
+              <span class="aperture-chip">f/5.6</span>
+              <span class="aperture-chip">f/8</span>
+              <span class="aperture-chip">f/11</span>
+              <span class="aperture-chip">f/16</span>
+            </div>
+          </div>
         </div>
 
         <div class="sheet-footer">
@@ -67,8 +313,9 @@
     </div>
 
     <div class="note">
-      Edit sheet shows current name. Delete button at bottom permanently removes
-      the lens.
+      Edit mode shows existing aperture configuration. Changing stop increment
+      recalculates the aperture list. Delete button removes the lens
+      permanently.
     </div>
   </body>
 </html>

@@ -21,7 +21,10 @@ body {
   color: #333;
   min-height: 100vh;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-content: flex-start;
+  gap: 20px;
   padding: 20px;
 }
 
@@ -259,10 +262,12 @@ body {
   border: 2px solid #e6d800;
   border-radius: 4px;
   padding: 8px 12px;
-  margin: 12px 0;
+  margin: 0;
   font-size: 14px;
   color: #666;
   position: relative;
+  max-width: 200px;
+  align-self: flex-start;
 }
 
 .note::before {
