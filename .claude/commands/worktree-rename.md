@@ -29,9 +29,7 @@ Every worktree must be classified into one of these categories:
      - Is concise but descriptive (2-4 words)
      - Describes the feature or fix, not implementation details
 
-3. Present your suggested `category/name` to the user and ask for confirmation or alternatives.
-
-4. Once confirmed, run the rename script:
+3. Run the rename script with your chosen `category/name`:
 
    ```bash
    ./scripts/worktree-rename.sh <category/name>
@@ -40,6 +38,6 @@ Every worktree must be classified into one of these categories:
    The branch will be named `category/name` (e.g., `workflow/worktree-rename`).
    The directory will be named `category-name` (e.g., `workflow-worktree-rename`).
 
-5. The script outputs the new worktree path. Use `cd` to change into the renamed directory.
+4. The script outputs the new worktree path. Use `cd` to change into the renamed directory.
 
-6. Confirm to the user the rename is complete and show the new branch name and path.
+5. Confirm to the user the rename is complete and show the new branch name and path.
