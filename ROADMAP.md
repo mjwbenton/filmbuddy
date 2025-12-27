@@ -11,7 +11,6 @@
 - [ ] Logging skill
 - [ ] Error handling skill
 - [ ] Break down skills into more skills that use progressive disclosure (e.g. maestro skill w/planning, writing and debugging)
-- [ ] Make code review agent only run relevant agents for the change
 - [ ] Create verification agent
 
 ## Features
