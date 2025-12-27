@@ -36,6 +36,7 @@
       "WebSearch"
     ],
     "ask": ["Bash(git push:*)"],
+    "deny": ["Bash(git -C:*)"],
     "defaultMode": "acceptEdits"
   }
 }
