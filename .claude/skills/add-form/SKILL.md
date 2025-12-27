@@ -11,7 +11,7 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 1. **Schema** (`db/[domain].ts`): Zod schema from Drizzle table using `drizzle-zod`
 2. **Hook** (`hooks/use[Name]Form.ts`): Wraps `useForm` with `zodResolver`
-3. **Component** (`components/[Name]Form.tsx`): Presentational form using `TextInput` from `@/components/ui`
+3. **Component** (`components/[Name]Form.tsx`): Presentational form using inputs from `@/components/ui`
 4. **Screen** (`app/`): Uses the hook, passes `form` to component
 
 ## Step 1: Define Schema
@@ -54,6 +54,8 @@ export function useItemForm({ defaultValues, onSubmit }: UseItemFormOptions) {
 
 ## Step 3: Create Form Component
 
+Use input components from `@/components/ui` (see **ui-components** skill for available inputs).
+
 ```tsx
 // components/ItemForm.tsx
 import { Control } from "react-hook-form";
@@ -79,6 +81,8 @@ export function ItemForm({ control }: ItemFormProps) {
   );
 }
 ```
+
+All form inputs take `name`, `control`, and `testID` props for react-hook-form integration.
 
 ## Step 4: Use in Screen
 
@@ -120,21 +124,6 @@ export default function AddItemScreen() {
     </View>
   );
 }
-```
-
-## TextInput Props
-
-The `TextInput` component from `@/components/ui` handles `Controller` integration:
-
-```tsx
-<TextInput
-  label="Email" // Label shown above input
-  name="email" // Field name in form
-  control={form.control} // From useForm
-  placeholder="..." // Placeholder text
-  testID="email-input" // For Maestro tests
-  keyboardType="email-address" // Optional keyboard type
-/>
 ```
 
 ## Checklist
