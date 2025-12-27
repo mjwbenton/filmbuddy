@@ -1,9 +1,9 @@
 ---
-name: add-store
-description: Add Zustand stores for database access and state management. Use when creating a store, accessing data, or adding CRUD operations.
+name: implement-store
+description: Implement Zustand stores for database access and state management. Use when creating or modifying stores, data access, or CRUD operations.
 ---
 
-# Adding Zustand Stores
+# Zustand Stores
 
 Zustand stores are the standard way to access the database. Each domain entity gets its own store for CRUD operations.
 

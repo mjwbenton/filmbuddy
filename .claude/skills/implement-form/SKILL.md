@@ -1,9 +1,9 @@
 ---
-name: add-form
-description: Add forms with react-hook-form and Zod validation. Use when creating a form, adding validation, building a form hook, or integrating form inputs.
+name: implement-form
+description: Implement forms with react-hook-form and Zod validation. Use when creating or modifying forms, validation, form hooks, or form inputs.
 ---
 
-# Adding Forms
+# Forms
 
 Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation.
 
@@ -16,7 +16,7 @@ Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod
 
 ## Step 1: Define Schema
 
-See the **add-domain** skill for creating the Drizzle table and Zod form schema.
+See the **implement-domain** skill for creating the Drizzle table and Zod form schema.
 
 Your domain file should export:
 
@@ -128,7 +128,7 @@ export default function AddItemScreen() {
 
 ## Checklist
 
-- [ ] Schema defined (see **add-domain** skill)
+- [ ] Schema defined (see **implement-domain** skill)
 - [ ] Hook in `hooks/use[Name]Form.ts`
 - [ ] Component in `components/[Name]Form.tsx`
 - [ ] Screen uses hook and component

@@ -1,9 +1,9 @@
 ---
-name: add-screen
-description: Add screens and routes with Expo Router. Use when creating a screen, adding a page, new route, adding a tab, or navigation.
+name: implement-screen
+description: Implement screens and routes with Expo Router. Use when creating or modifying screens, pages, routes, tabs, or navigation.
 ---
 
-# Adding Screens
+# Screens
 
 Expo Router provides file-based routing built on React Navigation.
 

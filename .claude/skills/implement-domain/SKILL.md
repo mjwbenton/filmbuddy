@@ -1,9 +1,9 @@
 ---
-name: add-domain
-description: Add database tables and schemas with Drizzle ORM. Use when adding a table, creating an entity, database schema, or new data type.
+name: implement-domain
+description: Implement database tables and schemas with Drizzle ORM. Use when creating or modifying tables, entities, schemas, or data types.
 ---
 
-# Adding a Domain (Database Entity)
+# Domains (Database Entities)
 
 Each domain has its own file containing the Drizzle table and Zod schemas.
 
