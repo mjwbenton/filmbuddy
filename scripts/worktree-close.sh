@@ -59,7 +59,7 @@ else
   # Multiple commits - create a merge commit
   echo "Merging $BRANCH_NAME into main..."
   git -C "$MAIN_REPO" checkout main
-  git -C "$MAIN_REPO" merge "$BRANCH_NAME" --no-edit
+  git -C "$MAIN_REPO" merge --no-ff "$BRANCH_NAME" --no-edit
 fi
 
 # Remove the worktree
