@@ -55,42 +55,6 @@ export const itemFormSchema = itemInsertSchema.pick({
 export type ItemForm = z.infer<typeof itemFormSchema>;
 ```
 
-## Column Types
-
-Common Drizzle column types for SQLite:
-
-```typescript
-import {
-  sqliteTable,
-  text,
-  integer,
-  real,
-  blob,
-} from "drizzle-orm/sqlite-core";
-
-const example = sqliteTable("example", {
-  // Primary key
-  id: text("id").primaryKey(),
-
-  // Strings
-  name: text("name").notNull(),
-  description: text("description"), // nullable
-
-  // Numbers
-  count: integer("count").notNull().default(0),
-  price: real("price"),
-
-  // Booleans (stored as 0/1)
-  isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
-
-  // Timestamps
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-
-  // Foreign keys
-  categoryId: text("category_id").references(() => categories.id),
-});
-```
-
 ## Export from schema.ts
 
 Add exports to the barrel file:
