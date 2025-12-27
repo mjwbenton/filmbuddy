@@ -1,5 +1,4 @@
 {
-  "preferredNotifChannel": "terminal_bell",
   "hooks": {
     "PostToolUse": [
       {
