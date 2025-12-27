@@ -126,13 +126,55 @@ const activeItems = useItemStore((state) =>
 
 ## Integration Testing
 
-Stores are tested with real SQLite using `better-sqlite3`. See `docs/testing.md` for the full pattern.
+Tests use `better-sqlite3` for real SQLite and `vi.mock` to replace Expo dependencies.
+
+```typescript
+// stores/itemStore.test.ts
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { createTestDb, type TestDbContext } from "@/test/db";
+
+let testDb: TestDbContext;
+let idCounter = 0;
+
+vi.mock("expo-crypto", () => ({
+  randomUUID: () => `test-id-${++idCounter}`,
+}));
+
+vi.mock("@/db", () => ({
+  get db() {
+    return testDb.db;
+  },
+}));
+
+beforeEach(async () => {
+  testDb = createTestDb();
+  idCounter = 0;
+  vi.resetModules();
+});
+
+afterEach(() => {
+  testDb.close();
+});
+
+describe("itemStore", () => {
+  it("adds an item", async () => {
+    const { useItemStore } = await import("./itemStore");
+    const store = useItemStore.getState();
+
+    await store.addItem({ name: "Test Item" });
+    await store.load();
+
+    expect(useItemStore.getState().items).toHaveLength(1);
+    expect(useItemStore.getState().items[0].name).toBe("Test Item");
+  });
+});
+```
 
 Key points:
 
-- Use `vi.mock` for `expo-crypto` and `@/db`
-- Use `vi.resetModules()` in `beforeEach` to get fresh store instances
-- Use dynamic `import()` after reset to load store with mocks
+- `vi.resetModules()` in `beforeEach` gets a fresh store instance
+- Dynamic `import()` after reset loads store with mocks applied
+- `get db()` getter ensures each test uses its own database
 
 ## Checklist
 
