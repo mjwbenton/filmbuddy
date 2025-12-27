@@ -16,8 +16,9 @@ apps/mobile/app/
 │   ├── _layout.tsx       # Tab bar configuration
 │   ├── index.tsx         # First tab (Rolls)
 │   └── [other].tsx       # Other tabs
-├── add-roll.tsx          # Modal/push screen
-└── roll/[id].tsx         # Dynamic route
+└── roll/                 # Entity group
+    ├── add.tsx           # Add screen (/roll/add)
+    └── [id].tsx          # Detail screen (/roll/123)
 ```
 
 ## Adding a Tab Screen
@@ -52,10 +53,10 @@ export default function GearScreen() {
 
 ## Adding a Push Screen
 
-Create the file directly in `app/`:
+Group screens by entity in `app/[entity]/`:
 
 ```tsx
-// app/add-item.tsx
+// app/item/add.tsx
 import { router } from "expo-router";
 import { View } from "react-native";
 import {
@@ -83,7 +84,7 @@ Navigate to it:
 ```tsx
 import { router } from "expo-router";
 
-router.push("/add-item");
+router.push("/item/add");
 ```
 
 ## Adding a Dynamic Route
@@ -136,12 +137,12 @@ For modal screens, configure in the parent layout:
 
 ```tsx
 // app/_layout.tsx
-<Stack.Screen name="add-item" options={{ presentation: "modal" }} />
+<Stack.Screen name="item/add" options={{ presentation: "modal" }} />
 ```
 
 ## Checklist
 
-- [ ] Screen file in correct location (`app/`, `app/(tabs)/`, or `app/[param]/`)
+- [ ] Screen file in correct location (`app/(tabs)/` for tabs, `app/[entity]/` for others)
 - [ ] Default export for the screen component
 - [ ] `ScreenHeader` with appropriate title and buttons
 - [ ] Navigation configured in parent `_layout.tsx` if needed
