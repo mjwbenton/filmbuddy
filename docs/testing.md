@@ -83,63 +83,7 @@ yarn test:unit src/lib/exposure.test.ts
 
 ## Integration Testing
 
-Integration tests for Zustand stores that interact with SQLite. Tests use `vi.mock` to replace Expo dependencies with a test database (`better-sqlite3`).
-
-### Architecture
-
-Stores remain simple with no special test infrastructure:
-
-```typescript
-// rollStore.ts
-import { create } from "zustand";
-import { db } from "@/db";
-import { randomUUID } from "expo-crypto";
-
-export const useRollStore = create<RollStore>((set, get) => ({
-  // ... methods use db and randomUUID directly
-}));
-```
-
-Tests mock `expo-crypto` and `@/db` using Vitest's `vi.mock`:
-
-```typescript
-vi.mock("expo-crypto", () => ({
-  randomUUID: () => `test-id-${++idCounter}`,
-}));
-
-vi.mock("@/db", () => ({
-  get db() {
-    return testDb.db;
-  },
-}));
-```
-
-### Test Database Setup
-
-Tests use an in-memory SQLite database via `better-sqlite3`:
-
-```typescript
-import { createTestDb, type TestDbContext } from "@/test/db";
-
-let testDb: TestDbContext;
-let idCounter = 0;
-
-beforeEach(async () => {
-  testDb = createTestDb(); // Fresh database with migrations applied
-  idCounter = 0;
-  vi.resetModules(); // Get fresh store instance
-});
-
-afterEach(() => {
-  testDb.close();
-});
-```
-
-### Key Points
-
-- Use `vi.resetModules()` in `beforeEach` to get a fresh store for each test
-- Use dynamic `import()` after `resetModules` to load the store with mocks applied
-- The `get db()` getter in the mock ensures each test uses its own database instance
+Integration tests for Zustand stores that interact with SQLite. See the **implement-store** skill for the full test pattern.
 
 ### What to Integration Test
 

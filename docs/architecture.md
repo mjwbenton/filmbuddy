@@ -125,251 +125,37 @@ See configuration files:
 
 ## Navigation
 
-Expo Router provides file-based routing built on React Navigation.
+Expo Router provides file-based routing. See the **implement-screen** skill for patterns.
 
-See layout files:
+Layout files:
 
-- [app/\_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout with font loading
-- [app/(tabs)/\_layout.tsx](<../apps/mobile/app/(tabs)/_layout.tsx>) - Tab bar configuration
+- [app/\_layout.tsx](../apps/mobile/app/_layout.tsx) - Root layout
+- [app/(tabs)/\_layout.tsx](<../apps/mobile/app/(tabs)/_layout.tsx>) - Tab bar
 
 ## UI Components
 
-Generic UI primitives live in `src/components/ui/` and provide consistent styling across the app.
+Generic UI primitives live in `components/ui/`. See the **ui-components** skill for usage.
 
-### Available Components
-
-| Component            | Purpose                                                                                 |
-| -------------------- | --------------------------------------------------------------------------------------- |
-| `Button`             | Interactive button with `primary`, `secondary`, `destructive` variants                  |
-| `Card`               | Container with optional `active` state and pressable behavior                           |
-| `Text`               | Typography with `display`, `heading`, `subheading`, `body`, `caption`, `small` variants |
-| `TextInput`          | React-hook-form aware input with integrated label and error display                     |
-| `Label`              | Form field label for custom inputs                                                      |
-| `ErrorMessage`       | Form validation error display                                                           |
-| `SectionHeader`      | Uppercase section title for list groupings                                              |
-| `ScreenHeader`       | Form screen header with left/title/right slots                                          |
-| `HeaderCancelButton` | Cancel button for screen headers                                                        |
-| `HeaderCloseButton`  | Close button for screen headers                                                         |
-| `HeaderSaveButton`   | Save button with disabled state for screen headers                                      |
-
-### Usage
-
-```tsx
-import {
-  Button,
-  Card,
-  Text,
-  TextInput,
-  ScreenHeader,
-  HeaderCancelButton,
-  HeaderSaveButton,
-} from "@/components/ui";
-
-// Button variants
-<Button onPress={handleSave}>Save</Button>
-<Button variant="secondary" onPress={handleCancel}>Cancel</Button>
-<Button variant="destructive" onPress={handleDelete}>Delete</Button>
-
-// Card with active state
-<Card active={isActive} onPress={handlePress}>
-  <Text variant="subheading">Title</Text>
-  <Text variant="caption" color="stone">Subtitle</Text>
-</Card>
-
-// Form input (react-hook-form aware)
-<TextInput
-  label="Name"
-  name="name"
-  control={form.control}
-  placeholder="Enter name"
-/>
-
-// Screen header with Cancel/Save buttons
-<ScreenHeader
-  title="Add Item"
-  left={<HeaderCancelButton onPress={() => router.back()} />}
-  right={<HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />}
-/>
-```
-
-### Design Principles
+Design principles:
 
 - **No app logic**: Components are purely presentational
 - **Design system aligned**: Styling matches `docs/design.md` tokens
-- **Accessible**: Proper touch targets (44pt minimum), accessibility roles
+- **Accessible**: Proper touch targets (44pt minimum)
 - **Composable**: Simple props, combine to build complex UI
 
 ## Form Handling
 
-Forms use [react-hook-form](https://react-hook-form.com/) with [Zod](https://zod.dev/) for validation.
-
-### Why These Libraries
-
-- **react-hook-form**: Minimal re-renders (ref-based), excellent React Native support via `Controller`
-- **Zod**: TypeScript-first validation with type inference, reusable for API validation
-- **@hookform/resolvers**: Connects react-hook-form to Zod
-
-### Pattern Overview
-
-1. **Schema** (`src/db/[domain].ts`): Define Drizzle table + Zod schemas using drizzle-zod
-2. **Hook** (`src/hooks/`): Create `useXxxForm` hook wrapping `useForm` with `zodResolver`
-3. **Component** (`src/components/`): Presentational form using `TextInput` from `@/components/ui`
-4. **Screen** (`app/`): Uses the hook, passes `form` to component
-
-The `TextInput` component handles `Controller` integration internally, simplifying form components.
-
-### Example: Form Hook
-
-**`src/hooks/useRollForm.ts`:**
-
-```typescript
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { rollFormSchema, RollForm } from "@/db/schema";
-
-export function useRollForm({ defaultValues, onSubmit }) {
-  const form = useForm<RollForm>({
-    resolver: zodResolver(rollFormSchema),
-    defaultValues: { filmStock: "", iso: 100, camera: "", ...defaultValues },
-    mode: "onSubmit",
-  });
-
-  return {
-    form,
-    handleSubmit: form.handleSubmit(onSubmit),
-    isSubmitting: form.formState.isSubmitting,
-    canSubmit: form.formState.isValid || !form.formState.isSubmitted,
-  };
-}
-```
-
-### Adding a New Form
-
-1. Create domain file `src/db/[name].ts` with Drizzle table + Zod schemas
-2. Export from `src/db/schema.ts`
-3. Create hook in `src/hooks/use[Name]Form.ts`
-4. Create component in `src/components/[Name]Form.tsx`
-5. Use hook in screen, pass `form` to component
+Forms use react-hook-form with Zod validation. See the **implement-form** skill for patterns.
 
 ## State Management
 
-Zustand provides lightweight, TypeScript-first state management. Store definitions live in [stores/](../apps/mobile/stores/).
-
-### Store Pattern
-
-```typescript
-// stores/exampleStore.ts
-import { create } from "zustand";
-import { db } from "@/db";
-import { randomUUID } from "expo-crypto";
-
-interface ExampleStore {
-  items: Item[];
-  addItem: (item: Omit<Item, "id">) => Promise<void>;
-}
-
-export const useExampleStore = create<ExampleStore>((set) => ({
-  items: [],
-  addItem: async (item) => {
-    const newItem = { id: randomUUID(), ...item };
-    await db.insert(items).values(newItem);
-    // reload from db...
-  },
-}));
-```
-
-Integration tests use `vi.mock` to replace Expo dependencies with test implementations. See [testing.md](testing.md#store-integration-testing) for details.
-
-### Persistence with Drizzle
-
-For simple cases, use Drizzle's `useLiveQuery` directly in components. For complex state that combines multiple data sources or derived state, Zustand stores can wrap Drizzle queries.
-
-**When to use each approach:**
-
-- `useLiveQuery`: Simple list/detail views that display database data directly
-- Zustand + Drizzle: Complex UI state, optimistic updates, combining multiple queries
+Zustand stores are the standard way to access the database. See the **implement-store** skill for patterns.
 
 ## Data Layer
 
-Drizzle ORM provides type-safe database access over expo-sqlite.
+Drizzle ORM provides type-safe database access over expo-sqlite. See the **implement-domain** skill for patterns.
 
-### File Structure
-
-Each domain has its own file containing both Drizzle table and Zod schemas:
-
-```
-db/
-├── index.ts      # DB instance (expo-sqlite)
-├── schema.ts     # Re-exports all tables and Zod schemas
-├── roll.ts       # rolls table + Zod schemas
-├── camera.ts     # cameras table + Zod schemas
-├── lens.ts       # lenses table + Zod schemas
-└── filmStock.ts  # filmStocks table + Zod schemas
-```
-
-Import patterns:
-
-- `import { db } from "@/db"` - database instance
-- `import { rolls, Roll, rollFormSchema } from "@/db/schema"` - tables, types, schemas
-
-See also: [drizzle.config.ts](../apps/mobile/drizzle.config.ts) for Drizzle Kit configuration.
-
-### Domain File Pattern
-
-Each domain file contains a Drizzle table, types inferred from it, and Zod schemas for form validation:
-
-```typescript
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
-import { createInsertSchema } from "drizzle-zod";
-import { z } from "zod";
-
-// Drizzle table
-export const items = sqliteTable("items", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-});
-
-// Types (inferred from Drizzle)
-export type Item = typeof items.$inferSelect;
-export type NewItem = typeof items.$inferInsert;
-
-// Zod schemas (for form validation only)
-export const itemInsertSchema = createInsertSchema(items, {
-  name: z.string().trim().min(1, "Name is required"),
-});
-
-export const itemFormSchema = itemInsertSchema.pick({ name: true });
-
-export type ItemForm = z.infer<typeof itemFormSchema>;
-```
-
-**Why no select schema?** Data from our own database already matches the schema we used to write it. Zod validation is only needed at input boundaries (forms, APIs), not for trusted internal data.
-
-### Live Queries
-
-Use `useLiveQuery` for reactive data that updates when the database changes:
-
-```tsx
-import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { db } from "@/db";
-import { items } from "@/db/schema";
-
-export function ItemList() {
-  const { data, error } = useLiveQuery(
-    db.select().from(items).orderBy(desc(items.createdAt)),
-  );
-  // ...
-}
-```
-
-### Migrations
-
-Generate migrations after schema changes:
-
-```bash
-npx drizzle-kit generate
-```
+Configuration: [drizzle.config.ts](../apps/mobile/drizzle.config.ts)
 
 ## Logging & Error Handling
 
