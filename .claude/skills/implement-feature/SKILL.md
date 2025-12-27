@@ -7,10 +7,6 @@ description: Implement features from plan files using test-first development. Us
 
 You are implementing a feature for FilmBuddy based on a feature plan document.
 
-## Prerequisites
-
-Read: `docs/architecture.md`, `docs/testing.md`, `docs/design.md`
-
 ## Implementation Process
 
 ### 1. Load the Feature Plan
@@ -40,9 +36,10 @@ Include the testIDs in the implementation plan so they are visible during coding
 
 If no implementation plan exists, analyze the codebase and create one:
 
-1. Search for related components, screens, hooks, and types
-2. Check for existing Maestro flows in `apps/mobile/e2e/flows/`
-3. Identify what needs to be built
+1. Consider what skills you may need to implement this feature and make sure you load them
+2. Search for related components, screens, hooks, and types
+3. Check for existing Maestro flows in `apps/mobile/e2e/flows/`
+4. Identify what needs to be built
 
 Write an implementation plan to the bottom of the plan file. See [implementation-template.md](implementation-template.md) for format.
 
