@@ -5,7 +5,6 @@ export { Label } from "./Label";
 export {
   ScreenHeader,
   HeaderButton,
-  HeaderCancelButton,
   HeaderCloseButton,
   HeaderSaveButton,
 } from "./ScreenHeader";

@@ -92,7 +92,7 @@ import { router } from "expo-router";
 import { View } from "react-native";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 import { ItemForm } from "@/components/ItemForm";
@@ -113,7 +113,7 @@ export default function AddItemScreen() {
     <View className="flex-1 bg-paper">
       <ScreenHeader
         title="Add Item"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           <HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />
         }

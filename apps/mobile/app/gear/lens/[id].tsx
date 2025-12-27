@@ -8,7 +8,7 @@ import { handleError } from "@/lib/handleError";
 import { LensForm as LensFormType } from "@/db/schema";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -62,7 +62,7 @@ export default function EditLensScreen() {
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
       <ScreenHeader
         title="Edit Lens"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           <HeaderSaveButton
             onPress={handleSubmit}

@@ -8,7 +8,7 @@ import { handleError } from "@/lib/handleError";
 import { CameraForm as CameraFormType } from "@/db/schema";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -66,7 +66,7 @@ export default function EditCameraScreen() {
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
       <ScreenHeader
         title="Edit Camera"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           <HeaderSaveButton
             onPress={handleSubmit}

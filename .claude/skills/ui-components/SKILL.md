@@ -9,19 +9,18 @@ Generic UI primitives in `components/ui/` provide consistent styling across the 
 
 ## Available Components
 
-| Component            | Purpose                                     |
-| -------------------- | ------------------------------------------- |
-| `Button`             | Interactive button with variants            |
-| `Card`               | Container with optional active state        |
-| `Text`               | Typography with size variants               |
-| `TextInput`          | Form input with react-hook-form integration |
-| `Label`              | Form field label                            |
-| `ErrorMessage`       | Form validation error                       |
-| `SectionHeader`      | Uppercase section title                     |
-| `ScreenHeader`       | Screen header with slots                    |
-| `HeaderCancelButton` | Cancel button for headers                   |
-| `HeaderCloseButton`  | Close button for headers                    |
-| `HeaderSaveButton`   | Save button with disabled state             |
+| Component           | Purpose                                     |
+| ------------------- | ------------------------------------------- |
+| `Button`            | Interactive button with variants            |
+| `Card`              | Container with optional active state        |
+| `Text`              | Typography with size variants               |
+| `TextInput`         | Form input with react-hook-form integration |
+| `Label`             | Form field label                            |
+| `ErrorMessage`      | Form validation error                       |
+| `SectionHeader`     | Uppercase section title                     |
+| `ScreenHeader`      | Screen header with slots                    |
+| `HeaderCloseButton` | Close button for headers                    |
+| `HeaderSaveButton`  | Save button with disabled state             |
 
 ## Import
 
@@ -32,7 +31,7 @@ import {
   Text,
   TextInput,
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 ```
@@ -113,14 +112,13 @@ Props:
 ```tsx
 <ScreenHeader
   title="Add Item"
-  left={<HeaderCancelButton onPress={() => router.back()} />}
+  left={<HeaderCloseButton onPress={() => router.back()} />}
   right={<HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />}
 />
 ```
 
 Header buttons:
 
-- `HeaderCancelButton` - "Cancel" text
 - `HeaderCloseButton` - "Close" text
 - `HeaderSaveButton` - "Save" with `disabled` prop
 

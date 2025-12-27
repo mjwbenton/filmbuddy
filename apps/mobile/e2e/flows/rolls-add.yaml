@@ -14,7 +14,7 @@ appId: tech.mattb.filmbuddy
 - assertVisible:
     id: "save-button"
 - assertVisible:
-    id: "cancel-button"
+    id: "close-button"
 
 # WHEN I try to save without filling in all three fields
 # Fill only film stock - Save should still be disabled

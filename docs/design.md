@@ -186,7 +186,7 @@ import {
   Text,
   TextInput,
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -220,7 +220,7 @@ import {
 // Screen header
 <ScreenHeader
   title="Add Item"
-  left={<HeaderCancelButton onPress={() => router.back()} />}
+  left={<HeaderCloseButton onPress={() => router.back()} />}
   right={<HeaderSaveButton onPress={handleSubmit} disabled={!canSubmit} />}
 />
 ```

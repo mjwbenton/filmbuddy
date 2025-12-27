@@ -29,7 +29,7 @@ appId: tech.mattb.filmbuddy
 # THEN I cannot save and the missing fields are indicated
 # (Save is disabled, we verify by canceling without saving)
 - tapOn:
-    id: "cancel-button"
+    id: "close-button"
 
 # Verify original data is still there (wasn't saved with empty field)
 - assertVisible: "Kodak Gold @ 200"

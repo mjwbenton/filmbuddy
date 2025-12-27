@@ -8,7 +8,6 @@ import { formatRelativeDate } from "@/lib/date-format";
 import { handleError } from "@/lib/handleError";
 import {
   ScreenHeader,
-  HeaderCancelButton,
   HeaderCloseButton,
   HeaderSaveButton,
   Text,
@@ -100,13 +99,7 @@ export default function RollDetailScreen() {
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
       <ScreenHeader
         title={isFinished ? "Finished Roll" : "Edit Roll"}
-        left={
-          isFinished ? (
-            <HeaderCloseButton onPress={() => router.back()} />
-          ) : (
-            <HeaderCancelButton onPress={() => router.back()} />
-          )
-        }
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           isFinished ? null : (
             <HeaderSaveButton

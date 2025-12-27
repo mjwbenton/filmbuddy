@@ -33,7 +33,7 @@ appId: tech.mattb.filmbuddy
 - assertVisible:
     id: "save-button"
 - assertVisible:
-    id: "cancel-button"
+    id: "close-button"
 
 # WHEN I try to save with an empty name
 # THEN I cannot save and the field is indicated as required
@@ -44,7 +44,7 @@ appId: tech.mattb.filmbuddy
 
 # Cancel and return to gear screen
 - tapOn:
-    id: "cancel-button"
+    id: "close-button"
 
 # =============================================================================
 # Scenario: Add a camera
@@ -126,7 +126,7 @@ appId: tech.mattb.filmbuddy
 
 # Cancel to return to gear screen
 - tapOn:
-    id: "cancel-button"
+    id: "close-button"
 
 # Verify original cameras still exist (no duplicate was created)
 - assertVisible: "Leica M6 TTL"

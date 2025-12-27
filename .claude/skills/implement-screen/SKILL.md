@@ -61,7 +61,7 @@ import { router } from "expo-router";
 import { View } from "react-native";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -70,7 +70,7 @@ export default function AddItemScreen() {
     <View className="flex-1 bg-paper">
       <ScreenHeader
         title="Add Item"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={<HeaderSaveButton onPress={handleSave} disabled={!canSubmit} />}
       />
       {/* Content */}
@@ -114,20 +114,19 @@ Use `ScreenHeader` from `@/components/ui` for consistent headers:
 ```tsx
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
 <ScreenHeader
   title="Screen Title"
-  left={<HeaderCancelButton onPress={() => router.back()} />}
+  left={<HeaderCloseButton onPress={() => router.back()} />}
   right={<HeaderSaveButton onPress={handleSave} disabled={!canSubmit} />}
 />;
 ```
 
 Available header buttons:
 
-- `HeaderCancelButton` - "Cancel" text button
 - `HeaderCloseButton` - "Close" text button
 - `HeaderSaveButton` - "Save" text button with `disabled` prop
 

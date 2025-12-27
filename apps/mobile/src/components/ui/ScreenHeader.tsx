@@ -53,19 +53,6 @@ interface HeaderTextButtonProps {
   testID?: string;
 }
 
-export function HeaderCancelButton({
-  onPress,
-  testID = "cancel-button",
-}: HeaderTextButtonProps) {
-  return (
-    <HeaderButton onPress={onPress} testID={testID}>
-      <Text variant="body" className="text-slate-blue">
-        Cancel
-      </Text>
-    </HeaderButton>
-  );
-}
-
 export function HeaderCloseButton({
   onPress,
   testID = "close-button",

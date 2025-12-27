@@ -8,7 +8,7 @@ import { handleError } from "@/lib/handleError";
 import { FilmStockForm as FilmStockFormType } from "@/db/schema";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -69,7 +69,7 @@ export default function EditFilmStockScreen() {
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
       <ScreenHeader
         title="Edit Film Stock"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           <HeaderSaveButton
             onPress={handleSubmit}

@@ -27,8 +27,6 @@
 
 ## Quality
 
-- [ ] HeaderCancelButton and HeaderCloseButton?
-
 ## Other
 
 - [ ] Scrape https://en.wikipedia.org/wiki/List_of_photographic_films for films and ISO

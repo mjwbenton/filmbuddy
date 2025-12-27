@@ -7,7 +7,7 @@ import { useRollForm } from "@/hooks/useRollForm";
 import { handleError } from "@/lib/handleError";
 import {
   ScreenHeader,
-  HeaderCancelButton,
+  HeaderCloseButton,
   HeaderSaveButton,
 } from "@/components/ui";
 
@@ -35,7 +35,7 @@ export default function AddRollScreen() {
     <SafeAreaView className="flex-1 bg-paper" edges={["top"]}>
       <ScreenHeader
         title="Add Roll"
-        left={<HeaderCancelButton onPress={() => router.back()} />}
+        left={<HeaderCloseButton onPress={() => router.back()} />}
         right={
           <HeaderSaveButton
             onPress={handleSubmit}
