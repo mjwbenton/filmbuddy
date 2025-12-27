@@ -74,9 +74,9 @@ Update checkboxes in the plan file as you complete each task.
 
 ### 7. Verify
 
-1. `yarn workspace @filmbuddy/mobile typecheck`
-2. `yarn workspace @filmbuddy/mobile lint`
-3. `yarn workspace @filmbuddy/mobile test:unit`
+1. `yarn typecheck`
+2. `yarn lint`
+3. `yarn test:unit`
 
 ### 8. Mark Complete
 
