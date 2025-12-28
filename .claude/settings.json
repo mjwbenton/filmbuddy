@@ -18,6 +18,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(./scripts/worktree-abandon.sh:*)",
       "Bash(./scripts/worktree-close.sh:*)",
       "Bash(./scripts/worktree-create.sh:*)",
       "Bash(./scripts/worktree-rename.sh:*)",
