@@ -21,6 +21,15 @@ export const APERTURE_BOUNDS = {
 const APERTURE_EPSILON = 0.01;
 
 /**
+ * Check if an aperture value is a whole stop.
+ */
+export function isWholeStop(aperture: number): boolean {
+  return APERTURE_STOPS.whole.some(
+    (stop) => Math.abs(stop - aperture) < APERTURE_EPSILON,
+  );
+}
+
+/**
  * Standard f-stop values at different increments.
  * Values are the f-numbers (denominator in f/X notation).
  */

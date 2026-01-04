@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Pressable, View, ScrollView } from "react-native";
 import { Text, Label } from "./ui";
-import { formatAperture, getAllApertureOptions } from "@/lib/aperture";
+import {
+  formatAperture,
+  getAllApertureOptions,
+  isWholeStop,
+} from "@/lib/aperture";
 
 interface AperturePickerProps {
   label: string;
@@ -58,7 +62,12 @@ export function AperturePicker({
                   value === aperture ? "bg-cloud" : ""
                 }`}
               >
-                <Text variant="body">{formatAperture(aperture)}</Text>
+                <Text
+                  variant="body"
+                  className={isWholeStop(aperture) ? "font-semibold" : ""}
+                >
+                  {formatAperture(aperture)}
+                </Text>
                 {value === aperture && (
                   <Text variant="body" color="stone">
                     ✓
