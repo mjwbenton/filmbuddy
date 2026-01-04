@@ -7,6 +7,7 @@ import {
   formatAperture,
   getAllApertureOptions,
   generateApertureSequence,
+  isWholeStop,
   type StopIncrement,
 } from "@/lib/aperture";
 
@@ -122,7 +123,12 @@ export function ApertureList({
                 onPress={() => handleAdd(aperture)}
                 className="min-h-touch flex-row items-center border-b border-fog px-md py-sm"
               >
-                <Text variant="body">{formatAperture(aperture)}</Text>
+                <Text
+                  variant="body"
+                  className={isWholeStop(aperture) ? "font-semibold" : ""}
+                >
+                  {formatAperture(aperture)}
+                </Text>
               </Pressable>
             ))}
           </ScrollView>
