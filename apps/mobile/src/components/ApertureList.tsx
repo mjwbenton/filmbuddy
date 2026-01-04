@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { View, Pressable, ScrollView } from "react-native";
+import { View, Pressable, TextInput as RNTextInput } from "react-native";
 import { Text, Label, DisclosureButton, SegmentedControl } from "./ui";
-import { AperturePicker } from "./AperturePicker";
 import {
   formatAperture,
-  getAllApertureOptions,
   generateApertureSequence,
-  isWholeStop,
+  validateApertureInput,
   type StopIncrement,
 } from "@/lib/aperture";
+import { colors } from "@/theme/colors";
 
 interface ApertureListProps {
   value: number[];
@@ -17,8 +16,6 @@ interface ApertureListProps {
   hasError?: boolean;
   errorMessage?: string;
 }
-
-const APERTURE_OPTIONS = getAllApertureOptions();
 
 const STOP_INCREMENT_OPTIONS = [
   { value: "whole", label: "Whole", testID: "increment-whole" },
@@ -33,41 +30,106 @@ export function ApertureList({
   hasError,
   errorMessage,
 }: ApertureListProps) {
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
   const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
 
-  // Generator state
+  // Manual add state
+  const [addInput, setAddInput] = useState("");
+  const [addError, setAddError] = useState<string | null>(null);
+
+  // Generator state - both string for display and number for validation
+  const [maxApertureInput, setMaxApertureInput] = useState("2.8");
+  const [minApertureInput, setMinApertureInput] = useState("16");
   const [maxAperture, setMaxAperture] = useState(2.8);
   const [minAperture, setMinAperture] = useState(16);
+  const [maxApertureError, setMaxApertureError] = useState<string | null>(null);
+  const [minApertureError, setMinApertureError] = useState<string | null>(null);
   const [stopIncrement, setStopIncrement] = useState<StopIncrement>("whole");
 
   const handleAdd = (aperture: number) => {
-    if (!value.includes(aperture)) {
-      const newValue = [...value, aperture].sort((a, b) => a - b);
-      onChange(newValue);
+    if (value.includes(aperture)) {
+      setAddError("Already added");
+      return;
     }
-    setIsPickerOpen(false);
+    const newValue = [...value, aperture].sort((a, b) => a - b);
+    onChange(newValue);
+    setAddInput("");
+    setAddError(null);
+    setIsAddOpen(false);
+  };
+
+  const handleAddInputBlur = () => {
+    if (!addInput.trim()) {
+      setAddError(null);
+      return;
+    }
+    const result = validateApertureInput(addInput);
+    if (!result.valid) {
+      setAddError(result.error);
+    } else {
+      setAddError(null);
+    }
+  };
+
+  const handleConfirmAdd = () => {
+    const result = validateApertureInput(addInput);
+    if (!result.valid) {
+      setAddError(result.error);
+      return;
+    }
+    handleAdd(result.value!);
   };
 
   const handleDelete = (aperture: number) => {
     onChange(value.filter((a) => a !== aperture));
   };
 
+  const handleMaxApertureBlur = () => {
+    const result = validateApertureInput(maxApertureInput);
+    if (result.valid) {
+      setMaxAperture(result.value!);
+      setMaxApertureError(null);
+    } else {
+      setMaxApertureError(result.error);
+    }
+  };
+
+  const handleMinApertureBlur = () => {
+    const result = validateApertureInput(minApertureInput);
+    if (result.valid) {
+      setMinAperture(result.value!);
+      setMinApertureError(null);
+    } else {
+      setMinApertureError(result.error);
+    }
+  };
+
   const handleGenerate = () => {
+    // Validate both inputs first
+    const maxResult = validateApertureInput(maxApertureInput);
+    const minResult = validateApertureInput(minApertureInput);
+
+    if (!maxResult.valid) {
+      setMaxApertureError(maxResult.error);
+      return;
+    }
+    if (!minResult.valid) {
+      setMinApertureError(minResult.error);
+      return;
+    }
+
     const apertures = generateApertureSequence(
-      maxAperture,
-      minAperture,
+      maxResult.value!,
+      minResult.value!,
       stopIncrement,
     );
     onChange(apertures);
     setIsGeneratorOpen(false);
   };
 
-  // Get apertures that haven't been added yet
-  const availableApertures = APERTURE_OPTIONS.filter((a) => !value.includes(a));
-
   // Validation: min must be narrower (larger f-number) than max
-  const isGeneratorValid = maxAperture < minAperture;
+  const isGeneratorValid =
+    !maxApertureError && !minApertureError && maxAperture < minAperture;
 
   return (
     <View className="gap-sm">
@@ -95,22 +157,6 @@ export function ApertureList({
             </Pressable>
           </View>
         ))}
-        <Pressable
-          testID="add-aperture-button"
-          onPress={() => {
-            setIsPickerOpen(!isPickerOpen);
-            setIsGeneratorOpen(false);
-          }}
-          disabled={disabled || availableApertures.length === 0}
-          hitSlop={20}
-          className={`rounded-full border-2 border-dashed border-stone px-sm py-xs ${
-            disabled ? "opacity-50" : ""
-          }`}
-        >
-          <Text variant="caption" color="stone">
-            + Add
-          </Text>
-        </Pressable>
       </View>
 
       {hasError && errorMessage && (
@@ -119,24 +165,52 @@ export function ApertureList({
         </Text>
       )}
 
-      {isPickerOpen && (
-        <View className="max-h-64 rounded-md border border-fog bg-white">
-          <ScrollView>
-            {availableApertures.map((aperture) => (
-              <Pressable
-                key={aperture}
-                onPress={() => handleAdd(aperture)}
-                className="min-h-touch flex-row items-center border-b border-fog px-md py-sm"
-              >
-                <Text
-                  variant="body"
-                  className={isWholeStop(aperture) ? "font-semibold" : ""}
-                >
-                  {formatAperture(aperture)}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
+      <DisclosureButton
+        label="Add single aperture"
+        isOpen={isAddOpen}
+        onPress={() => {
+          setIsAddOpen(!isAddOpen);
+          setIsGeneratorOpen(false);
+        }}
+        disabled={disabled}
+        testID="add-aperture-button"
+      />
+
+      {isAddOpen && (
+        <View className="flex-row gap-sm items-end">
+          <View className="flex-1">
+            <Label>Aperture</Label>
+            <RNTextInput
+              value={addInput}
+              onChangeText={setAddInput}
+              onBlur={handleAddInputBlur}
+              placeholder="e.g. 2.8"
+              keyboardType="decimal-pad"
+              editable={!disabled}
+              testID="add-aperture-input"
+              className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
+                addError ? "border-error" : "border-fog"
+              } ${disabled ? "opacity-50" : ""}`}
+              placeholderTextColor={colors.stone}
+            />
+            {addError && (
+              <Text variant="small" className="text-error mt-xs">
+                {addError}
+              </Text>
+            )}
+          </View>
+          <Pressable
+            testID="confirm-add-aperture"
+            onPress={handleConfirmAdd}
+            disabled={disabled}
+            className={`min-h-touch px-md justify-center rounded-md bg-slate-blue ${
+              disabled ? "opacity-50" : ""
+            }`}
+          >
+            <Text variant="body" className="text-white font-semibold">
+              Add
+            </Text>
+          </Pressable>
         </View>
       )}
 
@@ -145,23 +219,37 @@ export function ApertureList({
         isOpen={isGeneratorOpen}
         onPress={() => {
           setIsGeneratorOpen(!isGeneratorOpen);
-          setIsPickerOpen(false);
+          setIsAddOpen(false);
         }}
         disabled={disabled}
         testID="aperture-generator-toggle"
       />
 
       {isGeneratorOpen && (
-        <View className="rounded-md border border-fog bg-white p-md">
-          <AperturePicker
-            label="Maximum Aperture (widest)"
-            value={maxAperture}
-            onChange={setMaxAperture}
-            testID="generator-max-aperture"
-            disabled={disabled}
-          />
+        <View className="rounded-md border border-fog bg-white p-md gap-md">
+          <View>
+            <Label>Maximum Aperture (widest)</Label>
+            <RNTextInput
+              value={maxApertureInput}
+              onChangeText={setMaxApertureInput}
+              onBlur={handleMaxApertureBlur}
+              placeholder="e.g. 2.8"
+              keyboardType="decimal-pad"
+              editable={!disabled}
+              testID="generator-max-aperture"
+              className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
+                maxApertureError ? "border-error" : "border-fog"
+              } ${disabled ? "opacity-50" : ""}`}
+              placeholderTextColor={colors.stone}
+            />
+            {maxApertureError && (
+              <Text variant="small" className="text-error mt-xs">
+                {maxApertureError}
+              </Text>
+            )}
+          </View>
 
-          <View className="mb-md">
+          <View>
             <Label>Stop Increments</Label>
             <SegmentedControl
               value={stopIncrement}
@@ -171,20 +259,35 @@ export function ApertureList({
             />
           </View>
 
-          <AperturePicker
-            label="Minimum Aperture (narrowest)"
-            value={minAperture}
-            onChange={setMinAperture}
-            testID="generator-min-aperture"
-            disabled={disabled}
-            hasError={!isGeneratorValid}
-          />
-
-          {!isGeneratorValid && (
-            <Text variant="small" className="mb-sm text-error">
-              Minimum aperture must be narrower than maximum
-            </Text>
-          )}
+          <View>
+            <Label>Minimum Aperture (narrowest)</Label>
+            <RNTextInput
+              value={minApertureInput}
+              onChangeText={setMinApertureInput}
+              onBlur={handleMinApertureBlur}
+              placeholder="e.g. 16"
+              keyboardType="decimal-pad"
+              editable={!disabled}
+              testID="generator-min-aperture"
+              className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
+                minApertureError ||
+                (!minApertureError && !maxApertureError && !isGeneratorValid)
+                  ? "border-error"
+                  : "border-fog"
+              } ${disabled ? "opacity-50" : ""}`}
+              placeholderTextColor={colors.stone}
+            />
+            {minApertureError && (
+              <Text variant="small" className="text-error mt-xs">
+                {minApertureError}
+              </Text>
+            )}
+            {!minApertureError && !maxApertureError && !isGeneratorValid && (
+              <Text variant="small" className="text-error mt-xs">
+                Minimum aperture must be narrower than maximum
+              </Text>
+            )}
+          </View>
 
           <Pressable
             testID="generate-apertures-button"

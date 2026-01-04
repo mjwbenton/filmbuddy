@@ -21,15 +21,6 @@ export const APERTURE_BOUNDS = {
 const APERTURE_EPSILON = 0.01;
 
 /**
- * Check if an aperture value is a whole stop.
- */
-export function isWholeStop(aperture: number): boolean {
-  return APERTURE_STOPS.whole.some(
-    (stop) => Math.abs(stop - aperture) < APERTURE_EPSILON,
-  );
-}
-
-/**
  * Standard f-stop values at different increments.
  * Values are the f-numbers (denominator in f/X notation).
  */
@@ -171,25 +162,44 @@ export function isValidApertureRange(
   return maxAperture < minAperture;
 }
 
+export interface ApertureValidationResult {
+  valid: boolean;
+  value: number | null;
+  error: string | null;
+}
+
 /**
- * Get all available aperture options for a picker, within bounds.
- * Combines all three increment scales for maximum flexibility.
- * Results are memoized for performance.
+ * Validate a text input for aperture values.
+ *
+ * @param input - User input string (e.g., "2.8" or "f/2.8")
+ * @returns Validation result with parsed value or error message
  */
-export const getAllApertureOptions = (() => {
-  const cache: { value: number[] | null } = { value: null };
-  return (): number[] => {
-    if (cache.value) return cache.value;
+export function validateApertureInput(input: string): ApertureValidationResult {
+  const trimmed = input.trim();
 
-    const allValues = new Set<number>(
-      Object.values(APERTURE_STOPS)
-        .flatMap((stops) => [...stops])
-        .filter(
-          (stop) => stop >= APERTURE_BOUNDS.min && stop <= APERTURE_BOUNDS.max,
-        ),
-    );
+  if (!trimmed) {
+    return { valid: false, value: null, error: "Enter an aperture value" };
+  }
 
-    cache.value = Array.from(allValues).sort((a, b) => a - b);
-    return cache.value;
-  };
-})();
+  // Check for too many decimal places before parsing
+  const numericPart = trimmed.replace(/^f\/\s*/, "");
+  const decimalPart = numericPart.split(".")[1];
+  if (decimalPart && decimalPart.length > 1) {
+    return { valid: false, value: null, error: "Maximum 1 decimal place" };
+  }
+
+  const parsed = parseAperture(trimmed);
+  if (parsed === null) {
+    return { valid: false, value: null, error: "Enter a valid number" };
+  }
+
+  if (parsed < APERTURE_BOUNDS.min || parsed > APERTURE_BOUNDS.max) {
+    return {
+      valid: false,
+      value: null,
+      error: `Enter a number between ${APERTURE_BOUNDS.min} and ${APERTURE_BOUNDS.max}`,
+    };
+  }
+
+  return { valid: true, value: parsed, error: null };
+}

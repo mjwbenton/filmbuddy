@@ -5,9 +5,7 @@ import {
   formatAperture,
   parseAperture,
   isValidApertureRange,
-  getAllApertureOptions,
-  APERTURE_STOPS,
-  APERTURE_BOUNDS,
+  validateApertureInput,
   DEFAULT_APERTURES,
 } from "./aperture";
 
@@ -151,23 +149,56 @@ describe("isValidApertureRange", () => {
   });
 });
 
-describe("getAllApertureOptions", () => {
-  it("returns sorted unique values", () => {
-    const options = getAllApertureOptions();
-    expect(options[0]).toBe(APERTURE_BOUNDS.min);
-    expect(options[options.length - 1]).toBe(APERTURE_BOUNDS.max);
-
-    // Check sorted
-    options.slice(1).forEach((val, idx) => {
-      expect(val).toBeGreaterThan(options[idx]);
+describe("validateApertureInput", () => {
+  it("validates valid aperture values", () => {
+    expect(validateApertureInput("2.8")).toEqual({
+      valid: true,
+      value: 2.8,
+      error: null,
+    });
+    expect(validateApertureInput("f/4")).toEqual({
+      valid: true,
+      value: 4,
+      error: null,
+    });
+    expect(validateApertureInput("16")).toEqual({
+      valid: true,
+      value: 16,
+      error: null,
     });
   });
 
-  it("includes all whole stops", () => {
-    const options = getAllApertureOptions();
-    APERTURE_STOPS.whole.forEach((stop) => {
-      expect(options).toContain(stop);
-    });
+  it("validates boundary values", () => {
+    expect(validateApertureInput("0.5").valid).toBe(true);
+    expect(validateApertureInput("64").valid).toBe(true);
+  });
+
+  it("rejects out of bounds values", () => {
+    expect(validateApertureInput("0.4").valid).toBe(false);
+    expect(validateApertureInput("0.4").error).toContain("between");
+    expect(validateApertureInput("65").valid).toBe(false);
+    expect(validateApertureInput("65").error).toContain("between");
+  });
+
+  it("rejects too many decimal places", () => {
+    expect(validateApertureInput("2.85").valid).toBe(false);
+    expect(validateApertureInput("2.85").error).toContain("decimal");
+    expect(validateApertureInput("1.234").valid).toBe(false);
+  });
+
+  it("accepts one decimal place", () => {
+    expect(validateApertureInput("2.8").valid).toBe(true);
+    expect(validateApertureInput("5.6").valid).toBe(true);
+  });
+
+  it("rejects empty strings", () => {
+    expect(validateApertureInput("").valid).toBe(false);
+    expect(validateApertureInput("   ").valid).toBe(false);
+  });
+
+  it("rejects invalid strings", () => {
+    expect(validateApertureInput("abc").valid).toBe(false);
+    expect(validateApertureInput("f/").valid).toBe(false);
   });
 });
 

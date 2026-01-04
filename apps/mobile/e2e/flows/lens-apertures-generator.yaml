@@ -25,19 +25,23 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "aperture-generator-toggle"
 
-# AND I select f/2.8 as max aperture
+# AND I enter 2.8 as max aperture (already default, just verify it's there)
 - tapOn:
     id: "generator-max-aperture"
-- tapOn: "f/2.8"
+- eraseText
+- inputText: "2.8"
+- hideKeyboard
 
 # AND I select half stops as increment
 - tapOn:
     id: "increment-half"
 
-# AND I select f/16 as min aperture
+# AND I enter 16 as min aperture (already default)
 - tapOn:
     id: "generator-min-aperture"
-- tapOn: "f/16"
+- eraseText
+- inputText: "16"
+- hideKeyboard
 
 # AND I tap generate
 - tapOn:
@@ -82,19 +86,23 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "aperture-generator-toggle"
 
-# WHEN I select f/1.5 as max aperture
+# WHEN I enter 1.5 as max aperture
 - tapOn:
     id: "generator-max-aperture"
-- tapOn: "f/1.5"
+- eraseText
+- inputText: "1.5"
+- hideKeyboard
 
 # AND I select half stops
 - tapOn:
     id: "increment-half"
 
-# AND I select f/16 as min aperture
+# AND I enter 16 as min aperture
 - tapOn:
     id: "generator-min-aperture"
-- tapOn: "f/16"
+- eraseText
+- inputText: "16"
+- hideKeyboard
 
 # AND I tap generate
 - tapOn:
@@ -134,19 +142,23 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "aperture-generator-toggle"
 
-# Set max to f/2.8
+# Set max to 2.8
 - tapOn:
     id: "generator-max-aperture"
-- tapOn: "f/2.8"
+- eraseText
+- inputText: "2.8"
+- hideKeyboard
 
 # Set increment to whole
 - tapOn:
     id: "increment-whole"
 
-# Set min to f/22
+# Set min to 22
 - tapOn:
     id: "generator-min-aperture"
-- tapOn: "f/22"
+- eraseText
+- inputText: "22"
+- hideKeyboard
 
 # Generate with whole stops
 - tapOn:
@@ -181,7 +193,7 @@ appId: tech.mattb.filmbuddy
 # =============================================================================
 # Scenario 4: Aperture bounds verification
 # =============================================================================
-# GIVEN I open the aperture pickers
+# GIVEN I open the aperture generator
 - tapOn:
     id: "add-lens-button"
     retryTapIfNoChange: true
@@ -192,21 +204,29 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "aperture-generator-toggle"
 
-# Open the max aperture picker
+# WHEN I enter boundary values (0.5 to 64)
 - tapOn:
     id: "generator-max-aperture"
+- eraseText
+- inputText: "0.5"
+- hideKeyboard
 
-# THEN f/0.5 is available as a max aperture option
-- assertVisible: "f/0.5"
+# Set increment to whole
+- tapOn:
+    id: "increment-whole"
 
-# Select something to close the picker
-- tapOn: "f/2"
-
-# Open the min aperture picker
 - tapOn:
     id: "generator-min-aperture"
+- eraseText
+- inputText: "64"
+- hideKeyboard
 
-# AND f/64 is available as a min aperture option
+# AND I tap generate
+- tapOn:
+    id: "generate-apertures-button"
+
+# THEN the aperture list includes boundary values
+- assertVisible: "f/0.5"
 - assertVisible: "f/64"
 
 # Close the sheet without saving

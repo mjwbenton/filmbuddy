@@ -50,19 +50,35 @@ appId: tech.mattb.filmbuddy
 # WHEN I manually add apertures one by one
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/2"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "2"
+- tapOn:
+    id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/2.8"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "2.8"
+- tapOn:
+    id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/4"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "4"
+- tapOn:
+    id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/5.6"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "5.6"
+- tapOn:
+    id: "confirm-add-aperture"
 
 # THEN each aperture appears in my list
 - assertVisible: "f/2"
@@ -93,15 +109,27 @@ appId: tech.mattb.filmbuddy
 # Add apertures
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/2"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "2"
+- tapOn:
+    id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/2.8"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "2.8"
+- tapOn:
+    id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn: "f/4"
+- tapOn:
+    id: "add-aperture-input"
+- inputText: "4"
+- tapOn:
+    id: "confirm-add-aperture"
 
 # Verify all apertures are visible
 - assertVisible: "f/2"
