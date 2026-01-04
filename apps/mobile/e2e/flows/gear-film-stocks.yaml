@@ -53,3 +53,24 @@ appId: tech.mattb.filmbuddy
 # THEN the film stock is updated with the new name
 - assertVisible: "Kodak Tri-X 400"
 - assertNotVisible: "Kodak Portra 400"
+
+# =============================================================================
+# Scenario: Delete a film stock
+# =============================================================================
+# GIVEN I have a film stock in my gear library
+- tapOn: "Kodak Tri-X 400"
+
+# Verify edit sheet with delete button
+- assertVisible: "Edit Film Stock"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I delete it
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed from my library
+- extendedWaitUntil:
+    notVisible: "Kodak Tri-X 400"
+    timeout: 5000

@@ -134,3 +134,27 @@ appId: tech.mattb.filmbuddy
 # Verify original cameras still exist (no duplicate was created)
 - assertVisible: "Leica M6 TTL"
 - assertVisible: "Hasselblad 500C/M"
+
+# =============================================================================
+# Scenario: Delete a camera
+# =============================================================================
+# GIVEN I have a camera in my gear library
+- tapOn: "Hasselblad 500C/M"
+
+# Verify edit sheet with delete button
+- assertVisible: "Edit Camera"
+- assertVisible:
+    id: "delete-button"
+
+# WHEN I delete it
+- tapOn:
+    id: "delete-button"
+- tapOn: "Delete"
+
+# THEN it is permanently removed from my library
+- extendedWaitUntil:
+    notVisible: "Hasselblad 500C/M"
+    timeout: 5000
+
+# Verify the other camera still exists
+- assertVisible: "Leica M6 TTL"

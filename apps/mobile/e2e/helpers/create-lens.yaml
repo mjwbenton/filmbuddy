@@ -2,7 +2,7 @@ appId: tech.mattb.filmbuddy
 env:
   LENS_NAME: ${LENS_NAME || "Summicron 50mm f/2"}
 ---
-# Helper: Create a lens with configurable name
+# Helper: Create a lens with configurable name and default apertures
 # Parameters:
 #   LENS_NAME: Lens name (default: "Summicron 50mm f/2")
 - tapOn:
@@ -13,5 +13,24 @@ env:
     env:
       INPUT_ID: "lens-name-input"
       TEXT: ${LENS_NAME}
+
+# Add default apertures using generator (f/2 to f/16, whole stops)
+- tapOn:
+    id: "aperture-generator-toggle"
+- runFlow:
+    file: ./edit-text.yaml
+    env:
+      INPUT_ID: "generator-max-aperture"
+      TEXT: "2"
+- tapOn:
+    id: "increment-whole"
+- runFlow:
+    file: ./edit-text.yaml
+    env:
+      INPUT_ID: "generator-min-aperture"
+      TEXT: "16"
+- tapOn:
+    id: "generate-apertures-button"
+
 - tapOn:
     id: "save-button"
