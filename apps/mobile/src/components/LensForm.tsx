@@ -1,9 +1,8 @@
 import { View } from "react-native";
 import { UseFormReturn, Controller } from "react-hook-form";
 import { LensForm as LensFormType } from "@/db/schema";
-import { TextInput, SectionHeader } from "./ui";
-import { ApertureGenerator } from "./ApertureGenerator";
-import { CustomApertureList } from "./CustomApertureList";
+import { TextInput } from "./ui";
+import { ApertureList } from "./ApertureList";
 
 interface LensFormProps {
   form: UseFormReturn<LensFormType>;
@@ -11,13 +10,13 @@ interface LensFormProps {
 }
 
 export function LensForm({ form, disabled }: LensFormProps) {
-  const { control, formState, setValue } = form;
+  const { control, formState } = form;
 
   // Get errors
   const aperturesError = formState.errors.apertures?.message;
 
   return (
-    <View>
+    <View className="gap-md">
       <TextInput
         label="Name"
         name="name"
@@ -28,20 +27,11 @@ export function LensForm({ form, disabled }: LensFormProps) {
         testID="lens-name-input"
       />
 
-      <SectionHeader title="Apertures" />
-
-      <ApertureGenerator
-        onGenerate={(apertures) => {
-          setValue("apertures", apertures, { shouldValidate: true });
-        }}
-        disabled={disabled}
-      />
-
       <Controller
         control={control}
         name="apertures"
         render={({ field: { value, onChange } }) => (
-          <CustomApertureList
+          <ApertureList
             value={value}
             onChange={onChange}
             disabled={disabled}
