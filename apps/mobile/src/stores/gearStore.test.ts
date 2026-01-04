@@ -12,11 +12,7 @@ const testState: { db: TestDbContext | null; idCounter: number } = {
 function createLensData(name: string, overrides?: Partial<LensForm>): LensForm {
   return {
     name,
-    apertureMode: "standard",
-    maxAperture: 2.8,
-    minAperture: 16,
-    stopIncrement: "whole",
-    customApertures: [],
+    apertures: [2.8, 4, 5.6, 8, 11, 16],
     ...overrides,
   };
 }
@@ -194,36 +190,17 @@ describe("gearStore", () => {
         expect(lenses[0].name).toBe("Summicron 50mm f/2");
       });
 
-      it("stores aperture configuration", async () => {
+      it("stores apertures as JSON", async () => {
         const { useGearStore } = await import("./gearStore");
 
         await useGearStore.getState().addLens(
           createLensData("Voigtlander 35mm f/1.5", {
-            maxAperture: 1.5,
-            minAperture: 22,
-            stopIncrement: "half",
+            apertures: [1.5, 2, 2.8, 4, 5.6, 8, 11, 16, 22],
           }),
         );
 
         const { lenses } = useGearStore.getState();
-        expect(lenses[0].maxAperture).toBe(1.5);
-        expect(lenses[0].minAperture).toBe(22);
-        expect(lenses[0].stopIncrement).toBe("half");
-      });
-
-      it("stores custom aperture mode with custom values", async () => {
-        const { useGearStore } = await import("./gearStore");
-
-        await useGearStore.getState().addLens(
-          createLensData("Vintage 40mm", {
-            apertureMode: "custom",
-            customApertures: [2.8, 4, 5.6, 8],
-          }),
-        );
-
-        const { lenses } = useGearStore.getState();
-        expect(lenses[0].apertureMode).toBe("custom");
-        expect(lenses[0].customApertures).toBe("[2.8,4,5.6,8]");
+        expect(lenses[0].customApertures).toBe("[1.5,2,2.8,4,5.6,8,11,16,22]");
       });
 
       it("throws UserFacingError for duplicate name", async () => {
@@ -241,22 +218,22 @@ describe("gearStore", () => {
     });
 
     describe("updateLens", () => {
-      it("updates lens name and aperture config", async () => {
+      it("updates lens name and apertures", async () => {
         const { useGearStore } = await import("./gearStore");
 
         await useGearStore
           .getState()
           .addLens(createLensData("Summicron 50mm f/2"));
-        await useGearStore
-          .getState()
-          .updateLens(
-            "test-id-1",
-            createLensData("Summilux 50mm f/1.4", { maxAperture: 1.4 }),
-          );
+        await useGearStore.getState().updateLens(
+          "test-id-1",
+          createLensData("Summilux 50mm f/1.4", {
+            apertures: [1.4, 2, 2.8, 4, 5.6, 8, 11, 16],
+          }),
+        );
 
         const { lenses } = useGearStore.getState();
         expect(lenses[0].name).toBe("Summilux 50mm f/1.4");
-        expect(lenses[0].maxAperture).toBe(1.4);
+        expect(lenses[0].customApertures).toBe("[1.4,2,2.8,4,5.6,8,11,16]");
       });
     });
 

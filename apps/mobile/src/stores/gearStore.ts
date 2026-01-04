@@ -117,14 +117,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       id: randomUUID(),
       name: trimmedName,
       createdAt: new Date(),
-      apertureMode: data.apertureMode,
-      maxAperture: data.maxAperture,
-      minAperture: data.minAperture,
-      stopIncrement: data.stopIncrement,
-      customApertures:
-        data.apertureMode === "custom"
-          ? JSON.stringify(data.customApertures)
-          : null,
+      customApertures: JSON.stringify(data.apertures),
     });
     await get().loadGear();
   },
@@ -141,14 +134,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       .update(lenses)
       .set({
         name: trimmedName,
-        apertureMode: data.apertureMode,
-        maxAperture: data.maxAperture,
-        minAperture: data.minAperture,
-        stopIncrement: data.stopIncrement,
-        customApertures:
-          data.apertureMode === "custom"
-            ? JSON.stringify(data.customApertures)
-            : null,
+        customApertures: JSON.stringify(data.apertures),
       })
       .where(eq(lenses.id, id));
     await get().loadGear();

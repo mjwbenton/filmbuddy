@@ -2,21 +2,8 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { lensFormSchema, LensForm, Lens } from "@/db/schema";
 
-/** Default aperture values for new lenses */
-const DEFAULT_APERTURE_VALUES: Pick<
-  LensForm,
-  | "apertureMode"
-  | "maxAperture"
-  | "minAperture"
-  | "stopIncrement"
-  | "customApertures"
-> = {
-  apertureMode: "standard",
-  maxAperture: 2.8,
-  minAperture: 16,
-  stopIncrement: "whole",
-  customApertures: [],
-};
+/** Default aperture set for new lenses (whole stops f/2.8 to f/16) */
+const DEFAULT_APERTURES = [2.8, 4, 5.6, 8, 11, 16];
 
 interface UseLensFormOptions {
   /** Existing lens to edit, or undefined for new lens */
@@ -31,15 +18,15 @@ interface UseLensFormReturn {
   canSubmit: boolean;
 }
 
-/** Safely parse custom apertures JSON with error handling */
-function safeParseCustomApertures(json: string | null): number[] {
-  if (!json) return [];
+/** Safely parse apertures JSON with error handling */
+function safeParseApertures(json: string): number[] {
   try {
     const parsed: unknown = JSON.parse(json);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((n): n is number => typeof n === "number");
+    if (!Array.isArray(parsed)) return DEFAULT_APERTURES;
+    const numbers = parsed.filter((n): n is number => typeof n === "number");
+    return numbers.length > 0 ? numbers : DEFAULT_APERTURES;
   } catch {
-    return [];
+    return DEFAULT_APERTURES;
   }
 }
 
@@ -47,11 +34,7 @@ function safeParseCustomApertures(json: string | null): number[] {
 function lensToFormValues(lens: Lens): LensForm {
   return {
     name: lens.name,
-    apertureMode: lens.apertureMode,
-    maxAperture: lens.maxAperture,
-    minAperture: lens.minAperture,
-    stopIncrement: lens.stopIncrement,
-    customApertures: safeParseCustomApertures(lens.customApertures),
+    apertures: safeParseApertures(lens.customApertures),
   };
 }
 
@@ -63,7 +46,7 @@ export function useLensForm({
     ? lensToFormValues(lens)
     : {
         name: "",
-        ...DEFAULT_APERTURE_VALUES,
+        apertures: DEFAULT_APERTURES,
       };
 
   const form = useForm<LensForm>({
@@ -80,8 +63,8 @@ export function useLensForm({
   // Allow submission if:
   // - Form is valid, OR
   // - User hasn't tried to submit yet (for initial form entry)
-  // But disable if there are aperture range errors
-  const hasApertureError = !!errors.minAperture || !!errors.customApertures;
+  // But disable if there are aperture errors
+  const hasApertureError = !!errors.apertures;
   const canSubmit = (isValid || !isSubmitted) && !hasApertureError;
 
   return {

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "1792c10e-a35c-4354-ab0f-d1407c8472f3",
+  "id": "2370b5e7-a06f-465b-8f07-328cfe2f1e69",
   "prevId": "ffa31058-2cdd-4be3-9981-7ca607bef239",
   "tables": {
     "rolls": {
@@ -119,44 +119,13 @@
           "notNull": true,
           "autoincrement": false
         },
-        "aperture_mode": {
-          "name": "aperture_mode",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'standard'"
-        },
-        "max_aperture": {
-          "name": "max_aperture",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 2.8
-        },
-        "min_aperture": {
-          "name": "min_aperture",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 16
-        },
-        "stop_increment": {
-          "name": "stop_increment",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'whole'"
-        },
         "custom_apertures": {
           "name": "custom_apertures",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'[]'"
         }
       },
       "indexes": {

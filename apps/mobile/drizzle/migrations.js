@@ -3,7 +3,7 @@
 import journal from './meta/_journal.json';
 import m0000 from './0000_yielding_toro.sql';
 import m0001 from './0001_spotty_fabian_cortez.sql';
-import m0002 from './0002_colorful_clea.sql';
+import m0002 from './0002_moaning_leopardon.sql';
 
   export default {
     journal,
