@@ -33,7 +33,10 @@ export function isWholeStop(aperture: number): boolean {
  * Standard f-stop values at different increments.
  * Values are the f-numbers (denominator in f/X notation).
  */
-export const APERTURE_STOPS: Record<StopIncrement, readonly number[]> = {
+export const APERTURE_STOPS: Record<
+  StopIncrement | "nonStandard",
+  readonly number[]
+> = {
   whole: [0.5, 0.7, 1, 1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32, 45, 64] as const,
   half: [
     0.5, 0.6, 0.7, 0.8, 1, 1.2, 1.4, 1.7, 2, 2.4, 2.8, 3.5, 4, 4.5, 5.6, 6.7, 8,
@@ -44,6 +47,7 @@ export const APERTURE_STOPS: Record<StopIncrement, readonly number[]> = {
     2.8, 3.2, 3.5, 4, 4.5, 5, 5.6, 6.3, 7.1, 8, 9, 10, 11, 13, 14, 16, 18, 20,
     22, 25, 29, 32, 36, 40, 45, 51, 57, 64,
   ] as const,
+  nonStandard: [1.5] as const,
 } as const;
 
 /**
