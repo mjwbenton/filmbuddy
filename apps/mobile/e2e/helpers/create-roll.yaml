@@ -12,17 +12,19 @@ env:
 - tapOn:
     id: "add-roll-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "film-stock-input"
-- inputText: ${FILM_STOCK}
-- hideKeyboard
+- runFlow:
+    file: ./input-text.yaml
+    env:
+      INPUT_ID: "film-stock-input"
+      TEXT: ${FILM_STOCK}
 - tapOn:
     id: "iso-picker"
 - tapOn:
     id: "iso-option-${ISO}"
-- tapOn:
-    id: "camera-input"
-- inputText: ${CAMERA}
-- hideKeyboard
+- runFlow:
+    file: ./input-text.yaml
+    env:
+      INPUT_ID: "camera-input"
+      TEXT: ${CAMERA}
 - tapOn:
     id: "save-button"

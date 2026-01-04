@@ -54,10 +54,11 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "add-camera-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "camera-name-input"
-- inputText: "Leica M6"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "camera-name-input"
+      TEXT: "Leica M6"
 - tapOn:
     id: "save-button"
 
@@ -78,11 +79,11 @@ appId: tech.mattb.filmbuddy
     id: "delete-button"
 
 # WHEN I tap it, change the name, and save
-- tapOn:
-    id: "camera-name-input"
-- eraseText
-- inputText: "Leica M6 TTL"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "camera-name-input"
+      TEXT: "Leica M6 TTL"
 - tapOn:
     id: "save-button"
 
@@ -98,10 +99,11 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "add-camera-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "camera-name-input"
-- inputText: "Hasselblad 500C/M"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "camera-name-input"
+      TEXT: "Hasselblad 500C/M"
 - tapOn:
     id: "save-button"
 
@@ -113,10 +115,11 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "add-camera-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "camera-name-input"
-- inputText: "Leica M6 TTL"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "camera-name-input"
+      TEXT: "Leica M6 TTL"
 - tapOn:
     id: "save-button"
 

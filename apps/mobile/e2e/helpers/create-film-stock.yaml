@@ -8,9 +8,10 @@ env:
 - tapOn:
     id: "add-film-stock-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "film-stock-name-input"
-- inputText: ${FILM_STOCK_NAME}
-- hideKeyboard
+- runFlow:
+    file: ./input-text.yaml
+    env:
+      INPUT_ID: "film-stock-name-input"
+      TEXT: ${FILM_STOCK_NAME}
 - tapOn:
     id: "save-button"

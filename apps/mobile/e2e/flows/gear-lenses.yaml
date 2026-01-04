@@ -17,10 +17,11 @@ appId: tech.mattb.filmbuddy
 # Verify sheet is open
 - assertVisible: "Add Lens"
 
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Summicron 50mm f/2"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Summicron 50mm f/2"
 - tapOn:
     id: "save-button"
 
@@ -41,11 +42,11 @@ appId: tech.mattb.filmbuddy
     id: "delete-button"
 
 # WHEN I tap it, change the name, and save
-- tapOn:
-    id: "lens-name-input"
-- eraseText
-- inputText: "Summilux 35mm f/1.4"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Summilux 35mm f/1.4"
 - tapOn:
     id: "save-button"
 

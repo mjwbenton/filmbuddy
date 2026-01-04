@@ -8,9 +8,10 @@ env:
 - tapOn:
     id: "add-camera-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "camera-name-input"
-- inputText: ${CAMERA_NAME}
-- hideKeyboard
+- runFlow:
+    file: ./input-text.yaml
+    env:
+      INPUT_ID: "camera-name-input"
+      TEXT: ${CAMERA_NAME}
 - tapOn:
     id: "save-button"

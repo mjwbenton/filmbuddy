@@ -1,0 +1,14 @@
+appId: tech.mattb.filmbuddy
+env:
+  INPUT_ID: ${INPUT_ID}
+  TEXT: ${TEXT}
+---
+# Helper: Clear and replace text in an input field
+# Parameters:
+#   INPUT_ID: The testID of the input field
+#   TEXT: The new text to enter
+- tapOn:
+    id: ${INPUT_ID}
+- eraseText
+- inputText: ${TEXT}
+- runFlow: ./hide-keyboard.yaml

@@ -8,9 +8,10 @@ env:
 - tapOn:
     id: "add-lens-button"
     retryTapIfNoChange: true
-- tapOn:
-    id: "lens-name-input"
-- inputText: ${LENS_NAME}
-- hideKeyboard
+- runFlow:
+    file: ./input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: ${LENS_NAME}
 - tapOn:
     id: "save-button"

@@ -18,10 +18,11 @@ appId: tech.mattb.filmbuddy
 
 # WHEN I try to save without filling in all three fields
 # Fill only film stock - Save should still be disabled
-- tapOn:
-    id: "film-stock-input"
-- inputText: "Kodak Gold"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "film-stock-input"
+      TEXT: "Kodak Gold"
 
 # Fill ISO but not camera - Save should still be disabled
 - tapOn:
@@ -39,10 +40,11 @@ appId: tech.mattb.filmbuddy
 # =============================================================================
 # GIVEN I'm on the Rolls screen (with add sheet open, partial fields filled)
 # WHEN I enter camera and save
-- tapOn:
-    id: "camera-input"
-- inputText: "Leica M6"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "camera-input"
+      TEXT: "Leica M6"
 
 - tapOn:
     id: "save-button"

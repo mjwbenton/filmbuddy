@@ -1,0 +1,13 @@
+appId: tech.mattb.filmbuddy
+env:
+  INPUT_ID: ${INPUT_ID}
+  TEXT: ${TEXT}
+---
+# Helper: Input text and dismiss keyboard
+# Parameters:
+#   INPUT_ID: The testID of the input field
+#   TEXT: The text to enter
+- tapOn:
+    id: ${INPUT_ID}
+- inputText: ${TEXT}
+- runFlow: ./hide-keyboard.yaml

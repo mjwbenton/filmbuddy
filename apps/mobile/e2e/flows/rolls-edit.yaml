@@ -41,22 +41,22 @@ appId: tech.mattb.filmbuddy
 - tapOn: "Kodak Gold @ 200"
 
 # WHEN I edit the film stock, ISO, or camera and save
-- tapOn:
-    id: "film-stock-input"
-- eraseText
-- inputText: "Ektar 100"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "film-stock-input"
+      TEXT: "Ektar 100"
 
 - tapOn:
     id: "iso-picker"
 - tapOn:
     id: "iso-option-100"
 
-- tapOn:
-    id: "camera-input"
-- eraseText
-- inputText: "Contax T2"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "camera-input"
+      TEXT: "Contax T2"
 
 - tapOn:
     id: "save-button"

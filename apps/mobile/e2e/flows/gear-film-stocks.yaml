@@ -17,10 +17,11 @@ appId: tech.mattb.filmbuddy
 # Verify sheet is open
 - assertVisible: "Add Film Stock"
 
-- tapOn:
-    id: "film-stock-name-input"
-- inputText: "Kodak Portra 400"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "film-stock-name-input"
+      TEXT: "Kodak Portra 400"
 - tapOn:
     id: "save-button"
 
@@ -41,11 +42,11 @@ appId: tech.mattb.filmbuddy
     id: "delete-button"
 
 # WHEN I tap it, change the name, and save
-- tapOn:
-    id: "film-stock-name-input"
-- eraseText
-- inputText: "Kodak Tri-X 400"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "film-stock-name-input"
+      TEXT: "Kodak Tri-X 400"
 - tapOn:
     id: "save-button"
 
