@@ -93,6 +93,25 @@ import { eq, desc, and } from "drizzle-orm";
 
 Data from our own database already matches the schema we used to write it. Zod validation is only needed at input boundaries (forms, APIs), not for trusted internal data.
 
+## When DB and Consumer Types Differ
+
+Sometimes the database representation differs from what consumers need. For example, storing a JSON array as a `text` column. In these cases:
+
+1. **Prefix the raw DB type with `Db`** - e.g., `DbLens` for the raw database row
+2. **Use the natural name for the consumer type** - e.g., `Lens` with parsed fields
+
+```typescript
+// Raw database type (apertures stored as JSON string)
+export type DbLens = typeof lenses.$inferSelect;
+
+// Consumer-facing type (apertures as parsed array)
+export type Lens = Omit<DbLens, "apertures"> & {
+  apertures: number[];
+};
+```
+
+The store is responsible for converting between `Db*` and consumer types (see implement-store skill).
+
 ## Checklist
 
 - [ ] Domain file in `db/[domain].ts`

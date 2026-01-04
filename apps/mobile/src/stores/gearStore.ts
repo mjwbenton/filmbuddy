@@ -7,11 +7,21 @@ import {
   lenses,
   filmStocks,
   Camera,
+  DbLens,
   Lens,
   FilmStock,
   LensForm,
 } from "@/db/schema";
 import { UserFacingError } from "@/lib/errors";
+import { parseAperturesJson } from "@/lib/aperture";
+
+/** Convert a database lens row to consumer-facing Lens with parsed apertures */
+function parseLensRow(row: DbLens): Lens {
+  return {
+    ...row,
+    apertures: parseAperturesJson(row.apertures),
+  };
+}
 
 interface GearStore {
   cameras: Camera[];
@@ -51,7 +61,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       ]);
       set({
         cameras: cameraRows,
-        lenses: lensRows,
+        lenses: lensRows.map(parseLensRow),
         filmStocks: filmStockRows,
         isLoading: false,
       });

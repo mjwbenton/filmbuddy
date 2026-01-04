@@ -11,9 +11,14 @@ export const lenses = sqliteTable("lenses", {
   apertures: text("apertures").notNull().default("[]"),
 });
 
-// Types
-export type Lens = typeof lenses.$inferSelect;
+// Raw database type (apertures stored as JSON string)
+export type DbLens = typeof lenses.$inferSelect;
 export type NewLens = typeof lenses.$inferInsert;
+
+// Consumer-facing type (apertures as parsed array)
+export type Lens = Omit<DbLens, "apertures"> & {
+  apertures: number[];
+};
 
 // Apertures array schema
 const aperturesSchema = z

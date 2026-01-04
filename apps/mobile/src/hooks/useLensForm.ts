@@ -1,9 +1,7 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { lensFormSchema, LensForm, Lens } from "@/db/schema";
-
-/** Default aperture set for new lenses (whole stops f/2.8 to f/16) */
-const DEFAULT_APERTURES = [2.8, 4, 5.6, 8, 11, 16];
+import { DEFAULT_APERTURES } from "@/lib/aperture";
 
 interface UseLensFormOptions {
   /** Existing lens to edit, or undefined for new lens */
@@ -18,23 +16,11 @@ interface UseLensFormReturn {
   canSubmit: boolean;
 }
 
-/** Safely parse apertures JSON with error handling */
-function safeParseApertures(json: string): number[] {
-  try {
-    const parsed: unknown = JSON.parse(json);
-    if (!Array.isArray(parsed)) return DEFAULT_APERTURES;
-    const numbers = parsed.filter((n): n is number => typeof n === "number");
-    return numbers.length > 0 ? numbers : DEFAULT_APERTURES;
-  } catch {
-    return DEFAULT_APERTURES;
-  }
-}
-
 /** Convert a Lens entity to LensForm values */
 function lensToFormValues(lens: Lens): LensForm {
   return {
     name: lens.name,
-    apertures: safeParseApertures(lens.apertures),
+    apertures: lens.apertures,
   };
 }
 

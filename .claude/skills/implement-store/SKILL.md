@@ -107,6 +107,33 @@ export function ItemList() {
 }
 ```
 
+## Converting DB Types to Consumer Types
+
+When the database representation differs from what consumers need (see implement-domain skill), the store is responsible for the conversion:
+
+```typescript
+import { DbLens, Lens } from "@/db/schema";
+import { parseAperturesJson } from "@/lib/aperture";
+
+/** Convert a database row to consumer-facing type */
+function parseLensRow(row: DbLens): Lens {
+  return {
+    ...row,
+    apertures: parseAperturesJson(row.apertures),
+  };
+}
+
+// In load():
+const rows = await db.select().from(lenses);
+set({ lenses: rows.map(parseLensRow) });
+```
+
+This ensures:
+
+- Components receive clean, typed data (e.g., `apertures: number[]`)
+- JSON serialization details stay hidden from the rest of the app
+- Type safety is preserved end-to-end
+
 ## Selectors
 
 Use selectors to minimize re-renders:
