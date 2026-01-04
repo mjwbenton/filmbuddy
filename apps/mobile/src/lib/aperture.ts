@@ -11,21 +11,6 @@ export type StopIncrement = "whole" | "half" | "third";
 /** Default aperture set for new lenses (whole stops f/2.8 to f/16) */
 export const DEFAULT_APERTURES = [2.8, 4, 5.6, 8, 11, 16];
 
-/**
- * Parse apertures from JSON string with error handling.
- * Returns DEFAULT_APERTURES if parsing fails or result is invalid.
- */
-export function parseAperturesJson(json: string): number[] {
-  try {
-    const parsed: unknown = JSON.parse(json);
-    if (!Array.isArray(parsed)) return DEFAULT_APERTURES;
-    const numbers = parsed.filter((n): n is number => typeof n === "number");
-    return numbers.length > 0 ? numbers : DEFAULT_APERTURES;
-  } catch {
-    return DEFAULT_APERTURES;
-  }
-}
-
 /** Bounds for aperture selection */
 export const APERTURE_BOUNDS = {
   min: 0.5, // Widest (smallest f-number)

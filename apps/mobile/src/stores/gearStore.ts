@@ -13,7 +13,22 @@ import {
   LensForm,
 } from "@/db/schema";
 import { UserFacingError } from "@/lib/errors";
-import { parseAperturesJson } from "@/lib/aperture";
+import { DEFAULT_APERTURES } from "@/lib/aperture";
+
+/**
+ * Parse apertures from JSON string with error handling.
+ * Returns DEFAULT_APERTURES if parsing fails or result is invalid.
+ */
+function parseAperturesJson(json: string): number[] {
+  try {
+    const parsed: unknown = JSON.parse(json);
+    if (!Array.isArray(parsed)) return DEFAULT_APERTURES;
+    const numbers = parsed.filter((n): n is number => typeof n === "number");
+    return numbers.length > 0 ? numbers : DEFAULT_APERTURES;
+  } catch {
+    return DEFAULT_APERTURES;
+  }
+}
 
 /** Convert a database lens row to consumer-facing Lens with parsed apertures */
 function parseLensRow(row: DbLens): Lens {

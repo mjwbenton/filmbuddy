@@ -4,7 +4,6 @@ import {
   generateApertureSequence,
   formatAperture,
   parseAperture,
-  parseAperturesJson,
   isValidApertureRange,
   getAllApertureOptions,
   APERTURE_STOPS,
@@ -169,32 +168,6 @@ describe("getAllApertureOptions", () => {
     APERTURE_STOPS.whole.forEach((stop) => {
       expect(options).toContain(stop);
     });
-  });
-});
-
-describe("parseAperturesJson", () => {
-  it("parses valid JSON array of numbers", () => {
-    expect(parseAperturesJson("[1.4, 2, 2.8]")).toEqual([1.4, 2, 2.8]);
-  });
-
-  it("returns DEFAULT_APERTURES for invalid JSON", () => {
-    expect(parseAperturesJson("not json")).toEqual(DEFAULT_APERTURES);
-  });
-
-  it("returns DEFAULT_APERTURES for non-array JSON", () => {
-    expect(parseAperturesJson('{"foo": 1}')).toEqual(DEFAULT_APERTURES);
-  });
-
-  it("filters out non-numbers from array", () => {
-    expect(parseAperturesJson('[1.4, "two", 2.8, null]')).toEqual([1.4, 2.8]);
-  });
-
-  it("returns DEFAULT_APERTURES for empty array", () => {
-    expect(parseAperturesJson("[]")).toEqual(DEFAULT_APERTURES);
-  });
-
-  it("returns DEFAULT_APERTURES for array with only non-numbers", () => {
-    expect(parseAperturesJson('["a", "b", null]')).toEqual(DEFAULT_APERTURES);
   });
 });
 
