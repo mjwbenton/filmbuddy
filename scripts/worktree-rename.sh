@@ -74,6 +74,10 @@ git -C "$OLD_WORKTREE_PATH" branch -m "$NEW_BRANCH"
 echo "Moving worktree directory..."
 git -C "$MAIN_REPO" worktree move "$OLD_WORKTREE_PATH" "$NEW_WORKTREE_PATH"
 
+# Reinstall dependencies to fix git hooks (Husky setup)
+echo "Reinstalling dependencies..."
+(cd "$NEW_WORKTREE_PATH" && yarn install)
+
 echo "Done."
 
 # Output the new path for the caller
