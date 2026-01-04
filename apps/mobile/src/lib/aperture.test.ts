@@ -157,15 +157,15 @@ describe("getAllApertureOptions", () => {
     expect(options[options.length - 1]).toBe(APERTURE_BOUNDS.max);
 
     // Check sorted
-    for (let i = 1; i < options.length; i++) {
-      expect(options[i]).toBeGreaterThan(options[i - 1]);
-    }
+    options.slice(1).forEach((val, idx) => {
+      expect(val).toBeGreaterThan(options[idx]);
+    });
   });
 
   it("includes all whole stops", () => {
     const options = getAllApertureOptions();
-    for (const stop of APERTURE_STOPS.whole) {
+    APERTURE_STOPS.whole.forEach((stop) => {
       expect(options).toContain(stop);
-    }
+    });
   });
 });

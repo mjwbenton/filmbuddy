@@ -46,18 +46,9 @@ export function nearestStandardStop(
   increment: StopIncrement,
 ): number {
   const stops = APERTURE_STOPS[increment];
-  let nearest = stops[0];
-  let minDiff = Math.abs(aperture - nearest);
-
-  for (const stop of stops) {
-    const diff = Math.abs(aperture - stop);
-    if (diff < minDiff) {
-      minDiff = diff;
-      nearest = stop;
-    }
-  }
-
-  return nearest;
+  return stops.reduce((nearest, stop) =>
+    Math.abs(aperture - stop) < Math.abs(aperture - nearest) ? stop : nearest,
+  );
 }
 
 /**
@@ -94,34 +85,27 @@ export function generateApertureSequence(
 
   // Find starting index in standard stops
   const startStop = isStandardMax ? maxAperture : nearestMax;
-  let startIndex = stops.findIndex(
+  const baseIndex = stops.findIndex(
     (s) => Math.abs(s - startStop) < APERTURE_EPSILON,
   );
-
   // If the nearest standard stop is wider than our max, start from next
-  if (!isStandardMax && nearestMax < maxAperture) {
-    startIndex++;
-  }
+  const startIndex =
+    !isStandardMax && nearestMax < maxAperture ? baseIndex + 1 : baseIndex;
 
   // Add standard stops from start to min
-  for (let i = startIndex; i < stops.length; i++) {
-    const stop = stops[i];
-    if (stop > minAperture) break;
+  const standardStops = stops
+    .slice(startIndex)
+    .filter((stop) => stop <= minAperture)
+    .filter((stop, idx) => {
+      // Skip if this is essentially the same as our non-standard max
+      // Use larger threshold (0.1) here to avoid near-duplicates like f/1.5 and f/1.4
+      if (!isStandardMax && idx === 0 && Math.abs(stop - maxAperture) < 0.1) {
+        return false;
+      }
+      return true;
+    });
 
-    // Skip if this is essentially the same as our non-standard max
-    // Use larger threshold (0.1) here to avoid near-duplicates like f/1.5 and f/1.4
-    if (
-      !isStandardMax &&
-      result.length === 1 &&
-      Math.abs(stop - maxAperture) < 0.1
-    ) {
-      continue;
-    }
-
-    result.push(stop);
-  }
-
-  return result;
+  return [...result, ...standardStops];
 }
 
 /**
@@ -171,27 +155,25 @@ export function isValidApertureRange(
   return maxAperture < minAperture;
 }
 
-/** Cached aperture options for pickers */
-let cachedApertureOptions: number[] | null = null;
-
 /**
  * Get all available aperture options for a picker, within bounds.
  * Combines all three increment scales for maximum flexibility.
  * Results are memoized for performance.
  */
-export function getAllApertureOptions(): number[] {
-  if (cachedApertureOptions) return cachedApertureOptions;
+export const getAllApertureOptions = (() => {
+  const cache: { value: number[] | null } = { value: null };
+  return (): number[] => {
+    if (cache.value) return cache.value;
 
-  const allValues = new Set<number>();
+    const allValues = new Set<number>(
+      Object.values(APERTURE_STOPS)
+        .flatMap((stops) => [...stops])
+        .filter(
+          (stop) => stop >= APERTURE_BOUNDS.min && stop <= APERTURE_BOUNDS.max,
+        ),
+    );
 
-  for (const stops of Object.values(APERTURE_STOPS)) {
-    for (const stop of stops) {
-      if (stop >= APERTURE_BOUNDS.min && stop <= APERTURE_BOUNDS.max) {
-        allValues.add(stop);
-      }
-    }
-  }
-
-  cachedApertureOptions = Array.from(allValues).sort((a, b) => a - b);
-  return cachedApertureOptions;
-}
+    cache.value = Array.from(allValues).sort((a, b) => a - b);
+    return cache.value;
+  };
+})();
