@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "2370b5e7-a06f-465b-8f07-328cfe2f1e69",
+  "id": "9ee7f779-4729-4964-aeaa-ba8d6c4457f5",
   "prevId": "ffa31058-2cdd-4be3-9981-7ca607bef239",
   "tables": {
     "rolls": {
@@ -119,8 +119,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "custom_apertures": {
-          "name": "custom_apertures",
+        "apertures": {
+          "name": "apertures",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

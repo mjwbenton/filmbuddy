@@ -1,0 +1,1 @@
+ALTER TABLE `lenses` ADD `apertures` text DEFAULT '[]' NOT NULL;

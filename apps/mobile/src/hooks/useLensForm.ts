@@ -34,7 +34,7 @@ function safeParseApertures(json: string): number[] {
 function lensToFormValues(lens: Lens): LensForm {
   return {
     name: lens.name,
-    apertures: safeParseApertures(lens.customApertures),
+    apertures: safeParseApertures(lens.apertures),
   };
 }
 

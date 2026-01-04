@@ -105,9 +105,7 @@ As a film photographer, I want to quickly select from only the apertures my lens
 #### 2. Database Schema
 
 - [x] Update `src/db/lens.ts`:
-  - Add columns: `apertureMode` (text: 'standard' | 'custom')
-  - Add columns: `maxAperture` (real), `minAperture` (real), `stopIncrement` (text: 'whole' | 'half' | 'third')
-  - Add column: `customApertures` (text, JSON-stringified array)
+  - Add column: `apertures` (text, JSON-stringified array)
   - Update Zod schemas for validation
 - [x] Generate migration: `npx drizzle-kit generate`
 

@@ -117,7 +117,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       id: randomUUID(),
       name: trimmedName,
       createdAt: new Date(),
-      customApertures: JSON.stringify(data.apertures),
+      apertures: JSON.stringify(data.apertures),
     });
     await get().loadGear();
   },
@@ -134,7 +134,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
       .update(lenses)
       .set({
         name: trimmedName,
-        customApertures: JSON.stringify(data.apertures),
+        apertures: JSON.stringify(data.apertures),
       })
       .where(eq(lenses.id, id));
     await get().loadGear();

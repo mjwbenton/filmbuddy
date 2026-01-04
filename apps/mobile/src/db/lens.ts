@@ -8,7 +8,7 @@ export const lenses = sqliteTable("lenses", {
   name: text("name").notNull().unique(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
   // Aperture configuration - JSON-stringified array
-  customApertures: text("custom_apertures").notNull().default("[]"),
+  apertures: text("apertures").notNull().default("[]"),
 });
 
 // Types

@@ -200,7 +200,7 @@ describe("gearStore", () => {
         );
 
         const { lenses } = useGearStore.getState();
-        expect(lenses[0].customApertures).toBe("[1.5,2,2.8,4,5.6,8,11,16,22]");
+        expect(lenses[0].apertures).toBe("[1.5,2,2.8,4,5.6,8,11,16,22]");
       });
 
       it("throws UserFacingError for duplicate name", async () => {
@@ -233,7 +233,7 @@ describe("gearStore", () => {
 
         const { lenses } = useGearStore.getState();
         expect(lenses[0].name).toBe("Summilux 50mm f/1.4");
-        expect(lenses[0].customApertures).toBe("[1.4,2,2.8,4,5.6,8,11,16]");
+        expect(lenses[0].apertures).toBe("[1.4,2,2.8,4,5.6,8,11,16]");
       });
     });
 
