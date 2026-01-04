@@ -10,14 +10,16 @@ As a film photographer, I want to quickly select from only the apertures my lens
 
 ## Scenarios
 
-### Scenario: Configure apertures for a lens (standard mode)
+### Scenario: Generate apertures from a range
 
 - **GIVEN** I am editing a lens
-- **WHEN** I select a maximum aperture (e.g., f/1.4)
+- **WHEN** I open the aperture generator
+- **AND** I select a maximum aperture (e.g., f/1.4)
 - **AND** I select the stop increment (whole, half, or third stops)
 - **AND** I select a minimum aperture (e.g., f/16)
-- **THEN** the lens stores these settings
-- **AND** the available apertures are calculated from max to min using the selected increment
+- **AND** I tap generate
+- **THEN** the aperture list is populated with the calculated values
+- **AND** I can save the lens with these apertures
 
 ### Scenario: Lens with non-standard max aperture
 
@@ -32,25 +34,27 @@ As a film photographer, I want to quickly select from only the apertures my lens
 - **WHEN** I edit the lens and change the increment to half stops
 - **THEN** the available apertures are recalculated using the new increment
 
-### Scenario: Custom aperture list
+### Scenario: Manual aperture selection
 
 - **GIVEN** I am editing a lens
-- **WHEN** I select "custom" as the mode
-- **THEN** I see a list of aperture values I can add to or delete from
+- **WHEN** I tap the add aperture button
+- **AND** I select aperture values from the picker
+- **THEN** each selected aperture is added to my list
+- **AND** I can delete individual apertures
 - **AND** the lens stores exactly the apertures I've specified
 
 ### Scenario: Min aperture wider than max (error)
 
-- **GIVEN** I am configuring apertures for a lens
+- **GIVEN** I am using the aperture generator
 - **WHEN** I select a minimum aperture wider than the maximum (e.g., max f/4, min f/2)
-- **THEN** I see an error message
-- **AND** I cannot save until corrected
+- **THEN** the generate button is disabled
+- **AND** I cannot generate apertures until the range is valid
 
-### Scenario: Empty custom list (error)
+### Scenario: Empty aperture list (error)
 
-- **GIVEN** I am using custom aperture mode
+- **GIVEN** I am editing a lens with no apertures
 - **WHEN** I try to save with no apertures in the list
-- **THEN** I see an error message
+- **THEN** the save button is disabled
 - **AND** I cannot save until at least one aperture is added
 
 ### Scenario: Aperture bounds
@@ -71,24 +75,25 @@ As a film photographer, I want to quickly select from only the apertures my lens
 
 ### E2E Tests Created
 
-- `apps/mobile/e2e/flows/lens-apertures-standard.yaml` - Standard mode scenarios
-- `apps/mobile/e2e/flows/lens-apertures-custom.yaml` - Custom mode scenarios
+- `apps/mobile/e2e/flows/lens-apertures-generator.yaml` - Generator-based scenarios
+- `apps/mobile/e2e/flows/lens-apertures-manual.yaml` - Manual selection scenarios
 
 ### Required testIDs
 
-| Component              | testID                    |
-| ---------------------- | ------------------------- |
-| Standard mode tab      | `aperture-mode-standard`  |
-| Custom mode tab        | `aperture-mode-custom`    |
-| Max aperture picker    | `max-aperture-picker`     |
-| Min aperture picker    | `min-aperture-picker`     |
-| Whole stops button     | `increment-whole`         |
-| Half stops button      | `increment-half`          |
-| Third stops button     | `increment-third`         |
-| Aperture preview       | `aperture-preview`        |
-| Aperture error message | `aperture-error`          |
-| Add aperture button    | `add-aperture-button`     |
-| Delete aperture button | `delete-aperture-{value}` |
+| Component              | testID                      |
+| ---------------------- | --------------------------- |
+| Lens name input        | `lens-name-input`           |
+| Add aperture button    | `add-aperture-button`       |
+| Delete aperture button | `delete-aperture-f/X.X`     |
+| Generator toggle       | `aperture-generator-toggle` |
+| Max aperture picker    | `generator-max-aperture`    |
+| Min aperture picker    | `generator-min-aperture`    |
+| Whole stops button     | `increment-whole`           |
+| Half stops button      | `increment-half`            |
+| Third stops button     | `increment-third`           |
+| Generate button        | `generate-apertures-button` |
+| Save button            | `save-button`               |
+| Close button           | `close-button`              |
 
 ### Tasks
 
@@ -119,28 +124,21 @@ As a film photographer, I want to quickly select from only the apertures my lens
 #### 4. Form Hook
 
 - [x] Update `src/hooks/useLensForm.ts`:
-  - Add aperture mode state
-  - Add max/min/increment state for standard mode
-  - Add custom apertures list for custom mode
-  - Add validation: min must be >= max (numerically larger f-number)
-  - Add validation: custom list cannot be empty
+  - Add apertures array field
+  - Add validation: at least one aperture required
+  - Add validation: aperture values between 0.5 and 64
 
 #### 5. UI Components
 
 - [x] Create `src/components/AperturePicker.tsx` - dropdown for selecting aperture values
-- [x] Create `src/components/StopIncrementSelector.tsx` - segmented control for whole/half/third
-- [x] Create `src/components/AperturePreview.tsx` - chips showing calculated apertures
-- [x] Create `src/components/ApertureModeSelector.tsx` - tabs for Standard/Custom mode
-- [x] Create `src/components/CustomApertureList.tsx` - editable list for custom mode
+- [x] Create `src/components/ApertureList.tsx` - unified aperture management with add/delete and generator
+- [x] Create `src/components/ui/SegmentedControl.tsx` - for whole/half/third stop selection
 
 #### 6. Form Integration
 
 - [x] Update `src/components/LensForm.tsx`:
-  - Add Apertures section header
-  - Add mode selector tabs
-  - Add standard mode fields (max/min pickers, increment selector, preview)
-  - Add custom mode fields (aperture list with add/delete)
-  - Add error message display
+  - Add Apertures section with ApertureList component
+  - ApertureList handles both manual selection and generator modes
 
 #### 7. Screen Integration
 

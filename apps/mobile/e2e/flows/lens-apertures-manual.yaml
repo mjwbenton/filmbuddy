@@ -1,0 +1,143 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and navigate to Gear tab
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# =============================================================================
+# Scenario 1: Empty aperture list prevents save
+# =============================================================================
+# GIVEN I am adding a new lens with no apertures
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+# Verify sheet is open
+- assertVisible: "Add Lens"
+
+# WHEN I enter a name but don't add any apertures
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Empty Aperture Test"
+- hideKeyboard
+
+# AND I try to save
+- tapOn:
+    id: "save-button"
+
+# THEN save is blocked and I remain on the add lens sheet
+- assertVisible: "Add Lens"
+
+# Clean up - close the sheet
+- tapOn:
+    id: "close-button"
+
+# =============================================================================
+# Scenario 2: Manual aperture selection (happy path)
+# =============================================================================
+# GIVEN I am adding a lens
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+# Enter lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Manual Selection Lens"
+- hideKeyboard
+
+# WHEN I manually add apertures one by one
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/2"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/2.8"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/4"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/5.6"
+
+# THEN each aperture appears in my list
+- assertVisible: "f/2"
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+- assertVisible: "f/5.6"
+
+# AND I can save the lens successfully
+- tapOn:
+    id: "save-button"
+
+- assertVisible: "Manual Selection Lens"
+
+# =============================================================================
+# Scenario 3: Delete aperture from list
+# =============================================================================
+# GIVEN I am adding a new lens
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+# Enter lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Delete Aperture Test"
+- hideKeyboard
+
+# Add apertures
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/2"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/2.8"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/4"
+
+# Verify all apertures are visible
+- assertVisible: "f/2"
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+
+# WHEN I tap the delete button for an aperture
+- tapOn:
+    id: "delete-aperture-f/2.8"
+
+# THEN that aperture is removed from the list
+- assertVisible: "f/2"
+- assertVisible: "f/4"
+- assertNotVisible:
+    text: "f/2.8"
+    below:
+      text: "Apertures"
+
+# Save the lens
+- tapOn:
+    id: "save-button"
+
+- assertVisible: "Delete Aperture Test"
+
+# Verify deletion persisted by editing the lens
+- tapOn: "Delete Aperture Test"
+- assertVisible: "Edit Lens"
+
+# Verify saved apertures (f/2.8 should still be deleted)
+- assertVisible: "f/2"
+- assertVisible: "f/4"
+- assertNotVisible:
+    text: "f/2.8"
+    below:
+      text: "Apertures"
+
+# Close the edit sheet
+- tapOn:
+    id: "close-button"

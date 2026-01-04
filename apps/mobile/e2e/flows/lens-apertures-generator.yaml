@@ -1,0 +1,214 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and navigate to Gear tab
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# =============================================================================
+# Scenario 1: Generate apertures from a range (happy path)
+# =============================================================================
+# GIVEN I am editing a lens
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+- assertVisible: "Add Lens"
+
+# Enter lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Test Generator Lens"
+- hideKeyboard
+
+# WHEN I open the aperture generator
+- tapOn:
+    id: "aperture-generator-toggle"
+
+# AND I select f/2.8 as max aperture
+- tapOn:
+    id: "generator-max-aperture"
+- tapOn: "f/2.8"
+
+# AND I select half stops as increment
+- tapOn:
+    id: "increment-half"
+
+# AND I select f/16 as min aperture
+- tapOn:
+    id: "generator-min-aperture"
+- tapOn: "f/16"
+
+# AND I tap generate
+- tapOn:
+    id: "generate-apertures-button"
+
+# THEN the aperture list is populated with half-stop values from f/2.8 to f/16
+- assertVisible: "f/2.8"
+- assertVisible: "f/3.5"
+- assertVisible: "f/4"
+- assertVisible: "f/4.5"
+- assertVisible: "f/5.6"
+- assertVisible: "f/6.7"
+- assertVisible: "f/8"
+- assertVisible: "f/9.5"
+- assertVisible: "f/11"
+- assertVisible: "f/13"
+- assertVisible: "f/16"
+
+# AND I can save the lens successfully
+- tapOn:
+    id: "save-button"
+
+- assertVisible: "Test Generator Lens"
+
+# =============================================================================
+# Scenario 2: Non-standard max aperture (f/1.5)
+# =============================================================================
+# GIVEN I am adding a lens
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+- assertVisible: "Add Lens"
+
+# Enter lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Voigtlander 35mm f/1.5"
+- hideKeyboard
+
+# Open the aperture generator
+- tapOn:
+    id: "aperture-generator-toggle"
+
+# WHEN I select f/1.5 as max aperture
+- tapOn:
+    id: "generator-max-aperture"
+- tapOn: "f/1.5"
+
+# AND I select half stops
+- tapOn:
+    id: "increment-half"
+
+# AND I select f/16 as min aperture
+- tapOn:
+    id: "generator-min-aperture"
+- tapOn: "f/16"
+
+# AND I tap generate
+- tapOn:
+    id: "generate-apertures-button"
+
+# THEN the list starts with f/1.5 exactly
+- assertVisible: "f/1.5"
+
+# AND subsequent apertures continue from nearest half stop
+- assertVisible: "f/2"
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+
+# Save the lens
+- tapOn:
+    id: "save-button"
+
+- assertVisible: "Voigtlander 35mm f/1.5"
+
+# =============================================================================
+# Scenario 3: Change stop increment and regenerate
+# =============================================================================
+# GIVEN I have generated apertures with whole stops
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+- assertVisible: "Add Lens"
+
+# Enter lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Increment Change Test"
+- hideKeyboard
+
+# Open the aperture generator
+- tapOn:
+    id: "aperture-generator-toggle"
+
+# Set max to f/2.8
+- tapOn:
+    id: "generator-max-aperture"
+- tapOn: "f/2.8"
+
+# Set increment to whole
+- tapOn:
+    id: "increment-whole"
+
+# Set min to f/22
+- tapOn:
+    id: "generator-min-aperture"
+- tapOn: "f/22"
+
+# Generate with whole stops
+- tapOn:
+    id: "generate-apertures-button"
+
+# Verify whole stop apertures
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+- assertVisible: "f/5.6"
+- assertVisible: "f/8"
+- assertVisible: "f/11"
+- assertVisible: "f/16"
+- assertVisible: "f/22"
+
+# WHEN I change to half stops and regenerate
+- tapOn:
+    id: "increment-half"
+
+- tapOn:
+    id: "generate-apertures-button"
+
+# THEN the aperture list updates with half-stop values
+- assertVisible: "f/3.5"
+- assertVisible: "f/4.5"
+
+# Save the lens
+- tapOn:
+    id: "save-button"
+
+- assertVisible: "Increment Change Test"
+
+# =============================================================================
+# Scenario 4: Aperture bounds verification
+# =============================================================================
+# GIVEN I open the aperture pickers
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+- assertVisible: "Add Lens"
+
+# Open the aperture generator
+- tapOn:
+    id: "aperture-generator-toggle"
+
+# Open the max aperture picker
+- tapOn:
+    id: "generator-max-aperture"
+
+# THEN f/0.5 is available as a max aperture option
+- assertVisible: "f/0.5"
+
+# Select something to close the picker
+- tapOn: "f/2"
+
+# Open the min aperture picker
+- tapOn:
+    id: "generator-min-aperture"
+
+# AND f/64 is available as a min aperture option
+- assertVisible: "f/64"
+
+# Close the sheet without saving
+- tapOn:
+    id: "close-button"
