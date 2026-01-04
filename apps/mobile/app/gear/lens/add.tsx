@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
@@ -19,7 +19,7 @@ export default function AddLensScreen() {
   const { form, handleSubmit, isSubmitting, canSubmit } = useLensForm({
     onSubmit: async (data: LensFormType) => {
       try {
-        await addLens(data.name);
+        await addLens(data);
         router.back();
       } catch (err) {
         handleError(err, "Failed to add lens. Please try again.");
@@ -40,9 +40,9 @@ export default function AddLensScreen() {
         }
       />
 
-      <View className="flex-1 px-md pt-lg">
+      <ScrollView className="flex-1 px-md pt-lg">
         <LensForm form={form} disabled={isSubmitting} />
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

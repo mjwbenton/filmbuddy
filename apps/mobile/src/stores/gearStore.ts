@@ -9,6 +9,7 @@ import {
   Camera,
   Lens,
   FilmStock,
+  LensForm,
 } from "@/db/schema";
 import { UserFacingError } from "@/lib/errors";
 
@@ -22,8 +23,8 @@ interface GearStore {
   addCamera: (name: string) => Promise<void>;
   updateCamera: (id: string, name: string) => Promise<void>;
   deleteCamera: (id: string) => Promise<void>;
-  addLens: (name: string) => Promise<void>;
-  updateLens: (id: string, name: string) => Promise<void>;
+  addLens: (data: LensForm) => Promise<void>;
+  updateLens: (id: string, data: LensForm) => Promise<void>;
   deleteLens: (id: string) => Promise<void>;
   addFilmStock: (name: string) => Promise<void>;
   updateFilmStock: (id: string, name: string) => Promise<void>;
@@ -104,8 +105,8 @@ export const useGearStore = create<GearStore>((set, get) => ({
   },
 
   // Lens operations
-  addLens: async (name: string) => {
-    const trimmedName = name.trim();
+  addLens: async (data: LensForm) => {
+    const trimmedName = data.name.trim();
     const existing = get().lenses.find(
       (l) => l.name.toLowerCase() === trimmedName.toLowerCase(),
     );
@@ -116,19 +117,40 @@ export const useGearStore = create<GearStore>((set, get) => ({
       id: randomUUID(),
       name: trimmedName,
       createdAt: new Date(),
+      apertureMode: data.apertureMode,
+      maxAperture: data.maxAperture,
+      minAperture: data.minAperture,
+      stopIncrement: data.stopIncrement,
+      customApertures:
+        data.apertureMode === "custom"
+          ? JSON.stringify(data.customApertures)
+          : null,
     });
     await get().loadGear();
   },
 
-  updateLens: async (id: string, name: string) => {
-    const trimmedName = name.trim();
+  updateLens: async (id: string, data: LensForm) => {
+    const trimmedName = data.name.trim();
     const existing = get().lenses.find(
       (l) => l.name.toLowerCase() === trimmedName.toLowerCase() && l.id !== id,
     );
     if (existing) {
       throw new UserFacingError("A lens with this name already exists");
     }
-    await db.update(lenses).set({ name: trimmedName }).where(eq(lenses.id, id));
+    await db
+      .update(lenses)
+      .set({
+        name: trimmedName,
+        apertureMode: data.apertureMode,
+        maxAperture: data.maxAperture,
+        minAperture: data.minAperture,
+        stopIncrement: data.stopIncrement,
+        customApertures:
+          data.apertureMode === "custom"
+            ? JSON.stringify(data.customApertures)
+            : null,
+      })
+      .where(eq(lenses.id, id));
     await get().loadGear();
   },
 

@@ -62,3 +62,95 @@ As a film photographer, I want to quickly select from only the apertures my lens
 ## Wireframes
 
 - [Lens Sheet](../wireframes/gear-lens-sheet.html) - used in all scenarios
+
+---
+
+## Implementation Plan
+
+### Status: Complete
+
+### E2E Tests Created
+
+- `apps/mobile/e2e/flows/lens-apertures-standard.yaml` - Standard mode scenarios
+- `apps/mobile/e2e/flows/lens-apertures-custom.yaml` - Custom mode scenarios
+
+### Required testIDs
+
+| Component              | testID                    |
+| ---------------------- | ------------------------- |
+| Standard mode tab      | `aperture-mode-standard`  |
+| Custom mode tab        | `aperture-mode-custom`    |
+| Max aperture picker    | `max-aperture-picker`     |
+| Min aperture picker    | `min-aperture-picker`     |
+| Whole stops button     | `increment-whole`         |
+| Half stops button      | `increment-half`          |
+| Third stops button     | `increment-third`         |
+| Aperture preview       | `aperture-preview`        |
+| Aperture error message | `aperture-error`          |
+| Add aperture button    | `add-aperture-button`     |
+| Delete aperture button | `delete-aperture-{value}` |
+
+### Tasks
+
+#### 1. Pure Functions (with unit tests)
+
+- [x] Create `src/lib/aperture.ts` with aperture calculation logic
+  - `generateApertureSequence(maxAperture, minAperture, increment)` - generates standard sequence
+  - `nearestStandardStop(aperture, increment)` - finds nearest standard f-stop
+  - `formatAperture(value)` - formats numeric aperture as "f/X.X"
+  - `parseAperture(string)` - parses "f/X.X" to numeric value
+  - Constants: `APERTURE_STOPS.whole`, `APERTURE_STOPS.half`, `APERTURE_STOPS.third`
+  - `APERTURE_BOUNDS = { min: 0.5, max: 64 }`
+
+#### 2. Database Schema
+
+- [x] Update `src/db/lens.ts`:
+  - Add columns: `apertureMode` (text: 'standard' | 'custom')
+  - Add columns: `maxAperture` (real), `minAperture` (real), `stopIncrement` (text: 'whole' | 'half' | 'third')
+  - Add column: `customApertures` (text, JSON-stringified array)
+  - Update Zod schemas for validation
+- [x] Generate migration: `npx drizzle-kit generate`
+
+#### 3. Store Updates
+
+- [x] Update `src/stores/gearStore.ts`:
+  - Modify `addLens` to accept aperture config
+  - Modify `updateLens` to accept aperture config
+  - Update types
+
+#### 4. Form Hook
+
+- [x] Update `src/hooks/useLensForm.ts`:
+  - Add aperture mode state
+  - Add max/min/increment state for standard mode
+  - Add custom apertures list for custom mode
+  - Add validation: min must be >= max (numerically larger f-number)
+  - Add validation: custom list cannot be empty
+
+#### 5. UI Components
+
+- [x] Create `src/components/AperturePicker.tsx` - dropdown for selecting aperture values
+- [x] Create `src/components/StopIncrementSelector.tsx` - segmented control for whole/half/third
+- [x] Create `src/components/AperturePreview.tsx` - chips showing calculated apertures
+- [x] Create `src/components/ApertureModeSelector.tsx` - tabs for Standard/Custom mode
+- [x] Create `src/components/CustomApertureList.tsx` - editable list for custom mode
+
+#### 6. Form Integration
+
+- [x] Update `src/components/LensForm.tsx`:
+  - Add Apertures section header
+  - Add mode selector tabs
+  - Add standard mode fields (max/min pickers, increment selector, preview)
+  - Add custom mode fields (aperture list with add/delete)
+  - Add error message display
+
+#### 7. Screen Integration
+
+- [x] Update `app/gear/lens/add.tsx` to pass aperture data to store
+- [x] Update `app/gear/lens/[id].tsx` to load and save aperture data
+
+#### 8. Verification
+
+- [x] `yarn workspace @filmbuddy/mobile typecheck`
+- [x] `yarn workspace @filmbuddy/mobile lint`
+- [x] `yarn workspace @filmbuddy/mobile test:unit`

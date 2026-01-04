@@ -1,11 +1,25 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestDb, type TestDbContext } from "@/test/db";
+import type { LensForm } from "@/db/schema";
 
 // Track test state using object to avoid let
 const testState: { db: TestDbContext | null; idCounter: number } = {
   db: null,
   idCounter: 0,
 };
+
+/** Create a LensForm with defaults for testing */
+function createLensData(name: string, overrides?: Partial<LensForm>): LensForm {
+  return {
+    name,
+    apertureMode: "standard",
+    maxAperture: 2.8,
+    minAperture: 16,
+    stopIncrement: "whole",
+    customApertures: [],
+    ...overrides,
+  };
+}
 
 // Mock expo-crypto
 vi.mock("expo-crypto", () => ({
@@ -171,36 +185,78 @@ describe("gearStore", () => {
       it("creates a lens and updates state", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addLens("Summicron 50mm f/2");
+        await useGearStore
+          .getState()
+          .addLens(createLensData("Summicron 50mm f/2"));
 
         const { lenses } = useGearStore.getState();
         expect(lenses).toHaveLength(1);
         expect(lenses[0].name).toBe("Summicron 50mm f/2");
       });
 
+      it("stores aperture configuration", async () => {
+        const { useGearStore } = await import("./gearStore");
+
+        await useGearStore.getState().addLens(
+          createLensData("Voigtlander 35mm f/1.5", {
+            maxAperture: 1.5,
+            minAperture: 22,
+            stopIncrement: "half",
+          }),
+        );
+
+        const { lenses } = useGearStore.getState();
+        expect(lenses[0].maxAperture).toBe(1.5);
+        expect(lenses[0].minAperture).toBe(22);
+        expect(lenses[0].stopIncrement).toBe("half");
+      });
+
+      it("stores custom aperture mode with custom values", async () => {
+        const { useGearStore } = await import("./gearStore");
+
+        await useGearStore.getState().addLens(
+          createLensData("Vintage 40mm", {
+            apertureMode: "custom",
+            customApertures: [2.8, 4, 5.6, 8],
+          }),
+        );
+
+        const { lenses } = useGearStore.getState();
+        expect(lenses[0].apertureMode).toBe("custom");
+        expect(lenses[0].customApertures).toBe("[2.8,4,5.6,8]");
+      });
+
       it("throws UserFacingError for duplicate name", async () => {
         const { UserFacingError } = await import("@/lib/errors");
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addLens("Summicron 50mm f/2");
+        await useGearStore
+          .getState()
+          .addLens(createLensData("Summicron 50mm f/2"));
 
         await expect(
-          useGearStore.getState().addLens("Summicron 50mm f/2"),
+          useGearStore.getState().addLens(createLensData("Summicron 50mm f/2")),
         ).rejects.toThrow(UserFacingError);
       });
     });
 
     describe("updateLens", () => {
-      it("updates lens name", async () => {
+      it("updates lens name and aperture config", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addLens("Summicron 50mm f/2");
         await useGearStore
           .getState()
-          .updateLens("test-id-1", "Summilux 50mm f/1.4");
+          .addLens(createLensData("Summicron 50mm f/2"));
+        await useGearStore
+          .getState()
+          .updateLens(
+            "test-id-1",
+            createLensData("Summilux 50mm f/1.4", { maxAperture: 1.4 }),
+          );
 
         const { lenses } = useGearStore.getState();
         expect(lenses[0].name).toBe("Summilux 50mm f/1.4");
+        expect(lenses[0].maxAperture).toBe(1.4);
       });
     });
 
@@ -208,7 +264,9 @@ describe("gearStore", () => {
       it("removes lens from database and state", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addLens("Summicron 50mm f/2");
+        await useGearStore
+          .getState()
+          .addLens(createLensData("Summicron 50mm f/2"));
         await useGearStore.getState().deleteLens("test-id-1");
 
         const { lenses } = useGearStore.getState();
@@ -220,7 +278,9 @@ describe("gearStore", () => {
       it("finds lens by id", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addLens("Summicron 50mm f/2");
+        await useGearStore
+          .getState()
+          .addLens(createLensData("Summicron 50mm f/2"));
 
         const lens = useGearStore.getState().getLensById("test-id-1");
         expect(lens).toBeDefined();

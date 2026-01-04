@@ -1,0 +1,119 @@
+appId: tech.mattb.filmbuddy
+---
+# Setup: Launch app and navigate to Gear tab
+- runFlow:
+    file: ../helpers/launch.yaml
+- tapOn: "gear-tab"
+
+# =============================================================================
+# Scenario: Empty custom list (error)
+# =============================================================================
+# GIVEN I am using custom aperture mode
+- tapOn:
+    id: "add-lens-button"
+    retryTapIfNoChange: true
+
+- assertVisible: "Add Lens"
+
+# Switch to custom mode
+- tapOn:
+    id: "aperture-mode-custom"
+
+# Verify custom mode UI
+- assertVisible: "Aperture Values"
+
+# The list should start empty or with default values
+# If it starts with default values, delete them all to test empty state
+# For now, assume it starts empty
+
+# Enter a lens name
+- tapOn:
+    id: "lens-name-input"
+- inputText: "Custom Aperture Lens"
+- hideKeyboard
+
+# WHEN I try to save with no apertures in the list
+- tapOn:
+    id: "save-button"
+
+# THEN I see an error message
+- assertVisible: "At least one aperture is required"
+
+# AND I cannot save until at least one aperture is added
+# Verify we're still on the sheet
+- assertVisible: "Add Lens"
+
+# Dismiss the error
+- tapOn: "OK"
+
+# =============================================================================
+# Scenario: Custom aperture list (happy path)
+# =============================================================================
+# GIVEN I am editing a lens (continuing from above)
+# WHEN I select "custom" as the mode (already selected)
+
+# THEN I see a list of aperture values I can add to
+- tapOn:
+    id: "add-aperture-button"
+
+# Select an aperture to add
+- tapOn: "f/2"
+
+# Add more apertures
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/2.8"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/4"
+
+- tapOn:
+    id: "add-aperture-button"
+- tapOn: "f/5.6"
+
+# Verify the apertures are shown
+- assertVisible: "f/2"
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+- assertVisible: "f/5.6"
+
+# Test delete functionality - delete f/5.6
+- tapOn:
+    id: "delete-aperture-f/5.6"
+
+# Verify it's removed
+- assertNotVisible:
+    text: "f/5.6"
+    below:
+      text: "Aperture Values"
+
+# Save the lens
+- tapOn:
+    id: "save-button"
+
+# AND the lens stores exactly the apertures I've specified
+- assertVisible: "Custom Aperture Lens"
+
+# Verify by editing the lens
+- tapOn: "Custom Aperture Lens"
+- assertVisible: "Edit Lens"
+
+# Verify custom mode is selected
+- assertVisible:
+    id: "aperture-mode-custom"
+
+# Verify saved apertures
+- assertVisible: "f/2"
+- assertVisible: "f/2.8"
+- assertVisible: "f/4"
+
+# f/5.6 should not be present (we deleted it)
+- assertNotVisible:
+    text: "f/5.6"
+    below:
+      text: "Aperture Values"
+
+# Close the edit sheet
+- tapOn:
+    id: "close-button"

@@ -1,4 +1,4 @@
-import { View, Text, Pressable, Alert } from "react-native";
+import { View, Pressable, Alert, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
@@ -10,6 +10,7 @@ import {
   ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
+  Text,
 } from "@/components/ui";
 
 export default function EditLensScreen() {
@@ -20,11 +21,11 @@ export default function EditLensScreen() {
   const lens = id ? getLensById(id) : undefined;
 
   const { form, handleSubmit, isSubmitting, canSubmit } = useLensForm({
-    defaultValues: { name: lens?.name ?? "" },
+    lens,
     onSubmit: async (data: LensFormType) => {
       if (!id) return;
       try {
-        await updateLens(id, data.name);
+        await updateLens(id, data);
         router.back();
       } catch (err) {
         handleError(err, "Failed to save lens. Please try again.");
@@ -35,7 +36,9 @@ export default function EditLensScreen() {
   if (!lens || !id) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-paper">
-        <Text className="text-body text-stone">Lens not found</Text>
+        <Text variant="body" color="stone">
+          Lens not found
+        </Text>
       </SafeAreaView>
     );
   }
@@ -71,9 +74,9 @@ export default function EditLensScreen() {
         }
       />
 
-      <View className="flex-1 px-md pt-lg">
+      <ScrollView className="flex-1 px-md pt-lg">
         <LensForm form={form} disabled={isSubmitting} />
-      </View>
+      </ScrollView>
 
       <View className="px-md pb-lg">
         <Pressable
@@ -83,7 +86,9 @@ export default function EditLensScreen() {
           accessibilityLabel="Delete lens"
           className="min-h-touch items-center justify-center rounded-md border border-error"
         >
-          <Text className="text-body font-medium text-error">Delete Lens</Text>
+          <Text variant="body" className="font-medium text-error">
+            Delete Lens
+          </Text>
         </Pressable>
       </View>
     </SafeAreaView>
