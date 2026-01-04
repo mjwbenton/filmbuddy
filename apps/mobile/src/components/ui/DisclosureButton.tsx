@@ -1,5 +1,7 @@
 import { Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { Text } from "./Text";
+import { colors } from "@/theme/colors";
 
 interface DisclosureButtonProps {
   label: string;
@@ -31,9 +33,11 @@ export function DisclosureButton({
       <Text variant="body" color="stone">
         {label}
       </Text>
-      <Text variant="body" color="stone">
-        {isOpen ? "▲" : "▼"}
-      </Text>
+      <Ionicons
+        name={isOpen ? "chevron-up" : "chevron-down"}
+        size={18}
+        color={colors.stone}
+      />
     </Pressable>
   );
 }

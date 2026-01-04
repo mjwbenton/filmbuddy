@@ -35,7 +35,7 @@ export function SegmentedControl<T extends string>({
             accessibilityRole="button"
             accessibilityState={{ selected: isSelected, disabled }}
             accessibilityLabel={option.label}
-            className={`min-h-touch flex-1 flex-row items-center justify-center gap-xs rounded-md border bg-white py-sm ${
+            className={`min-h-touch flex-1 flex-row items-center justify-center gap-xs rounded-sm border bg-white py-sm ${
               isSelected ? "border-slate-blue" : "border-fog"
             } ${disabled ? "opacity-50" : ""}`}
           >

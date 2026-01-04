@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { View, Pressable, TextInput as RNTextInput } from "react-native";
-import { Text, Label, DisclosureButton, SegmentedControl } from "./ui";
+import { Text, Label, Button, DisclosureButton, SegmentedControl } from "./ui";
 import {
   formatAperture,
   generateApertureSequence,
   validateApertureInput,
+  isValidApertureRange,
   type StopIncrement,
 } from "@/lib/aperture";
 import { colors } from "@/theme/colors";
@@ -127,9 +128,10 @@ export function ApertureList({
     setIsGeneratorOpen(false);
   };
 
-  // Validation: min must be narrower (larger f-number) than max
   const isGeneratorValid =
-    !maxApertureError && !minApertureError && maxAperture < minAperture;
+    !maxApertureError &&
+    !minApertureError &&
+    isValidApertureRange(maxAperture, minAperture);
 
   return (
     <View className="gap-sm">
@@ -142,7 +144,7 @@ export function ApertureList({
         {value.map((aperture) => (
           <View
             key={aperture}
-            className="flex-row items-center gap-xs rounded-full border border-ink bg-white px-sm py-xs"
+            className="flex-row items-center gap-xs rounded-full border border-fog bg-white px-sm py-xs"
           >
             <Text variant="caption">{formatAperture(aperture)}</Text>
             <Pressable
@@ -199,18 +201,13 @@ export function ApertureList({
               </Text>
             )}
           </View>
-          <Pressable
+          <Button
             testID="confirm-add-aperture"
             onPress={handleConfirmAdd}
             disabled={disabled}
-            className={`min-h-touch px-md justify-center rounded-md bg-slate-blue ${
-              disabled ? "opacity-50" : ""
-            }`}
           >
-            <Text variant="body" className="text-white font-semibold">
-              Add
-            </Text>
-          </Pressable>
+            Add
+          </Button>
         </View>
       )}
 
@@ -293,7 +290,7 @@ export function ApertureList({
             testID="generate-apertures-button"
             onPress={handleGenerate}
             disabled={disabled || !isGeneratorValid}
-            className={`min-h-touch items-center justify-center rounded-md ${
+            className={`min-h-touch items-center justify-center rounded-sm ${
               isGeneratorValid ? "bg-slate-blue" : "bg-fog"
             } ${disabled ? "opacity-50" : ""}`}
           >
