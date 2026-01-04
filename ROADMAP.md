@@ -8,9 +8,10 @@
 
 ## Workflow
 
+- [ ] Get implementation skill to commit as it goes
+- [ ] Get implementation skill to use code review agents
 - [ ] Logging skill
 - [ ] Error handling skill
-- [ ] Break down skills into more skills that use progressive disclosure (e.g. maestro skill w/planning, writing and debugging)
 - [ ] Create verification agent
 
 ## Features
@@ -21,8 +22,11 @@
 - [ ] Add more data to film stock
 - [ ] Integrate gear and rolls
 - [ ] Add ability to record first note
+- [ ] Export all data to JSON
 
 ## Bugs
+
+- [ ] Maestro tests are failing in CI
 
 ## Quality
 
