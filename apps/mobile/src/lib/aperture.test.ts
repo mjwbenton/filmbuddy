@@ -172,11 +172,7 @@ describe("getAllApertureOptions", () => {
 });
 
 describe("DEFAULT_APERTURES", () => {
-  it("is a valid non-empty array of numbers", () => {
-    expect(Array.isArray(DEFAULT_APERTURES)).toBe(true);
-    expect(DEFAULT_APERTURES.length).toBeGreaterThan(0);
-    DEFAULT_APERTURES.forEach((val) => {
-      expect(typeof val).toBe("number");
-    });
+  it("is an empty array", () => {
+    expect(DEFAULT_APERTURES).toEqual([]);
   });
 });

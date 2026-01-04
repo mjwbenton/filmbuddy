@@ -8,8 +8,8 @@
 
 export type StopIncrement = "whole" | "half" | "third";
 
-/** Default aperture set for new lenses (whole stops f/2.8 to f/16) */
-export const DEFAULT_APERTURES = [2.8, 4, 5.6, 8, 11, 16];
+/** Default aperture set for new lenses (empty - user must configure) */
+export const DEFAULT_APERTURES: number[] = [];
 
 /** Bounds for aperture selection */
 export const APERTURE_BOUNDS = {
