@@ -17,10 +17,11 @@ appId: tech.mattb.filmbuddy
 - assertVisible: "Add Lens"
 
 # WHEN I enter a name but don't add any apertures
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Empty Aperture Test"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Empty Aperture Test"
 
 # AND I try to save
 - tapOn:
@@ -42,41 +43,50 @@ appId: tech.mattb.filmbuddy
     retryTapIfNoChange: true
 
 # Enter lens name
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Manual Selection Lens"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Manual Selection Lens"
 
 # WHEN I manually add apertures one by one
 - tapOn:
     id: "add-aperture-button"
-- tapOn:
-    id: "add-aperture-input"
-- inputText: "2"
-- tapOn:
-    id: "confirm-add-aperture"
-
-- tapOn:
-    id: "add-aperture-button"
-- tapOn:
-    id: "add-aperture-input"
-- inputText: "2.8"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "2"
 - tapOn:
     id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
-- tapOn:
-    id: "add-aperture-input"
-- inputText: "4"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "2.8"
 - tapOn:
     id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "4"
 - tapOn:
-    id: "add-aperture-input"
-- inputText: "5.6"
+    id: "confirm-add-aperture"
+
+- tapOn:
+    id: "add-aperture-button"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "5.6"
 - tapOn:
     id: "confirm-add-aperture"
 
@@ -101,33 +111,40 @@ appId: tech.mattb.filmbuddy
     retryTapIfNoChange: true
 
 # Enter lens name
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Delete Aperture Test"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Delete Aperture Test"
 
 # Add apertures
 - tapOn:
     id: "add-aperture-button"
-- tapOn:
-    id: "add-aperture-input"
-- inputText: "2"
-- tapOn:
-    id: "confirm-add-aperture"
-
-- tapOn:
-    id: "add-aperture-button"
-- tapOn:
-    id: "add-aperture-input"
-- inputText: "2.8"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "2"
 - tapOn:
     id: "confirm-add-aperture"
 
 - tapOn:
     id: "add-aperture-button"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "2.8"
 - tapOn:
-    id: "add-aperture-input"
-- inputText: "4"
+    id: "confirm-add-aperture"
+
+- tapOn:
+    id: "add-aperture-button"
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "add-aperture-input"
+      TEXT: "4"
 - tapOn:
     id: "confirm-add-aperture"
 

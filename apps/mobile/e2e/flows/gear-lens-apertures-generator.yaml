@@ -16,32 +16,33 @@ appId: tech.mattb.filmbuddy
 - assertVisible: "Add Lens"
 
 # Enter lens name
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Test Generator Lens"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Test Generator Lens"
 
 # WHEN I open the aperture generator
 - tapOn:
     id: "aperture-generator-toggle"
 
 # AND I enter 2.8 as max aperture (already default, just verify it's there)
-- tapOn:
-    id: "generator-max-aperture"
-- eraseText
-- inputText: "2.8"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-max-aperture"
+      TEXT: "2.8"
 
 # AND I select half stops as increment
 - tapOn:
     id: "increment-half"
 
 # AND I enter 16 as min aperture (already default)
-- tapOn:
-    id: "generator-min-aperture"
-- eraseText
-- inputText: "16"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-min-aperture"
+      TEXT: "16"
 
 # AND I tap generate
 - tapOn:
@@ -77,32 +78,33 @@ appId: tech.mattb.filmbuddy
 - assertVisible: "Add Lens"
 
 # Enter lens name
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Voigtlander 35mm f/1.5"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Voigtlander 35mm f/1.5"
 
 # Open the aperture generator
 - tapOn:
     id: "aperture-generator-toggle"
 
 # WHEN I enter 1.5 as max aperture
-- tapOn:
-    id: "generator-max-aperture"
-- eraseText
-- inputText: "1.5"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-max-aperture"
+      TEXT: "1.5"
 
 # AND I select half stops
 - tapOn:
     id: "increment-half"
 
 # AND I enter 16 as min aperture
-- tapOn:
-    id: "generator-min-aperture"
-- eraseText
-- inputText: "16"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-min-aperture"
+      TEXT: "16"
 
 # AND I tap generate
 - tapOn:
@@ -133,32 +135,33 @@ appId: tech.mattb.filmbuddy
 - assertVisible: "Add Lens"
 
 # Enter lens name
-- tapOn:
-    id: "lens-name-input"
-- inputText: "Increment Change Test"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/input-text.yaml
+    env:
+      INPUT_ID: "lens-name-input"
+      TEXT: "Increment Change Test"
 
 # Open the aperture generator
 - tapOn:
     id: "aperture-generator-toggle"
 
 # Set max to 2.8
-- tapOn:
-    id: "generator-max-aperture"
-- eraseText
-- inputText: "2.8"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-max-aperture"
+      TEXT: "2.8"
 
 # Set increment to whole
 - tapOn:
     id: "increment-whole"
 
 # Set min to 22
-- tapOn:
-    id: "generator-min-aperture"
-- eraseText
-- inputText: "22"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-min-aperture"
+      TEXT: "22"
 
 # Generate with whole stops
 - tapOn:
@@ -174,6 +177,8 @@ appId: tech.mattb.filmbuddy
 - assertVisible: "f/22"
 
 # WHEN I change to half stops and regenerate
+- tapOn:
+    id: "aperture-generator-toggle"
 - tapOn:
     id: "increment-half"
 
@@ -205,21 +210,21 @@ appId: tech.mattb.filmbuddy
     id: "aperture-generator-toggle"
 
 # WHEN I enter boundary values (0.5 to 64)
-- tapOn:
-    id: "generator-max-aperture"
-- eraseText
-- inputText: "0.5"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-max-aperture"
+      TEXT: "0.5"
 
 # Set increment to whole
 - tapOn:
     id: "increment-whole"
 
-- tapOn:
-    id: "generator-min-aperture"
-- eraseText
-- inputText: "64"
-- hideKeyboard
+- runFlow:
+    file: ../helpers/edit-text.yaml
+    env:
+      INPUT_ID: "generator-min-aperture"
+      TEXT: "64"
 
 # AND I tap generate
 - tapOn:
