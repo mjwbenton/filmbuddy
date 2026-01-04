@@ -84,9 +84,7 @@
       "indexes": {
         "cameras_name_unique": {
           "name": "cameras_name_unique",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
@@ -131,9 +129,7 @@
       "indexes": {
         "lenses_name_unique": {
           "name": "lenses_name_unique",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
@@ -170,9 +166,7 @@
       "indexes": {
         "film_stocks_name_unique": {
           "name": "film_stocks_name_unique",
-          "columns": [
-            "name"
-          ],
+          "columns": ["name"],
           "isUnique": true
         }
       },
