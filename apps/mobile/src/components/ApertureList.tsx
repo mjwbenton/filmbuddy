@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { View, Pressable, ScrollView } from "react-native";
-import { Text, Label, DisclosureButton } from "./ui";
+import { Text, Label, DisclosureButton, SegmentedControl } from "./ui";
 import { AperturePicker } from "./AperturePicker";
-import { StopIncrementSelector } from "./StopIncrementSelector";
 import {
   formatAperture,
   getAllApertureOptions,
@@ -20,6 +19,12 @@ interface ApertureListProps {
 }
 
 const APERTURE_OPTIONS = getAllApertureOptions();
+
+const STOP_INCREMENT_OPTIONS = [
+  { value: "whole", label: "Whole", testID: "increment-whole" },
+  { value: "half", label: "Half", testID: "increment-half" },
+  { value: "third", label: "Third", testID: "increment-third" },
+] as const;
 
 export function ApertureList({
   value,
@@ -156,11 +161,15 @@ export function ApertureList({
             disabled={disabled}
           />
 
-          <StopIncrementSelector
-            value={stopIncrement}
-            onChange={setStopIncrement}
-            disabled={disabled}
-          />
+          <View className="mb-md">
+            <Label>Stop Increments</Label>
+            <SegmentedControl
+              value={stopIncrement}
+              onChange={setStopIncrement}
+              options={STOP_INCREMENT_OPTIONS}
+              disabled={disabled}
+            />
+          </View>
 
           <AperturePicker
             label="Minimum Aperture (narrowest)"

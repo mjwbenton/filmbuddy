@@ -3,6 +3,7 @@ export { Card } from "./Card";
 export { DisclosureButton } from "./DisclosureButton";
 export { ErrorMessage } from "./ErrorMessage";
 export { Label } from "./Label";
+export { SegmentedControl } from "./SegmentedControl";
 export {
   ScreenHeader,
   HeaderButton,
