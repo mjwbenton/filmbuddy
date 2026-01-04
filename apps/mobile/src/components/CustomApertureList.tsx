@@ -55,7 +55,7 @@ export function CustomApertureList({
               testID={`delete-aperture-${formatAperture(aperture)}`}
               onPress={() => handleDelete(aperture)}
               disabled={disabled}
-              hitSlop={8}
+              hitSlop={20}
             >
               <Text variant="caption" className="text-error font-bold">
                 ×
@@ -67,6 +67,7 @@ export function CustomApertureList({
           testID="add-aperture-button"
           onPress={() => setIsPickerOpen(true)}
           disabled={disabled || availableApertures.length === 0}
+          hitSlop={20}
           className={`rounded-full border-2 border-dashed border-stone px-sm py-xs ${
             disabled ? "opacity-50" : ""
           }`}

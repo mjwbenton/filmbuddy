@@ -38,7 +38,7 @@ export function ApertureGenerator({
         testID="aperture-generator-toggle"
         onPress={() => !disabled && setIsExpanded(!isExpanded)}
         disabled={disabled}
-        className={`flex-row items-center justify-between rounded-md border border-fog bg-cloud px-md py-sm ${
+        className={`min-h-touch flex-row items-center justify-between rounded-md border border-fog bg-cloud px-md py-sm ${
           disabled ? "opacity-50" : ""
         }`}
       >
@@ -85,7 +85,7 @@ export function ApertureGenerator({
             testID="generate-apertures-button"
             onPress={handleGenerate}
             disabled={disabled || !isValid}
-            className={`items-center rounded-md py-sm ${
+            className={`min-h-touch items-center justify-center rounded-md ${
               isValid ? "bg-slate-blue" : "bg-fog"
             } ${disabled ? "opacity-50" : ""}`}
           >
