@@ -7,14 +7,26 @@ description: Git worktree management. Create, rename, update, close, or abandon 
 
 Worktrees let you work on multiple branches simultaneously in separate directories. Each worktree has its own working directory but shares the same git repository.
 
+## Directory Structure
+
+- **Main repo**: `<project>/main` (contains scripts and the `main` branch)
+- **Worktrees**: `<project>/trees/<worktree-name>`
+
+To find the main repo from any worktree:
+
+```bash
+MAIN_REPO="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)"
+```
+
 ## Operations
 
 ### Create a new worktree
 
-Start isolated work with a randomly-named worktree:
+Start isolated work with a randomly-named worktree (run from main repo):
 
 ```bash
-./scripts/worktree-create.sh
+MAIN_REPO="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)"
+cd "$MAIN_REPO" && ./scripts/worktree-create.sh
 ```
 
 The script outputs the path to the new worktree. Use `cd` to change into that directory and continue working from there.
@@ -41,7 +53,8 @@ Rename the current worktree and branch based on the work being done. Use your cu
 - Describes the feature or fix, not implementation details
 
 ```bash
-./scripts/worktree-rename.sh <category/name>
+MAIN_REPO="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)"
+"$MAIN_REPO/scripts/worktree-rename.sh" <category/name>
 ```
 
 The branch becomes `category/name` (e.g., `workflow/worktree-rename`).
@@ -54,7 +67,8 @@ Use `cd` to change into the renamed directory.
 Rebase the current worktree branch onto the latest main:
 
 ```bash
-./scripts/worktree-update.sh
+MAIN_REPO="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)"
+"$MAIN_REPO/scripts/worktree-update.sh"
 ```
 
 The script automatically stashes uncommitted changes, rebases, and restores them.

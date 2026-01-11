@@ -3,9 +3,9 @@
 
 set -e
 
-# Get the repo root (where this script lives)
+# Get the repo root (where this script lives) and trees dir (sibling)
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TREES_DIR="$REPO_ROOT/trees"
+TREES_DIR="$(dirname "$REPO_ROOT")/trees"
 
 # Word lists for random name generation
 ADJECTIVES=(

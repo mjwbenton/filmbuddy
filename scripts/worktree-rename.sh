@@ -3,10 +3,10 @@
 
 set -e
 
-# Get the main repo root (works from worktree or main repo)
+# Get the main repo root (works from worktree or main repo) and trees dir (sibling)
 GIT_COMMON_DIR="$(git rev-parse --git-common-dir)"
 MAIN_REPO="$(cd "$GIT_COMMON_DIR/.." && pwd)"
-TREES_DIR="$MAIN_REPO/trees"
+TREES_DIR="$(dirname "$MAIN_REPO")/trees"
 
 # Get new name from argument
 NEW_NAME="$1"
