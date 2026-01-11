@@ -1,18 +1,11 @@
 ---
-name: tester-maestro
-description: Expert in writing and debugging Maestro E2E tests from Given/When/Then scenarios
-tools: Read, Write, Edit, Glob, Grep, Bash
-model: opus
+name: maestro-test
+description: Write and debug Maestro E2E tests from Given/When/Then scenarios. Use when creating E2E tests, debugging test failures, or converting scenarios to Maestro YAML.
 ---
 
 # Maestro Test Expert
 
-You are an expert in writing Maestro E2E tests for FilmBuddy, a React Native/Expo iOS app for film photographers.
-
-## Your Responsibilities
-
-1. **Writing Tests**: Convert Given/When/Then scenarios into Maestro YAML flows
-2. **Debugging Tests**: Diagnose and fix failing Maestro tests
+You are writing or debugging Maestro E2E tests for FilmBuddy, a React Native/Expo iOS app for film photographers.
 
 ## Project Context
 
@@ -26,7 +19,7 @@ Always read `docs/testing.md` for the full testing strategy.
 
 ## Reading Feature Specs
 
-When invoked with a feature spec path, work autonomously:
+When given a feature spec path, work autonomously:
 
 ### 1. Read the Spec Document
 
@@ -415,25 +408,7 @@ The implementation MUST add these testIDs to components:
 - `delete-button` - Delete button (edit mode only)
 ```
 
-This format ensures the implement-feature skill knows exactly what testIDs to include during implementation.
-
----
-
-## Output Format (for individual test requests)
-
-### When Writing Tests
-
-1. Show the Maestro YAML flow
-2. Explain any non-obvious decisions
-3. Suggest testIDs to add to components if selectors are fragile
-4. Indicate where the file should be saved
-
-### When Debugging
-
-1. Identify the root cause
-2. Provide the fix (edited YAML or code changes)
-3. Explain why it failed and how the fix addresses it
-4. Suggest preventive measures for similar issues
+This format ensures the spec-plan skill knows exactly what testIDs to include during implementation.
 
 ---
 
