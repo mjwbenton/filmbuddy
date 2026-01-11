@@ -1,32 +1,32 @@
 ---
-name: plan-feature
-description: Create or refine feature plans with user stories and GIVEN/WHEN/THEN scenarios. Use when planning a feature, writing scenarios, defining user stories, or creating a feature spec.
+name: spec-create
+description: Plan a feature creating a feature spec, write scenarios, define user stories using GIVEN/WHEN/THEN.
 ---
 
-# Feature Planning Mode
+# Spec Create
 
-You are helping create or refine a feature plan for FilmBuddy, an iOS app for film photographers.
+You are creating a feature spec for FilmBuddy.
 
 ## Setup
 
-Feature plans live in `docs/plans/`:
+Feature specs live in `docs/specs/`:
 
 - Use kebab-case for filenames (e.g., `roll-tracking.md`)
 - Wireframes live in `docs/wireframes/` (use the `wireframe` skill when creating)
 - Product vision is in `docs/vision.md`
 
-## Feature Planning Process
+## Feature Spec Process
 
 ### 1. Determine Starting Point
 
-First, check if this is a new or existing plan:
+First, check if this is a new or existing spec:
 
 1. Check if the user provided a feature name
-2. Check if `docs/plans/{feature-name}.md` already exists
+2. Check if `docs/specs/{feature-name}.md` already exists
 
-**If existing plan:** Read it, give a brief summary of current state (scenario count, wireframes linked, open questions), then ask what the user wants to add or change.
+**If existing spec:** Read it, give a brief summary of current state (scenario count, wireframes linked, open questions), then ask what the user wants to add or change.
 
-**If new plan:** Proceed with the phases below.
+**If new spec:** Proceed with the phases below.
 
 ### 2. Feature Definition
 
@@ -35,7 +35,7 @@ Ask these questions one at a time, waiting for answers:
 1. "What's the feature name?" (will become the filename)
 2. "Describe this feature in one sentence."
 3. "Which area of the app does this touch?" (Rolls, Meter, Gear, Archive, or multiple)
-4. "Does this feature depend on any others?" Check `docs/plans/` for existing plans to reference.
+4. "Does this feature depend on any others?" Check `docs/specs/` for existing specs to reference.
 
 ### 3. User Story
 
@@ -72,17 +72,17 @@ For the scenarios defined:
    - Add it to `docs/wireframes/index.html`
 4. Link wireframes to which scenarios use them
 
-### 6. Generate Plan
+### 6. Generate Spec
 
-Create or update `docs/plans/{feature-name}.md` using the template in [plan-template.md](plan-template.md).
+Create or update `docs/specs/{feature-name}.md` using the template in [spec-template.md](spec-template.md).
 
-### 7. Update Plans Index
+### 7. Update Specs Index
 
-Ensure `docs/plans/index.md` exists and includes this plan. See [plan-template.md](plan-template.md) for index format.
+Ensure `docs/specs/index.md` exists and includes this spec. See [spec-template.md](spec-template.md) for index format.
 
 ## Iteration Mode
 
-When updating an existing plan:
+When updating an existing spec:
 
 - Preserve existing content unless explicitly changing it
 - When adding scenarios, append to existing list
@@ -93,6 +93,6 @@ When updating an existing plan:
 
 - **One question at a time:** Don't overwhelm with multiple questions
 - **Confirm before proceeding:** Get explicit approval on user stories and scenarios
-- **Check for dependencies:** Reference existing plans when features connect
+- **Check for dependencies:** Reference existing specs when features connect
 - **Link wireframes to scenarios:** Make it clear which screens support which flows
 - **Capture open questions:** Don't lose track of unresolved decisions
