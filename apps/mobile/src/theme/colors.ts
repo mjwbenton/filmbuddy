@@ -1,6 +1,4 @@
-// Design system colors - single source of truth
 // Used by both Tailwind config and React Native components
-
 export const colors = {
   amber: "#ecc24c",
   slateBlue: "#487cab",

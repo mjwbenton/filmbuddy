@@ -34,11 +34,9 @@ export function ApertureList({
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
 
-  // Manual add state
   const [addInput, setAddInput] = useState("");
   const [addError, setAddError] = useState<string | null>(null);
 
-  // Generator state - both string for display and number for validation
   const [maxApertureInput, setMaxApertureInput] = useState("2.8");
   const [minApertureInput, setMinApertureInput] = useState("16");
   const [maxAperture, setMaxAperture] = useState(2.8);

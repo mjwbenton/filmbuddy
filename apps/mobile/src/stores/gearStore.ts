@@ -88,7 +88,6 @@ export const useGearStore = create<GearStore>((set, get) => ({
     }
   },
 
-  // Camera operations
   addCamera: async (name: string) => {
     const trimmedName = name.trim();
     const existing = get().cameras.find(
@@ -129,7 +128,6 @@ export const useGearStore = create<GearStore>((set, get) => ({
     return get().cameras.find((c) => c.id === id);
   },
 
-  // Lens operations
   addLens: async (data: LensForm) => {
     const trimmedName = data.name.trim();
     const existing = get().lenses.find(
@@ -174,7 +172,6 @@ export const useGearStore = create<GearStore>((set, get) => ({
     return get().lenses.find((l) => l.id === id);
   },
 
-  // Film stock operations
   addFilmStock: async (name: string) => {
     const trimmedName = name.trim();
     const existing = get().filmStocks.find(

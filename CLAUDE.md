@@ -19,3 +19,21 @@ See [docs/architecture.md](docs/architecture.md) for the technical stack, projec
 Be direct and concise. No fluff, no filler—get straight to the point.
 
 Don't summarize or repeat back what you just did—I can see the changes in the files. Only tell me things I can't already see: errors, blockers, decisions you made, or questions you have.
+
+## Comments
+
+Comments should explain **why**, not **what**. The "what" can always be derived from reading the code.
+
+**Good** - explains non-obvious reasoning:
+
+```typescript
+// Epsilon for comparing aperture values (handles floating point imprecision)
+const APERTURE_EPSILON = 0.01;
+```
+
+**Bad** - restates what the code already shows:
+
+```typescript
+// Drizzle table
+export const cameras = sqliteTable("cameras", {
+```

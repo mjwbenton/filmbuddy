@@ -2,30 +2,24 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { z } from "zod";
 import { APERTURE_BOUNDS } from "@/lib/aperture";
 
-// Drizzle table
 export const lenses = sqliteTable("lenses", {
   id: text("id").primaryKey(),
   name: text("name").notNull().unique(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-  // Aperture configuration - JSON-stringified array
   apertures: text("apertures").notNull().default("[]"),
 });
 
-// Raw database type (apertures stored as JSON string)
 export type DbLens = typeof lenses.$inferSelect;
 export type NewLens = typeof lenses.$inferInsert;
 
-// Consumer-facing type (apertures as parsed array)
 export type Lens = Omit<DbLens, "apertures"> & {
   apertures: number[];
 };
 
-// Apertures array schema
 const aperturesSchema = z
   .array(z.number().min(APERTURE_BOUNDS.min).max(APERTURE_BOUNDS.max))
   .min(1, "At least one aperture is required");
 
-// Form schema for user-editable fields
 export const lensFormSchema = z.object({
   name: z.string().trim().min(1, "Name is required"),
   apertures: aperturesSchema,

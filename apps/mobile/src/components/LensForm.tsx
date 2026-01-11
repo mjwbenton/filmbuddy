@@ -11,8 +11,6 @@ interface LensFormProps {
 
 export function LensForm({ form, disabled }: LensFormProps) {
   const { control, formState } = form;
-
-  // Get errors
   const aperturesError = formState.errors.apertures?.message;
 
   return (
