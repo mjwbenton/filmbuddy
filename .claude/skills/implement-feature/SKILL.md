@@ -1,36 +1,23 @@
 ---
 name: implement-feature
-description: Implement features from plan files using test-first development. Use when implementing a plan, building a feature, or starting implementation from a spec.
+description: Implement features from spec files using test-first development. Use when implementing a spec, building a feature, or starting implementation from a spec.
 ---
 
 # Feature Implementation Mode
 
-You are implementing a feature for FilmBuddy based on a feature plan document.
+You are implementing a feature for FilmBuddy based on a feature spec document.
 
 ## Implementation Process
 
-### 1. Load the Feature Plan
+### 1. Ensure you are on a worktree
 
-1. If the user specified a plan name, read `docs/plans/{plan-name}.md`
-2. If not specified, list available plans from `docs/plans/` and ask which to implement
-3. Read linked wireframes from `docs/wireframes/`
-4. Check if an implementation plan already exists at the bottom of the plan file
+All feature implementation should happen in an isolated worktree. Check whether you're already operating in one, and if not create a new one with an appropriate name for the feature you are implementing.
 
-### 2. Generate E2E Tests First
+### 2. Load the Feature Spec
 
-Invoke the **tester-maestro agent** with the plan file path:
-
-```
-Read this feature plan and create Maestro E2E tests:
-Plan file: docs/plans/{plan-name}.md
-```
-
-Wait for the agent to complete. It will output:
-
-1. **Flow files created** - List of YAML files in `apps/mobile/e2e/flows/`
-2. **Required testIDs** - Map of component → testIDs for implementation
-
-Include the testIDs in the implementation plan so they are visible during coding.
+1. Read the spec from `docs/specs/{spec-name}.md`
+2. Read linked wireframes from `docs/wireframes/`
+3. Check if an implementation plan already exists at the bottom of the spec file
 
 ### 3. Create Implementation Plan
 
@@ -41,9 +28,27 @@ If no implementation plan exists, analyze the codebase and create one:
 3. Check for existing Maestro flows in `apps/mobile/e2e/flows/`
 4. Identify what needs to be built
 
-Write an implementation plan to the bottom of the plan file. See [implementation-template.md](implementation-template.md) for format.
+Write an implementation plan to the bottom of the spec file. See [implementation-template.md](implementation-template.md) for format.
 
-**Wait for user confirmation before proceeding.**
+Commit the implementation plan before moving on.
+
+### 3. Generate E2E Tests First
+
+Invoke the **tester-maestro agent** with the spec file path:
+
+```
+Read this feature spec and create Maestro E2E tests:
+Spec file: docs/specs/{spec-name}.md
+```
+
+Wait for the agent to complete. It will output:
+
+1. **Flow files created** - List of YAML files in `apps/mobile/e2e/flows/`
+2. **Required testIDs** - Map of component → testIDs for implementation
+
+Include the testIDs in the implementation plan so they are visible during coding.
+
+Commit the maestro tests before moving on.
 
 ### 4. Resume or Start
 
@@ -52,6 +57,7 @@ If an implementation plan already exists:
 1. Read the checkboxes to see what's done
 2. Resume from the first unchecked item
 3. Update checkboxes as you complete tasks
+4. Commit each task before moving on to the next one
 
 ### 5. Write Unit Tests First
 
@@ -63,14 +69,14 @@ Before implementing pure functions, write failing unit tests:
 
 ### 6. Implement Code
 
-Work through tasks in order. Follow patterns from `docs/architecture.md`.
+Work through tasks in order.
 
 **For testability:** Add `testID` props to all interactive elements:
 
 - `testID="add-roll-button"`
 - `testID="film-stock-input"`
 
-Update checkboxes in the plan file as you complete each task.
+Update checkboxes in the spec file as you complete each task.
 
 ### 7. Verify
 

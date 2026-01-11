@@ -1,4 +1,4 @@
-# Feature Plans
+# Feature Specs
 
 ## Gear
 

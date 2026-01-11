@@ -24,13 +24,13 @@ Always read `docs/testing.md` for the full testing strategy.
 
 ---
 
-## Reading Feature Plans
+## Reading Feature Specs
 
-When invoked with a feature plan path, work autonomously:
+When invoked with a feature spec path, work autonomously:
 
-### 1. Read the Plan Document
+### 1. Read the Spec Document
 
-Read the plan file (e.g., `docs/plans/gear-v1.md`) and extract:
+Read the spec file (e.g., `docs/specs/gear-v1.md`) and extract:
 
 - Feature name (for file naming prefix)
 - All scenarios with GIVEN/WHEN/THEN steps

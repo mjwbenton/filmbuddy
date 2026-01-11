@@ -1,6 +1,6 @@
 # Implementation Plan Template
 
-Add this to the bottom of the feature plan file (`docs/plans/{feature-name}.md`):
+Add this to the bottom of the feature spec file (`docs/specs/{feature-name}.md`):
 
 ```markdown
 ## Implementation Plan

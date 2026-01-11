@@ -1,6 +1,6 @@
-# Feature Plan Template
+# Feature Spec Template
 
-Use this template when creating `docs/plans/{feature-name}.md`:
+Use this template when creating `docs/specs/{feature-name}.md`:
 
 ```markdown
 # Feature: [Name]
@@ -40,12 +40,12 @@ As a film photographer, I want to [goal] so that [benefit].
 - [Any unresolved decisions or unknowns]
 ```
 
-## Plans Index Template
+## Specs Index Template
 
-Use this for `docs/plans/index.md`:
+Use this for `docs/specs/index.md`:
 
 ```markdown
-# Feature Plans
+# Feature Specs
 
 ## Rolls
 
@@ -64,4 +64,4 @@ Use this for `docs/plans/index.md`:
 - [Feature Name](feature-name.md)
 ```
 
-Group plans by app area. A plan can appear in multiple sections if it spans areas.
+Group specs by app area. A spec can appear in multiple sections if it spans areas.
