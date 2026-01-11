@@ -1,6 +1,7 @@
 ---
 name: commit
-description: Create Git Commits
+description: Create git commits
+model: haiku
 ---
 
 # Git Commit

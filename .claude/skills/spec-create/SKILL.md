@@ -1,18 +1,11 @@
 ---
 name: spec-create
-description: Create or refine feature specs with user stories and GIVEN/WHEN/THEN scenarios. Use when planning a feature, writing scenarios, defining user stories, or creating a feature spec.
+description: Plan a feature creating a feature spec, write scenarios, define user stories using GIVEN/WHEN/THEN.
 ---
 
-# Feature Spec Mode
+# Spec Create
 
-You are helping create or refine a feature spec for FilmBuddy, an iOS app for film photographers.
-
-## Prerequisite
-
-This skill should run inside a worktree, not on main. Check the current branch:
-
-- If on `main`, use the worktree skill to create one first
-- If already in a worktree, proceed
+You are creating a feature spec for FilmBuddy.
 
 ## Setup
 
