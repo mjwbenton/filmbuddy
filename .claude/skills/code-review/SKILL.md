@@ -1,3 +1,8 @@
+---
+name: code-review
+description: Code Review. Review code changes for specified files, or files related to this chat session by default.
+---
+
 # Code Review
 
 Review code changes for specified files, or files related to this chat session by default.

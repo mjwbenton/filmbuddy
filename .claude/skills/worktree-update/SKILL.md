@@ -1,3 +1,8 @@
+---
+name: worktree-update
+description: Update Worktree. Rebase the current worktree branch onto the latest main.
+---
+
 # Update Worktree
 
 Rebase the current worktree branch onto the latest main.

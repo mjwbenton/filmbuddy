@@ -1,3 +1,8 @@
+---
+name: worktree-create
+description: Create Worktree. Create a new git worktree with a random name for isolated work.
+---
+
 # Create Worktree
 
 Create a new git worktree with a random name for isolated work.

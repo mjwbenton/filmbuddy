@@ -1,3 +1,8 @@
+---
+name: commit
+description: Git Commit. Create a git commit for specified changes, or files related to this chat session by default.
+---
+
 # Git Commit
 
 Create a git commit for specified changes, or files related to this chat session by default.

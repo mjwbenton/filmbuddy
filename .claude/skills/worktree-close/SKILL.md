@@ -1,3 +1,8 @@
+---
+name: worktree-close
+description: Close Worktree. Merge the current worktree branch back to main and clean up.
+---
+
 # Close Worktree
 
 Merge the current worktree branch back to main and clean up.

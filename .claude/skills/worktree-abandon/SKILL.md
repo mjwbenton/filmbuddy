@@ -1,3 +1,8 @@
+---
+name: worktree-abandon
+description: Abandon Worktree. Throw away a worktree and its branch without merging.
+---
+
 # Abandon Worktree
 
 Throw away a worktree and its branch without merging.

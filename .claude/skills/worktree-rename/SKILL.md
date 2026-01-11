@@ -1,3 +1,8 @@
+---
+name: worktree-rename
+description: Rename Worktree. Rename the current worktree and branch based on the work being done.
+---
+
 # Rename Worktree
 
 Rename the current worktree and branch based on the work being done.
