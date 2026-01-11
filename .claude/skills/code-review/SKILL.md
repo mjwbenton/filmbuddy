@@ -1,27 +1,18 @@
 ---
 name: code-review
-description: Code Review. Review code changes for specified files, or files related to this chat session by default.
+description: Review code changes for quality, correctness and alignment.
 ---
 
 # Code Review
 
-Review code changes for specified files, or files related to this chat session by default.
+When reviewing changes, only review the files related to the curent context - don't just review everything that's changed as there may be unrelated modifications to the working tree.
 
 **Arguments:** $ARGUMENTS
 
 ## Instructions
 
-1. Determine which files to review:
-   - **If arguments are provided**: Interpret the arguments and find matching files in the codebase (could be file paths, patterns like `src/`, or descriptions like "the maestro tests"). Search the codebase to identify relevant files.
-   - **If arguments are empty (default)**: Run `git status` and only include files related to this session:
-     - Files Claude directly created or edited
-     - Files the user modified as part of this task
-     - Files changed by running code/commands during this session
-     - Exclude files that appear unrelated to the work done in this chat
-2. For each file identified, determine what to provide to reviewers:
-   - **If file has uncommitted changes**: Use `git diff` to get the changes
-   - **If file is committed (no pending changes)**: Read the full file contents for review
-3. Launch **all four reviewer agents in parallel** using the Task tool:
+1. Determine what to review. Consider what is relevant to our current session. Create a description of this to pass to the subagents so that they know what to review, and the context of the review.
+2. Launch **all four reviewer agents in parallel** using the Task tool:
 
 | Agent                 | subagent_type         | Task                                        |
 | --------------------- | --------------------- | ------------------------------------------- |
@@ -30,11 +21,7 @@ Review code changes for specified files, or files related to this chat session b
 | reviewer-testing      | reviewer-testing      | Review test coverage for these changes      |
 | reviewer-product      | reviewer-product      | Review product alignment for these changes  |
 
-For each agent, include:
-
-- The list of files to review
-- The diff output (for uncommitted changes) or full file contents (for committed files)
-- A note that they should ONLY review these files, ignoring other changes in the repo
+For each agent, include the description of what to review, and a note that they should ONLY review what you've indicated.
 
 ## Output Format
 
@@ -61,9 +48,3 @@ After all agents complete, compile findings:
 
 Would you like me to address any of these?
 ```
-
-## Important
-
-- Launch all 4 agents in a SINGLE message (parallel execution)
-- Only report actual issues, not observations
-- Be specific with file:line references
