@@ -1,5 +1,7 @@
 # Plan: Film Stock Base ISO
 
+## Status: Complete
+
 Spec: [../specs/film-stock-base-iso.md](../specs/film-stock-base-iso.md)
 
 ## Summary
@@ -10,7 +12,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 1. Data Layer
 
-- [ ] **Add baseIso field to schema**
+- [x] **Add baseIso field to schema**
 
   ```typescript
   // apps/mobile/src/db/filmStock.ts
@@ -22,7 +24,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   });
   ```
 
-- [ ] **Update Zod form schema to include baseIso**
+- [x] **Update Zod form schema to include baseIso**
 
   ```typescript
   // apps/mobile/src/db/filmStock.ts
@@ -32,7 +34,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   });
   ```
 
-- [ ] **Generate migration for baseIso column**
+- [x] **Generate migration for baseIso column**
 
   After updating the schema, run from `apps/mobile`:
 
@@ -46,7 +48,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   ALTER TABLE `film_stocks` ADD `base_iso` integer DEFAULT 400 NOT NULL;
   ```
 
-- [ ] **Update store methods to handle baseIso**
+- [x] **Update store methods to handle baseIso**
 
   ```typescript
   // apps/mobile/src/stores/gearStore.ts
@@ -77,7 +79,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 2. Unit Tests
 
-- [ ] **Add film stock baseIso tests** - `apps/mobile/src/stores/gearStore.test.ts`
+- [x] **Add film stock baseIso tests** - `apps/mobile/src/stores/gearStore.test.ts`
 
   ```typescript
   // Helper for creating film stock form data
@@ -131,7 +133,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 3. Form Hook
 
-- [ ] **Update useFilmStockForm with baseIso default**
+- [x] **Update useFilmStockForm with baseIso default**
 
   ```typescript
   // apps/mobile/src/hooks/useFilmStockForm.ts
@@ -154,7 +156,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 4. Components
 
-- [ ] **Add ISOPicker to FilmStockForm**
+- [x] **Add ISOPicker to FilmStockForm**
 
   ```typescript
   // apps/mobile/src/components/FilmStockForm.tsx
@@ -198,7 +200,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   }
   ```
 
-- [ ] **Create FilmStockCard component with ISO display**
+- [x] **Create FilmStockCard component with ISO display**
 
   ```typescript
   // apps/mobile/src/components/FilmStockCard.tsx
@@ -230,7 +232,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 5. Screens
 
-- [ ] **Update gear screen to use FilmStockCard**
+- [x] **Update gear screen to use FilmStockCard**
 
   ```typescript
   // apps/mobile/app/(tabs)/gear.tsx
@@ -248,7 +250,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   ))}
   ```
 
-- [ ] **Update add screen to pass form data**
+- [x] **Update add screen to pass form data**
 
   ```typescript
   // apps/mobile/app/gear/film-stock/add.tsx
@@ -264,7 +266,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
   });
   ```
 
-- [ ] **Update edit screen to include baseIso in defaults and submission**
+- [x] **Update edit screen to include baseIso in defaults and submission**
 
   ```typescript
   // apps/mobile/app/gear/film-stock/[id].tsx
@@ -287,7 +289,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
 
 ### 6. E2E Tests
 
-- [ ] **Update gear-film-stocks.yaml with ISO interactions**
+- [x] **Update gear-film-stocks.yaml with ISO interactions**
 
   ```yaml
   # apps/mobile/e2e/flows/gear-film-stocks.yaml
@@ -387,7 +389,7 @@ Add a `baseIso` field to film stocks that stores the ISO rating and becomes the 
       timeout: 5000
   ```
 
-- [ ] **Update create-film-stock.yaml helper with optional ISO**
+- [x] **Update create-film-stock.yaml helper with optional ISO**
 
   ```yaml
   # apps/mobile/e2e/helpers/create-film-stock.yaml
