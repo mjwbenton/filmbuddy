@@ -40,7 +40,7 @@ For each task in order:
 2. **Create or modify files** following the plan
 3. **Run lint, typecheck and unit tests** using `yarn typecheck`, `yarn lint` and `yarn test:unit`
 4. **Mark the checkbox** `[x]` in the plan file
-5. **Commit the change** before moving to the next task
+5. **Commit** If you've finished a section of the plan, then create a commit for the work you have completed
 
 ### 4. Mark Complete
 

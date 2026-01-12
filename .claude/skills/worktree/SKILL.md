@@ -40,7 +40,6 @@ Rename the current worktree and branch based on the work being done. Use your cu
 - **setup** - Infrastructure work (dependencies, config, tooling)
 - **workflow** - Changes to how we work (scripts, commands, CI)
 - **feature** - New features
-- **plan** - Planning features or other work
 - **bug** - Bug fixes
 - **quality** - Code quality improvements (refactoring, tests, types)
 - **other** - Everything else
