@@ -1,7 +1,7 @@
 ---
 name: spec-execute
 description: Execute implementation of a spec from a plan file.
-model: sonnet
+model: claude-sonnet-4-5
 ---
 
 # Spec execute

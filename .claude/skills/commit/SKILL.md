@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Create git commits
-model: haiku
+model: claude-haiku-4-5
 ---
 
 # Git Commit
