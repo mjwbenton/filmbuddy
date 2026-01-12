@@ -1,10 +1,12 @@
 appId: tech.mattb.filmbuddy
 env:
   FILM_STOCK_NAME: ${FILM_STOCK_NAME || "Kodak Portra 400"}
+  BASE_ISO: ${BASE_ISO || "400"}
 ---
-# Helper: Create a film stock with configurable name
+# Helper: Create a film stock with configurable name and ISO
 # Parameters:
 #   FILM_STOCK_NAME: Film stock name (default: "Kodak Portra 400")
+#   BASE_ISO: Base ISO value (default: "400")
 - tapOn:
     id: "add-film-stock-button"
     retryTapIfNoChange: true
@@ -13,5 +15,9 @@ env:
     env:
       INPUT_ID: "film-stock-name-input"
       TEXT: ${FILM_STOCK_NAME}
+- tapOn:
+    id: "film-stock-iso-picker"
+- tapOn:
+    id: "iso-option-${BASE_ISO}"
 - tapOn:
     id: "save-button"

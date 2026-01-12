@@ -6,10 +6,11 @@ appId: tech.mattb.filmbuddy
 - tapOn: "gear-tab"
 
 # =============================================================================
-# Scenario: Add a film stock
+# Scenario: Add a film stock with base ISO
+# Scenario: Default ISO for new film stocks (ISO picker defaults to 400)
 # =============================================================================
 # GIVEN I'm on the Gear screen
-# WHEN I tap to add a film stock, enter a name, and save
+# WHEN I tap to add a film stock
 - tapOn:
     id: "add-film-stock-button"
     retryTapIfNoChange: true
@@ -17,22 +18,37 @@ appId: tech.mattb.filmbuddy
 # Verify sheet is open
 - assertVisible: "Add Film Stock"
 
+# THEN the base ISO defaults to 400
+- assertVisible:
+    id: "film-stock-iso-picker"
+- assertVisible: "400"
+
+# WHEN I enter a name, select a base ISO, and save
 - runFlow:
     file: ../helpers/input-text.yaml
     env:
       INPUT_ID: "film-stock-name-input"
-      TEXT: "Kodak Portra 400"
+      TEXT: "Kodak Portra 800"
+
+# Select ISO 800
+- tapOn:
+    id: "film-stock-iso-picker"
+- tapOn:
+    id: "iso-option-800"
+
 - tapOn:
     id: "save-button"
 
-# THEN the film stock appears in my film stocks list
-- assertVisible: "Kodak Portra 400"
+# THEN the film stock appears in my list with the selected base ISO
+- assertVisible: "Kodak Portra 800"
+- assertVisible: "ISO 800"
 
 # =============================================================================
-# Scenario: Edit a film stock
+# Scenario: Edit a film stock's base ISO
+# Scenario: Display base ISO on film stock card
 # =============================================================================
 # GIVEN I have a film stock in my gear library
-- tapOn: "Kodak Portra 400"
+- tapOn: "Kodak Portra 800"
 
 # Verify edit sheet is open
 - assertVisible: "Edit Film Stock"
@@ -41,24 +57,26 @@ appId: tech.mattb.filmbuddy
 - assertVisible:
     id: "delete-button"
 
-# WHEN I tap it, change the name, and save
-- runFlow:
-    file: ../helpers/edit-text.yaml
-    env:
-      INPUT_ID: "film-stock-name-input"
-      TEXT: "Kodak Tri-X 400"
+# Verify current ISO is displayed
+- assertVisible: "800"
+
+# WHEN I tap it, change the base ISO, and save
+- tapOn:
+    id: "film-stock-iso-picker"
+- tapOn:
+    id: "iso-option-400"
 - tapOn:
     id: "save-button"
 
-# THEN the film stock is updated with the new name
-- assertVisible: "Kodak Tri-X 400"
-- assertNotVisible: "Kodak Portra 400"
+# THEN the film stock is updated with the new base ISO
+- assertVisible: "Kodak Portra 800"
+- assertVisible: "ISO 400"
 
 # =============================================================================
 # Scenario: Delete a film stock
 # =============================================================================
 # GIVEN I have a film stock in my gear library
-- tapOn: "Kodak Tri-X 400"
+- tapOn: "Kodak Portra 800"
 
 # Verify edit sheet with delete button
 - assertVisible: "Edit Film Stock"
@@ -72,5 +90,5 @@ appId: tech.mattb.filmbuddy
 
 # THEN it is permanently removed from my library
 - extendedWaitUntil:
-    notVisible: "Kodak Tri-X 400"
+    notVisible: "Kodak Portra 800"
     timeout: 5000
