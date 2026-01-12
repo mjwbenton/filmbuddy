@@ -1,7 +1,8 @@
 import { View } from "react-native";
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import { FilmStockForm as FilmStockFormType } from "@/db/schema";
-import { TextInput } from "./ui";
+import { TextInput, Label } from "./ui";
+import { ISOPicker } from "./ISOPicker";
 
 interface FilmStockFormProps {
   form: UseFormReturn<FilmStockFormType>;
@@ -10,7 +11,7 @@ interface FilmStockFormProps {
 
 export function FilmStockForm({ form, disabled }: FilmStockFormProps) {
   return (
-    <View>
+    <View className="gap-lg">
       <TextInput
         label="Name"
         name="name"
@@ -20,6 +21,22 @@ export function FilmStockForm({ form, disabled }: FilmStockFormProps) {
         autoFocus
         testID="film-stock-name-input"
       />
+
+      <View>
+        <Label>Base ISO</Label>
+        <Controller
+          control={form.control}
+          name="baseIso"
+          render={({ field: { value, onChange }, fieldState: { error } }) => (
+            <ISOPicker
+              value={value ?? 400}
+              onChange={onChange}
+              hasError={!!error}
+              testID="film-stock-iso-picker"
+            />
+          )}
+        />
+      </View>
     </View>
   );
 }

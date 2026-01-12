@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { GearCard } from "@/components/GearCard";
+import { FilmStockCard } from "@/components/FilmStockCard";
 import { SectionHeader } from "@/components/ui";
 
 export default function GearScreen() {
@@ -99,9 +100,10 @@ export default function GearScreen() {
               </Pressable>
             </View>
             {filmStocks.map((filmStock) => (
-              <GearCard
+              <FilmStockCard
                 key={filmStock.id}
                 name={filmStock.name}
+                baseIso={filmStock.baseIso}
                 onPress={() => router.push(`/gear/film-stock/${filmStock.id}`)}
                 testID={`film-stock-card-${filmStock.id}`}
               />

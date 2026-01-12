@@ -20,11 +20,14 @@ export default function EditFilmStockScreen() {
   const filmStock = id ? getFilmStockById(id) : undefined;
 
   const { form, handleSubmit, isSubmitting, canSubmit } = useFilmStockForm({
-    defaultValues: { name: filmStock?.name ?? "" },
+    defaultValues: {
+      name: filmStock?.name,
+      baseIso: filmStock?.baseIso,
+    },
     onSubmit: async (data: FilmStockFormType) => {
       if (!id) return;
       try {
-        await updateFilmStock(id, data.name);
+        await updateFilmStock(id, data);
         router.back();
       } catch (err) {
         handleError(err, "Failed to save film stock. Please try again.");

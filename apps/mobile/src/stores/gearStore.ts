@@ -11,6 +11,7 @@ import {
   Lens,
   FilmStock,
   LensForm,
+  FilmStockForm,
 } from "@/db/schema";
 import { UserFacingError } from "@/lib/errors";
 import { DEFAULT_APERTURES } from "@/lib/aperture";
@@ -51,8 +52,8 @@ interface GearStore {
   addLens: (data: LensForm) => Promise<void>;
   updateLens: (id: string, data: LensForm) => Promise<void>;
   deleteLens: (id: string) => Promise<void>;
-  addFilmStock: (name: string) => Promise<void>;
-  updateFilmStock: (id: string, name: string) => Promise<void>;
+  addFilmStock: (data: FilmStockForm) => Promise<void>;
+  updateFilmStock: (id: string, data: FilmStockForm) => Promise<void>;
   deleteFilmStock: (id: string) => Promise<void>;
   getCameraById: (id: string) => Camera | undefined;
   getLensById: (id: string) => Lens | undefined;
@@ -172,8 +173,8 @@ export const useGearStore = create<GearStore>((set, get) => ({
     return get().lenses.find((l) => l.id === id);
   },
 
-  addFilmStock: async (name: string) => {
-    const trimmedName = name.trim();
+  addFilmStock: async (data: FilmStockForm) => {
+    const trimmedName = data.name.trim();
     const existing = get().filmStocks.find(
       (f) => f.name.toLowerCase() === trimmedName.toLowerCase(),
     );
@@ -183,13 +184,14 @@ export const useGearStore = create<GearStore>((set, get) => ({
     await db.insert(filmStocks).values({
       id: randomUUID(),
       name: trimmedName,
+      baseIso: data.baseIso,
       createdAt: new Date(),
     });
     await get().loadGear();
   },
 
-  updateFilmStock: async (id: string, name: string) => {
-    const trimmedName = name.trim();
+  updateFilmStock: async (id: string, data: FilmStockForm) => {
+    const trimmedName = data.name.trim();
     const existing = get().filmStocks.find(
       (f) => f.name.toLowerCase() === trimmedName.toLowerCase() && f.id !== id,
     );
@@ -198,7 +200,7 @@ export const useGearStore = create<GearStore>((set, get) => ({
     }
     await db
       .update(filmStocks)
-      .set({ name: trimmedName })
+      .set({ name: trimmedName, baseIso: data.baseIso })
       .where(eq(filmStocks.id, id));
     await get().loadGear();
   },

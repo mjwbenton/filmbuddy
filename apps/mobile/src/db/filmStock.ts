@@ -5,6 +5,7 @@ import { z } from "zod";
 export const filmStocks = sqliteTable("film_stocks", {
   id: text("id").primaryKey(),
   name: text("name").notNull().unique(),
+  baseIso: integer("base_iso").notNull().default(400),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
@@ -17,6 +18,7 @@ export const filmStockInsertSchema = createInsertSchema(filmStocks, {
 
 export const filmStockFormSchema = filmStockInsertSchema.pick({
   name: true,
+  baseIso: true,
 });
 
 export type FilmStockForm = z.infer<typeof filmStockFormSchema>;

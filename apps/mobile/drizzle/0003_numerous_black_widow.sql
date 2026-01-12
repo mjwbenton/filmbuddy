@@ -1,0 +1,1 @@
+ALTER TABLE `film_stocks` ADD `base_iso` integer DEFAULT 400 NOT NULL;

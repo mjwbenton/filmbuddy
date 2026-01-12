@@ -19,7 +19,7 @@ export default function AddFilmStockScreen() {
   const { form, handleSubmit, isSubmitting, canSubmit } = useFilmStockForm({
     onSubmit: async (data: FilmStockFormType) => {
       try {
-        await addFilmStock(data.name);
+        await addFilmStock(data);
         router.back();
       } catch (err) {
         handleError(err, "Failed to add film stock. Please try again.");

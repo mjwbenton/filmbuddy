@@ -22,6 +22,7 @@ export function useFilmStockForm({
     resolver: zodResolver(filmStockFormSchema),
     defaultValues: {
       name: "",
+      baseIso: 400,
       ...defaultValues,
     },
     mode: "onSubmit",

@@ -22,6 +22,13 @@
       "when": 1767541977521,
       "tag": "0002_nebulous_star_brand",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1768250150007,
+      "tag": "0003_numerous_black_widow",
+      "breakpoints": true
     }
   ]
 }

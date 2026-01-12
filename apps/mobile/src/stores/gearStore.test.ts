@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestDb, type TestDbContext } from "@/test/db";
-import type { LensForm } from "@/db/schema";
+import type { LensForm, FilmStockForm } from "@/db/schema";
 
 // Track test state using object to avoid let
 const testState: { db: TestDbContext | null; idCounter: number } = {
@@ -13,6 +13,18 @@ function createLensData(name: string, overrides?: Partial<LensForm>): LensForm {
   return {
     name,
     apertures: [2.8, 4, 5.6, 8, 11, 16],
+    ...overrides,
+  };
+}
+
+/** Create a FilmStockForm with defaults for testing */
+function createFilmStockData(
+  name: string,
+  overrides?: Partial<FilmStockForm>,
+): FilmStockForm {
+  return {
+    name,
+    baseIso: 400,
     ...overrides,
   };
 }
@@ -273,21 +285,40 @@ describe("gearStore", () => {
       it("creates a film stock and updates state", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addFilmStock("Kodak Portra 400");
+        await useGearStore
+          .getState()
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
 
         const { filmStocks } = useGearStore.getState();
         expect(filmStocks).toHaveLength(1);
         expect(filmStocks[0].name).toBe("Kodak Portra 400");
       });
 
+      it("creates a film stock with baseIso", async () => {
+        const { useGearStore } = await import("./gearStore");
+
+        await useGearStore
+          .getState()
+          .addFilmStock(
+            createFilmStockData("Ilford Delta 3200", { baseIso: 3200 }),
+          );
+
+        const { filmStocks } = useGearStore.getState();
+        expect(filmStocks[0].baseIso).toBe(3200);
+      });
+
       it("throws UserFacingError for duplicate name", async () => {
         const { UserFacingError } = await import("@/lib/errors");
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addFilmStock("Kodak Portra 400");
+        await useGearStore
+          .getState()
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
 
         await expect(
-          useGearStore.getState().addFilmStock("Kodak Portra 400"),
+          useGearStore
+            .getState()
+            .addFilmStock(createFilmStockData("Kodak Portra 400")),
         ).rejects.toThrow(UserFacingError);
       });
     });
@@ -296,13 +327,35 @@ describe("gearStore", () => {
       it("updates film stock name", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addFilmStock("Kodak Portra 400");
         await useGearStore
           .getState()
-          .updateFilmStock("test-id-1", "Kodak Portra 800");
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
+        await useGearStore
+          .getState()
+          .updateFilmStock(
+            "test-id-1",
+            createFilmStockData("Kodak Portra 800"),
+          );
 
         const { filmStocks } = useGearStore.getState();
         expect(filmStocks[0].name).toBe("Kodak Portra 800");
+      });
+
+      it("updates film stock baseIso", async () => {
+        const { useGearStore } = await import("./gearStore");
+
+        await useGearStore
+          .getState()
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
+        await useGearStore
+          .getState()
+          .updateFilmStock(
+            "test-id-1",
+            createFilmStockData("Kodak Portra 400", { baseIso: 800 }),
+          );
+
+        const { filmStocks } = useGearStore.getState();
+        expect(filmStocks[0].baseIso).toBe(800);
       });
     });
 
@@ -310,7 +363,9 @@ describe("gearStore", () => {
       it("removes film stock from database and state", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addFilmStock("Kodak Portra 400");
+        await useGearStore
+          .getState()
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
         await useGearStore.getState().deleteFilmStock("test-id-1");
 
         const { filmStocks } = useGearStore.getState();
@@ -322,7 +377,9 @@ describe("gearStore", () => {
       it("finds film stock by id", async () => {
         const { useGearStore } = await import("./gearStore");
 
-        await useGearStore.getState().addFilmStock("Kodak Portra 400");
+        await useGearStore
+          .getState()
+          .addFilmStock(createFilmStockData("Kodak Portra 400"));
 
         const filmStock = useGearStore.getState().getFilmStockById("test-id-1");
         expect(filmStock).toBeDefined();
