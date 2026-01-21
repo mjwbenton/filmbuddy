@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { GearCard } from "@/components/GearCard";
+import { LensCard } from "@/components/LensCard";
 import { SectionHeader } from "@/components/ui";
 
 export default function GearScreen() {
@@ -77,9 +78,9 @@ export default function GearScreen() {
               </Pressable>
             </View>
             {lenses.map((lens) => (
-              <GearCard
+              <LensCard
                 key={lens.id}
-                name={lens.name}
+                lens={lens}
                 onPress={() => router.push(`/gear/lens/${lens.id}`)}
                 testID={`lens-card-${lens.id}`}
               />

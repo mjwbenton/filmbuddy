@@ -48,8 +48,9 @@ appId: tech.mattb.filmbuddy
 - tapOn:
     id: "save-button"
 
-# THEN the lens appears in my lenses list
+# THEN the lens appears in my lenses list with its aperture range
 - assertVisible: "Summicron 50mm f/2"
+- assertVisible: "f/2 - f/16"
 
 # =============================================================================
 # Scenario: Edit a lens
