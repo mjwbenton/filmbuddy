@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { createTestDb, type TestDbContext } from "@/test/db";
-import type { LensForm } from "@/db/schema";
+import type { LensForm } from "@/db/lens";
 
 // Track test state using object to avoid let
 const testState: { db: TestDbContext | null; idCounter: number } = {

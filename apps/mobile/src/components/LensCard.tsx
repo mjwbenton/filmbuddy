@@ -1,5 +1,6 @@
-import { Lens } from "@/db/schema";
-import { Card, Text } from "./ui";
+import { Lens } from "@/db/lens";
+import { Card } from "./ui/Card";
+import { Text } from "./ui/Text";
 
 interface LensCardProps {
   lens: Lens;

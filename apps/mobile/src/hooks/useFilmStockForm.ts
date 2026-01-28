@@ -1,6 +1,6 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { filmStockFormSchema, FilmStockForm } from "@/db/schema";
+import { filmStockFormSchema, FilmStockForm } from "@/db/filmStock";
 
 interface UseFilmStockFormOptions {
   defaultValues?: Partial<FilmStockForm>;

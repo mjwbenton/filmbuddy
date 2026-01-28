@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { eq, desc, isNull, isNotNull } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
-import { rolls, NewRoll, Roll } from "@/db/schema";
+import { rolls, NewRoll, Roll } from "@/db/roll";
 
 interface RollStore {
   activeRolls: Roll[];

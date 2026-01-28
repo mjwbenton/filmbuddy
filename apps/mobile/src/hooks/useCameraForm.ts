@@ -1,6 +1,6 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { cameraFormSchema, CameraForm } from "@/db/schema";
+import { cameraFormSchema, CameraForm } from "@/db/camera";
 
 interface UseCameraFormOptions {
   defaultValues?: Partial<CameraForm>;

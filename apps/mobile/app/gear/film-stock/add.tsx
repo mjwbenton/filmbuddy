@@ -5,12 +5,12 @@ import { useGearStore } from "@/stores/gearStore";
 import { useFilmStockForm } from "@/hooks/useFilmStockForm";
 import { FilmStockForm } from "@/components/FilmStockForm";
 import { handleError } from "@/lib/handleError";
-import { FilmStockForm as FilmStockFormType } from "@/db/schema";
+import { FilmStockForm as FilmStockFormType } from "@/db/filmStock";
 import {
-  ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
-} from "@/components/ui";
+  ScreenHeader,
+} from "@/components/ui/ScreenHeader";
 
 export default function AddFilmStockScreen() {
   const router = useRouter();

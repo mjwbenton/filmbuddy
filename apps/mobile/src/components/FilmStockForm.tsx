@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { UseFormReturn } from "react-hook-form";
-import { FilmStockForm as FilmStockFormType } from "@/db/schema";
-import { TextInput } from "./ui";
+import { FilmStockForm as FilmStockFormType } from "@/db/filmStock";
+import { TextInput } from "./ui/TextInput";
 
 interface FilmStockFormProps {
   form: UseFormReturn<FilmStockFormType>;

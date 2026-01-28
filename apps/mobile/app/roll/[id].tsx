@@ -6,13 +6,13 @@ import { RollForm } from "@/components/RollForm";
 import { useRollForm } from "@/hooks/useRollForm";
 import { formatRelativeDate } from "@/lib/date-format";
 import { handleError } from "@/lib/handleError";
+import { Button } from "@/components/ui/Button";
 import {
-  ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
-  Text,
-  Button,
-} from "@/components/ui";
+  ScreenHeader,
+} from "@/components/ui/ScreenHeader";
+import { Text } from "@/components/ui/Text";
 
 export default function RollDetailScreen() {
   const router = useRouter();

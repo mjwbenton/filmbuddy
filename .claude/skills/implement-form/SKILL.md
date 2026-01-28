@@ -29,7 +29,7 @@ Your domain file should export:
 // hooks/useItemForm.ts
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { itemFormSchema, ItemForm } from "@/db/schema";
+import { itemFormSchema, ItemForm } from "@/db/item";
 
 interface UseItemFormOptions {
   defaultValues?: Partial<ItemForm>;
@@ -60,8 +60,8 @@ Use input components from `@/components/ui` (see **ui-components** skill for ava
 // components/ItemForm.tsx
 import { Control } from "react-hook-form";
 import { View } from "react-native";
-import { TextInput } from "@/components/ui";
-import { ItemForm } from "@/db/schema";
+import { TextInput } from "@/components/ui/TextInput";
+import { ItemForm } from "@/db/item";
 
 interface ItemFormProps {
   control: Control<ItemForm>;
@@ -91,10 +91,10 @@ All form inputs take `name`, `control`, and `testID` props for react-hook-form i
 import { router } from "expo-router";
 import { View } from "react-native";
 import {
-  ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
-} from "@/components/ui";
+  ScreenHeader,
+} from "@/components/ui/ScreenHeader";
 import { ItemForm } from "@/components/ItemForm";
 import { useItemForm } from "@/hooks/useItemForm";
 import { useItemStore } from "@/stores/itemStore";

@@ -2,16 +2,9 @@ import { create } from "zustand";
 import { eq, asc } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { db } from "@/db";
-import {
-  cameras,
-  lenses,
-  filmStocks,
-  Camera,
-  DbLens,
-  Lens,
-  FilmStock,
-  LensForm,
-} from "@/db/schema";
+import { cameras, Camera } from "@/db/camera";
+import { filmStocks, FilmStock } from "@/db/filmStock";
+import { lenses, DbLens, Lens, LensForm } from "@/db/lens";
 import { UserFacingError } from "@/lib/errors";
 import { DEFAULT_APERTURES } from "@/lib/aperture";
 

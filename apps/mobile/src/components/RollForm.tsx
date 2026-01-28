@@ -1,8 +1,10 @@
 import { Text, View } from "react-native";
 import { Controller, UseFormReturn } from "react-hook-form";
 import { ISOPicker } from "./ISOPicker";
-import { RollForm as RollFormType } from "@/db/schema";
-import { TextInput, Label, ErrorMessage } from "./ui";
+import { RollForm as RollFormType } from "@/db/roll";
+import { ErrorMessage } from "./ui/ErrorMessage";
+import { Label } from "./ui/Label";
+import { TextInput } from "./ui/TextInput";
 
 interface RollFormProps {
   form: UseFormReturn<RollFormType>;

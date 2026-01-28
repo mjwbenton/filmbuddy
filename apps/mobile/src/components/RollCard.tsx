@@ -1,6 +1,7 @@
-import { Roll } from "@/db/schema";
+import { Roll } from "@/db/roll";
 import { formatRelativeDate } from "@/lib/date-format";
-import { Card, Text } from "./ui";
+import { Card } from "./ui/Card";
+import { Text } from "./ui/Text";
 
 interface RollCardProps {
   roll: Roll;

@@ -24,7 +24,7 @@ stores/
 // stores/itemStore.ts
 import { create } from "zustand";
 import { db } from "@/db";
-import { items, Item, NewItem } from "@/db/schema";
+import { items, Item, NewItem } from "@/db/item";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "expo-crypto";
 import { logger } from "@/lib/logger";
@@ -112,7 +112,7 @@ export function ItemList() {
 When the database representation differs from what consumers need (see implement-domain skill), the store is responsible for the conversion:
 
 ```typescript
-import { DbLens, Lens } from "@/db/schema";
+import { DbLens, Lens } from "@/db/lens";
 import { parseAperturesJson } from "@/lib/aperture";
 
 /** Convert a database row to consumer-facing type */

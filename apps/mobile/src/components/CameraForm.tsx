@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { UseFormReturn } from "react-hook-form";
-import { CameraForm as CameraFormType } from "@/db/schema";
-import { TextInput } from "./ui";
+import { CameraForm as CameraFormType } from "@/db/camera";
+import { TextInput } from "./ui/TextInput";
 
 interface CameraFormProps {
   form: UseFormReturn<CameraFormType>;

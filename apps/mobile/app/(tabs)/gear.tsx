@@ -5,7 +5,7 @@ import { useRouter } from "expo-router";
 import { useGearStore } from "@/stores/gearStore";
 import { GearCard } from "@/components/GearCard";
 import { LensCard } from "@/components/LensCard";
-import { SectionHeader } from "@/components/ui";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function GearScreen() {
   const router = useRouter();

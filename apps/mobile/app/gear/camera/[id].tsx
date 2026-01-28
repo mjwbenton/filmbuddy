@@ -5,12 +5,12 @@ import { useGearStore } from "@/stores/gearStore";
 import { useCameraForm } from "@/hooks/useCameraForm";
 import { CameraForm } from "@/components/CameraForm";
 import { handleError } from "@/lib/handleError";
-import { CameraForm as CameraFormType } from "@/db/schema";
+import { CameraForm as CameraFormType } from "@/db/camera";
 import {
-  ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
-} from "@/components/ui";
+  ScreenHeader,
+} from "@/components/ui/ScreenHeader";
 
 export default function EditCameraScreen() {
   const router = useRouter();

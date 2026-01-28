@@ -20,7 +20,27 @@ Be direct and concise. No fluff, no filler—get straight to the point.
 
 Don't summarize or repeat back what you just did—I can see the changes in the files. Only tell me things I can't already see: errors, blockers, decisions you made, or questions you have.
 
-## Comments
+## Coding Guidelines
+
+### Imports
+
+Don't use barrel files (index.ts files that only re-export). Import directly from the source file.
+
+**Good:**
+
+```typescript
+import { Button } from "@/components/ui/Button";
+import { rolls } from "@/db/roll";
+```
+
+**Bad:**
+
+```typescript
+import { Button } from "@/components/ui";
+import { rolls } from "@/db/schema";
+```
+
+### Comments
 
 Comments should explain **why**, not **what**. The "what" can always be derived from reading the code.
 

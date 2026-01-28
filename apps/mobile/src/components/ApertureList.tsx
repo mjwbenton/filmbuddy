@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { View, Pressable, TextInput as RNTextInput } from "react-native";
-import { Text, Label, Button, DisclosureButton, SegmentedControl } from "./ui";
+import { Button } from "./ui/Button";
+import { DisclosureButton } from "./ui/DisclosureButton";
+import { Label } from "./ui/Label";
+import { SegmentedControl } from "./ui/SegmentedControl";
+import { Text } from "./ui/Text";
 import {
   formatAperture,
   generateApertureSequence,

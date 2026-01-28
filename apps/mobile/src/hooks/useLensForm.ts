@@ -1,6 +1,6 @@
 import { useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { lensFormSchema, LensForm, Lens } from "@/db/schema";
+import { lensFormSchema, LensForm, Lens } from "@/db/lens";
 import { DEFAULT_APERTURES } from "@/lib/aperture";
 
 interface UseLensFormOptions {

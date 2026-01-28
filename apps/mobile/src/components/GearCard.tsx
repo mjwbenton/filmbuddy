@@ -1,4 +1,5 @@
-import { Card, Text } from "./ui";
+import { Card } from "./ui/Card";
+import { Text } from "./ui/Text";
 
 interface GearCardProps {
   name: string;

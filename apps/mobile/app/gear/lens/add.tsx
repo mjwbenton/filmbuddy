@@ -5,12 +5,12 @@ import { useGearStore } from "@/stores/gearStore";
 import { useLensForm } from "@/hooks/useLensForm";
 import { LensForm } from "@/components/LensForm";
 import { handleError } from "@/lib/handleError";
-import { LensForm as LensFormType } from "@/db/schema";
+import { LensForm as LensFormType } from "@/db/lens";
 import {
-  ScreenHeader,
   HeaderCloseButton,
   HeaderSaveButton,
-} from "@/components/ui";
+  ScreenHeader,
+} from "@/components/ui/ScreenHeader";
 
 export default function AddLensScreen() {
   const router = useRouter();

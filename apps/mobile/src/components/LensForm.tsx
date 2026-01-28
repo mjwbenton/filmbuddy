@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { UseFormReturn, Controller } from "react-hook-form";
-import { LensForm as LensFormType } from "@/db/schema";
-import { TextInput } from "./ui";
+import { LensForm as LensFormType } from "@/db/lens";
+import { TextInput } from "./ui/TextInput";
 import { ApertureList } from "./ApertureList";
 
 interface LensFormProps {

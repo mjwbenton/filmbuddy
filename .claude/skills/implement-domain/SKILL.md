@@ -12,7 +12,6 @@ Each domain has its own file containing the Drizzle table and Zod schemas.
 ```
 db/
 ├── index.ts      # DB instance (expo-sqlite)
-├── schema.ts     # Re-exports all tables and schemas
 ├── roll.ts       # rolls table + schemas
 ├── camera.ts     # cameras table + schemas
 └── [domain].ts   # Your new domain
@@ -55,17 +54,6 @@ export const itemFormSchema = itemInsertSchema.pick({
 export type ItemForm = z.infer<typeof itemFormSchema>;
 ```
 
-## Export from schema.ts
-
-Add exports to the barrel file:
-
-```typescript
-// db/schema.ts
-export * from "./roll";
-export * from "./camera";
-export * from "./item"; // Add your new domain
-```
-
 ## Generate Migration
 
 After adding or modifying a table:
@@ -83,7 +71,7 @@ This creates a migration file in `db/migrations/`.
 import { db } from "@/db";
 
 // Tables, types, and schemas
-import { items, Item, NewItem, itemFormSchema } from "@/db/schema";
+import { items, Item, NewItem, itemFormSchema } from "@/db/item";
 
 // Drizzle query helpers
 import { eq, desc, and } from "drizzle-orm";
@@ -119,5 +107,4 @@ The store is responsible for converting between `Db*` and consumer types (see im
 - [ ] `$inferSelect` and `$inferInsert` types exported
 - [ ] `createInsertSchema` with field validations
 - [ ] Form schema with `.pick()` for user-editable fields
-- [ ] Export from `db/schema.ts`
 - [ ] Run `npx drizzle-kit generate` for migration

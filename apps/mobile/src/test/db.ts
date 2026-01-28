@@ -2,7 +2,17 @@ import Database from "better-sqlite3";
 import { drizzle, BetterSQLite3Database } from "drizzle-orm/better-sqlite3";
 import { readFileSync } from "fs";
 import { join } from "path";
-import * as schema from "@/db/schema";
+import * as cameraSchema from "@/db/camera";
+import * as filmStockSchema from "@/db/filmStock";
+import * as lensSchema from "@/db/lens";
+import * as rollSchema from "@/db/roll";
+
+const schema = {
+  ...cameraSchema,
+  ...filmStockSchema,
+  ...lensSchema,
+  ...rollSchema,
+};
 
 // Read migration journal to get list of migrations
 import journal from "../../drizzle/meta/_journal.json";
