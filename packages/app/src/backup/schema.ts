@@ -5,8 +5,6 @@ const camera = z.object({
   id: z.string(),
   name: z.string(),
   currentRollId: z.string().nullable().optional(),
-  lensId: z.string().nullable().optional(),
-  filterId: z.string().nullable().optional(),
 });
 
 const roll = z.object({

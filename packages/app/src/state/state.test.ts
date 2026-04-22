@@ -9,6 +9,10 @@ import {
   loadState,
   saveState,
   suggestStrings,
+  effectiveLensAt,
+  effectiveFilterAt,
+  currentLensId,
+  currentFilterId,
 } from './index';
 import {
   addCamera,
@@ -136,12 +140,13 @@ describe('roll lifecycle', () => {
     expect(s2.rolls[0]?.completedAt).toBeTypeOf('number');
   });
 
-  it('logShot stamps current lens + filter onto shot', () => {
+  it('logShot merges into an existing shot at the same frame', () => {
     let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     s = setLensFilter(s, { cameraId: camId, lensName: '35 Summilux', filterName: 'Y2 yellow' });
     s = logShot(s, { cameraId: camId, frame: 1, aperture: 'f/5.6', shutter: '1/250' });
+    expect(s.shots).toHaveLength(1);
     const shot = s.shots[0]!;
     expect(shot.aperture).toBe('f/5.6');
     expect(shot.shutter).toBe('1/250');
@@ -220,6 +225,70 @@ describe('suggestStrings', () => {
     s = logShot(s, { cameraId: camId, frame: 2, aperture: 'f/2', shutter: '1/60' });
     expect(suggestStrings(s, 'aperture')).toEqual(['f/2']);
     expect(suggestStrings(s, 'shutter')).toEqual(['1/125', '1/60']);
+  });
+});
+
+describe('lens + filter as timeline events', () => {
+  it('setLensFilter creates a shot at the pending frame (no aperture/shutter)', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    s = setLensFilter(s, { cameraId: camId, lensName: '50 Summicron', filterName: null });
+    expect(s.shots).toHaveLength(1);
+    const shot = s.shots[0]!;
+    expect(shot.frame).toBe(1);
+    expect(shot.lensId).toBe(s.lenses[0]!.id);
+    expect(shot.aperture ?? null).toBe(null);
+    expect(s.rolls[0]?.shotCount).toBe(0);
+  });
+
+  it('effective lens/filter at a later frame carries forward from the last swap', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    s = setLensFilter(s, { cameraId: camId, lensName: '35 Summilux', filterName: 'Y2 yellow' });
+    s = logShot(s, { cameraId: camId, frame: 1, aperture: 'f/5.6' });
+    s = logShot(s, { cameraId: camId, frame: 2, aperture: 'f/8' });
+    const rollId = s.rolls[0]!.id;
+    const lensId = s.lenses[0]!.id;
+    const filterId = s.filters[0]!.id;
+    expect(effectiveLensAt(s, rollId, 2)).toBe(lensId);
+    expect(effectiveFilterAt(s, rollId, 2)).toBe(filterId);
+    // Frame 2 has no explicit lens/filter on its own shot record
+    const frame2 = s.shots.find((x) => x.frame === 2)!;
+    expect(frame2.lensId ?? null).toBe(null);
+    expect(frame2.filterId ?? null).toBe(null);
+  });
+
+  it('second swap before shooting updates the swap-shot at the same frame', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens A', filterName: null });
+    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens B', filterName: null });
+    const frame1Shots = s.shots.filter((x) => x.frame === 1);
+    expect(frame1Shots).toHaveLength(1);
+    const lensB = s.lenses.find((l) => l.name === 'Lens B')!;
+    expect(frame1Shots[0]!.lensId).toBe(lensB.id);
+  });
+
+  it('currentLensId / currentFilterId reflect the most recent swap on the active roll', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    expect(currentLensId(s, camId)).toBeNull();
+    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    expect(currentLensId(s, camId)).toBeNull();
+    s = setLensFilter(s, { cameraId: camId, lensName: '35 Summilux', filterName: 'Y2' });
+    expect(currentLensId(s, camId)).toBe(s.lenses[0]!.id);
+    expect(currentFilterId(s, camId)).toBe(s.filters[0]!.id);
+  });
+
+  it('setLensFilter is a no-op when no roll is loaded', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    s = setLensFilter(s, { cameraId: camId, lensName: 'X', filterName: null });
+    expect(s.shots).toHaveLength(0);
+    expect(s.lenses).toHaveLength(0);
   });
 });
 

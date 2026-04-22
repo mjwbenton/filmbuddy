@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppState, suggestStrings } from '../state';
+import { useAppState, suggestStrings, currentLensId, currentFilterId } from '../state';
 import { useToast, Sheet, Field, SuggestInput, Seg } from '../ui';
 import { useNav } from '../nav/context';
 
@@ -10,11 +10,11 @@ export function SwapLensFilterSheet({ cameraId }: Props) {
   const { closeSheet } = useNav();
   const toast = useToast();
   const camera = state.cameras.find((c) => c.id === cameraId);
-  const currentLensName = camera?.lensId
-    ? (state.lenses.find((l) => l.id === camera.lensId)?.name ?? '')
-    : '';
-  const currentFilterName = camera?.filterId
-    ? (state.filters.find((f) => f.id === camera.filterId)?.name ?? '')
+  const lensId = currentLensId(state, cameraId);
+  const filterId = currentFilterId(state, cameraId);
+  const currentLensName = lensId ? (state.lenses.find((l) => l.id === lensId)?.name ?? '') : '';
+  const currentFilterName = filterId
+    ? (state.filters.find((f) => f.id === filterId)?.name ?? '')
     : '';
 
   const [lens, setLens] = useState(currentLensName);

@@ -1,5 +1,5 @@
 import type { Camera } from '../state';
-import { useAppState, currentRoll } from '../state';
+import { useAppState, currentRoll, currentLensId, currentFilterId } from '../state';
 import { useNav } from '../nav/context';
 import { Pill } from '../ui';
 import { Icon } from '../icons';
@@ -13,8 +13,10 @@ export function CameraCard({ camera }: Props) {
   const digital = roll?.digital === true;
 
   const stock = roll ? state.stocks.find((s) => s.id === roll.stockId) : null;
-  const lens = camera.lensId ? state.lenses.find((l) => l.id === camera.lensId) : null;
-  const filter = camera.filterId ? state.filters.find((f) => f.id === camera.filterId) : null;
+  const lensId = currentLensId(state, camera.id);
+  const filterId = currentFilterId(state, camera.id);
+  const lens = lensId ? state.lenses.find((l) => l.id === lensId) : null;
+  const filter = filterId ? state.filters.find((f) => f.id === filterId) : null;
 
   const progressPct = roll && !digital ? Math.min(100, (roll.shotCount / roll.length) * 100) : 0;
 
@@ -94,6 +96,7 @@ export function CameraCard({ camera }: Props) {
         <button
           type="button"
           className="act-btn primary"
+          disabled={!roll}
           onClick={() => openSheet({ kind: 'swap-lens-filter', cameraId: camera.id })}
         >
           <Icon name="swap" size={18} />

@@ -1,15 +1,17 @@
 import type { AppState, Roll, Shot } from '../state';
+import { effectiveLensAt, effectiveFilterAt } from '../state';
 
 type Props = {
   state: AppState;
   roll: Roll;
   shot: Shot | null;
+  frame: number;
 };
 
-export function DetailGrid({ state, roll, shot }: Props) {
+export function DetailGrid({ state, roll, shot, frame }: Props) {
   const stock = state.stocks.find((s) => s.id === roll.stockId);
-  const lensId = shot?.lensId ?? null;
-  const filterId = shot?.filterId ?? null;
+  const lensId = effectiveLensAt(state, roll.id, frame);
+  const filterId = effectiveFilterAt(state, roll.id, frame);
   const lens = lensId ? state.lenses.find((l) => l.id === lensId) : null;
   const filter = filterId ? state.filters.find((f) => f.id === filterId) : null;
 

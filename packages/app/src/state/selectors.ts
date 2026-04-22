@@ -18,6 +18,39 @@ export function latestShotForRoll(state: AppState, rollId: string): Shot | null 
   return ss.length > 0 ? (ss[ss.length - 1] ?? null) : null;
 }
 
+function latestAtOrBefore<K extends 'lensId' | 'filterId'>(
+  shots: Shot[],
+  frame: number,
+  key: K,
+): string | null {
+  for (let i = shots.length - 1; i >= 0; i--) {
+    const s = shots[i]!;
+    if (s.frame > frame) continue;
+    if (s[key] !== undefined) return s[key] ?? null;
+  }
+  return null;
+}
+
+export function effectiveLensAt(state: AppState, rollId: string, frame: number): string | null {
+  return latestAtOrBefore(shotsForRoll(state, rollId), frame, 'lensId');
+}
+
+export function effectiveFilterAt(state: AppState, rollId: string, frame: number): string | null {
+  return latestAtOrBefore(shotsForRoll(state, rollId), frame, 'filterId');
+}
+
+export function currentLensId(state: AppState, cameraId: string): string | null {
+  const roll = currentRoll(state, cameraId);
+  if (!roll) return null;
+  return latestAtOrBefore(shotsForRoll(state, roll.id), Infinity, 'lensId');
+}
+
+export function currentFilterId(state: AppState, cameraId: string): string | null {
+  const roll = currentRoll(state, cameraId);
+  if (!roll) return null;
+  return latestAtOrBefore(shotsForRoll(state, roll.id), Infinity, 'filterId');
+}
+
 export function daysSince(ts: number | null, now: number = Date.now()): number {
   if (ts === null) return Infinity;
   return Math.floor((now - ts) / DAY_MS);

@@ -61,10 +61,20 @@ export function CameraDetail({ cameraId }: Props) {
                 <div className="progress-fill" style={{ width: `${progressPct}%` }} />
               </div>
             )}
-            <DetailGrid state={state} roll={roll} shot={selectedShot} />
-            <div className="as-grid" style={{ marginTop: 8 }}>
-              <Button
-                variant="accent"
+            <DetailGrid state={state} roll={roll} shot={selectedShot} frame={selectedFrame} />
+            <div className="card-actions" style={{ marginTop: 12 }}>
+              <button
+                type="button"
+                className="act-btn primary"
+                disabled={!roll}
+                onClick={() => openSheet({ kind: 'swap-lens-filter', cameraId: camera.id })}
+              >
+                <Icon name="swap" size={18} />
+                Swap
+              </button>
+              <button
+                type="button"
+                className="act-btn"
                 onClick={() =>
                   openSheet({
                     kind: 'log-shot',
@@ -73,14 +83,17 @@ export function CameraDetail({ cameraId }: Props) {
                   })
                 }
               >
+                <Icon name="aperture" size={18} />
                 {selectedShot ? 'Edit shot' : 'Log shot'}
-              </Button>
-              <Button
-                variant="ghost"
+              </button>
+              <button
+                type="button"
+                className="act-btn"
                 onClick={() => openSheet({ kind: 'more', cameraId: camera.id })}
               >
-                More actions
-              </Button>
+                <Icon name="more" size={18} />
+                More
+              </button>
             </div>
           </>
         ) : (

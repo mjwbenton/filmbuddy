@@ -43,8 +43,6 @@ export function addCamera(
     id: uid('cam'),
     name: args.name.trim(),
     currentRollId: null,
-    lensId: null,
-    filterId: null,
   };
   let next: AppState = { ...state, cameras: [...state.cameras, camera] };
   if (args.startDigitalRoll) {
@@ -105,6 +103,12 @@ export function setLensFilter(
   state: AppState,
   args: { cameraId: string; lensName: string | null; filterName: string | null },
 ): AppState {
+  const cam = state.cameras.find((c) => c.id === args.cameraId);
+  if (!cam?.currentRollId) return state;
+  const rollId = cam.currentRollId;
+  const roll = state.rolls.find((r) => r.id === rollId);
+  if (!roll) return state;
+
   let next = state;
   let lensId: string | null = null;
   let filterId: string | null = null;
@@ -118,10 +122,25 @@ export function setLensFilter(
     next = s;
     filterId = filter.id;
   }
-  return {
-    ...next,
-    cameras: next.cameras.map((c) => (c.id === args.cameraId ? { ...c, lensId, filterId } : c)),
+
+  const targetFrame = Math.max(1, roll.shotCount + 1);
+  const existing = next.shots.find((s) => s.rollId === rollId && s.frame === targetFrame);
+
+  if (existing) {
+    return {
+      ...next,
+      shots: next.shots.map((s) => (s.id === existing.id ? { ...s, lensId, filterId } : s)),
+    };
+  }
+  const shot: Shot = {
+    id: uid('shot'),
+    rollId,
+    frame: targetFrame,
+    lensId,
+    filterId,
+    ts: Date.now(),
   };
+  return { ...next, shots: [...next.shots, shot] };
 }
 
 export function setShotCount(state: AppState, cameraId: string, n: number): AppState {
@@ -146,22 +165,32 @@ export function logShot(
 ): AppState {
   const cam = state.cameras.find((c) => c.id === args.cameraId);
   if (!cam?.currentRollId) return state;
-  const shot: Shot = {
-    id: uid('shot'),
-    rollId: cam.currentRollId,
-    frame: args.frame,
-    aperture: args.aperture?.trim() || null,
-    shutter: args.shutter?.trim() || null,
-    lensId: cam.lensId ?? null,
-    filterId: cam.filterId ?? null,
-    note: args.note?.trim() || null,
-    ts: Date.now(),
-  };
-  const withShot: AppState = { ...state, shots: [...state.shots, shot] };
+  const rollId = cam.currentRollId;
+  const aperture = args.aperture?.trim() || null;
+  const shutter = args.shutter?.trim() || null;
+  const note = args.note?.trim() || null;
+
+  const existing = state.shots.find((s) => s.rollId === rollId && s.frame === args.frame);
+  const shots = existing
+    ? state.shots.map((s) => (s.id === existing.id ? { ...s, aperture, shutter, note } : s))
+    : [
+        ...state.shots,
+        {
+          id: uid('shot'),
+          rollId,
+          frame: args.frame,
+          aperture,
+          shutter,
+          note,
+          ts: Date.now(),
+        } as Shot,
+      ];
+
   return {
-    ...withShot,
-    rolls: withShot.rolls.map((r) =>
-      r.id === cam.currentRollId ? { ...r, shotCount: Math.max(r.shotCount, args.frame) } : r,
+    ...state,
+    shots,
+    rolls: state.rolls.map((r) =>
+      r.id === rollId ? { ...r, shotCount: Math.max(r.shotCount, args.frame) } : r,
     ),
   };
 }

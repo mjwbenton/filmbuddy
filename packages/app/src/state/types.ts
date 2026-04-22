@@ -2,8 +2,6 @@ export type Camera = {
   id: string;
   name: string;
   currentRollId?: string | null;
-  lensId?: string | null;
-  filterId?: string | null;
 };
 
 export type Roll = {
