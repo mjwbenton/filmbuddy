@@ -1,4 +1,4 @@
-import { useAppState, currentRoll, isDigitalType } from '../state';
+import { useAppState, currentRoll } from '../state';
 import { Sheet } from '../ui';
 import { Icon } from '../icons';
 import { useNav, type SheetState } from '../nav/context';
@@ -19,7 +19,7 @@ export function MoreActionsSheet({ cameraId }: Props) {
   const roll = camera ? currentRoll(state, cameraId) : null;
 
   if (!camera) return null;
-  const digital = isDigitalType(camera.type);
+  const digital = roll?.digital === true;
 
   const actions: Action[] = [
     {

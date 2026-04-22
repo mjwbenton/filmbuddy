@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useAppState, currentRoll, shotsForRoll, isDigitalType } from '../state';
+import { useAppState, currentRoll, shotsForRoll } from '../state';
 import { useNav } from '../nav/context';
 import { FilmTimeline } from '../components/FilmTimeline';
 import { DetailGrid } from '../components/DetailGrid';
@@ -33,7 +33,7 @@ export function CameraDetail({ cameraId }: Props) {
     );
   }
 
-  const digital = isDigitalType(camera.type);
+  const digital = roll?.digital === true;
   const selectedShot = shots.find((s) => s.frame === selectedFrame) ?? null;
   const progressPct = roll && !digital ? Math.min(100, (roll.shotCount / roll.length) * 100) : 0;
 
@@ -45,7 +45,6 @@ export function CameraDetail({ cameraId }: Props) {
 
       <div className="detail-header">
         <h1>{camera.name}</h1>
-        <div className="sub">{camera.type}</div>
       </div>
 
       <div style={{ padding: '0 var(--pad)' }}>

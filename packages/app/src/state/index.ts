@@ -7,8 +7,6 @@ export {
   daysSince,
   isBackupStale,
   relTime,
-  defaultRollLength,
-  isDigitalType,
   suggestStrings,
   BACKUP_STALE_DAYS,
 } from './selectors';

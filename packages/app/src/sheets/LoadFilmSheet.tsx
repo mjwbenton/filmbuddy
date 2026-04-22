@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppState, suggestStrings, defaultRollLength } from '../state';
+import { useAppState, suggestStrings } from '../state';
 import { useToast, Sheet, Field, SuggestInput, Input } from '../ui';
 import { useNav } from '../nav/context';
 import { COMMON_ISOS } from './constants';
@@ -14,7 +14,7 @@ export function LoadFilmSheet({ cameraId }: Props) {
 
   const [stock, setStock] = useState('');
   const [iso, setIso] = useState('400');
-  const [length, setLength] = useState(camera ? String(defaultRollLength(camera.type)) : '36');
+  const [length, setLength] = useState('36');
 
   if (!camera) return null;
 

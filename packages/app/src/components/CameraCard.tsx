@@ -1,5 +1,5 @@
 import type { Camera } from '../state';
-import { useAppState, currentRoll, isDigitalType } from '../state';
+import { useAppState, currentRoll } from '../state';
 import { useNav } from '../nav/context';
 import { Pill } from '../ui';
 import { Icon } from '../icons';
@@ -10,7 +10,7 @@ export function CameraCard({ camera }: Props) {
   const { state } = useAppState();
   const { openScreen, openSheet } = useNav();
   const roll = currentRoll(state, camera.id);
-  const digital = isDigitalType(camera.type);
+  const digital = roll?.digital === true;
 
   const stock = roll ? state.stocks.find((s) => s.id === roll.stockId) : null;
   const lens = camera.lensId ? state.lenses.find((l) => l.id === camera.lensId) : null;
@@ -35,7 +35,6 @@ export function CameraCard({ camera }: Props) {
       >
         <div>
           <div className="cam-name">{camera.name}</div>
-          <div className="cam-sub">{camera.type}</div>
         </div>
         <div className="shot-counter">
           <div className="num mono">{roll?.shotCount ?? 0}</div>

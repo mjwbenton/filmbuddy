@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAppState, currentRoll, isDigitalType } from '../state';
+import { useAppState, currentRoll } from '../state';
 import { useToast, Sheet, Field, Input } from '../ui';
 import { useNav } from '../nav/context';
 
@@ -15,7 +15,7 @@ export function ChangeShotSheet({ cameraId }: Props) {
 
   if (!camera || !roll) return null;
 
-  const title = isDigitalType(camera.type) ? 'Set in-camera counter' : 'Change shot number';
+  const title = roll.digital ? 'Set in-camera counter' : 'Change shot number';
   const n = Math.max(0, Math.floor(Number(value)));
   const valid = Number.isFinite(Number(value));
 

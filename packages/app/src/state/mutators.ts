@@ -1,6 +1,5 @@
 import type { AppState, Camera, Filter, Lens, Roll, Shot, Stock } from './types';
 import { uid } from './id';
-import { defaultRollLength, isDigitalType } from './selectors';
 
 function ensureByName<T extends { id: string; name: string }>(
   arr: T[],
@@ -38,24 +37,23 @@ export function ensureFilter(state: AppState, name: string): [AppState, Filter] 
 
 export function addCamera(
   state: AppState,
-  args: { name: string; type: string; startDigitalRoll?: boolean },
+  args: { name: string; startDigitalRoll?: boolean },
 ): AppState {
   const camera: Camera = {
     id: uid('cam'),
     name: args.name.trim(),
-    type: args.type.trim(),
     currentRollId: null,
     lensId: null,
     filterId: null,
   };
   let next: AppState = { ...state, cameras: [...state.cameras, camera] };
-  if (args.startDigitalRoll && isDigitalType(camera.type)) {
+  if (args.startDigitalRoll) {
     const roll: Roll = {
       id: uid('roll'),
       cameraId: camera.id,
       stockId: '',
       iso: 0,
-      length: defaultRollLength(camera.type),
+      length: 9999,
       startedAt: Date.now(),
       completedAt: null,
       shotCount: 0,

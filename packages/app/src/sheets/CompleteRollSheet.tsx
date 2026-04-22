@@ -1,4 +1,4 @@
-import { useAppState, currentRoll, isDigitalType } from '../state';
+import { useAppState, currentRoll } from '../state';
 import { useToast, Sheet } from '../ui';
 import { useNav } from '../nav/context';
 
@@ -14,7 +14,7 @@ export function CompleteRollSheet({ cameraId }: Props) {
   if (!camera || !roll) return null;
 
   const stock = state.stocks.find((s) => s.id === roll.stockId);
-  const digital = isDigitalType(camera.type);
+  const digital = roll.digital === true;
 
   const submit = () => {
     mutators.completeRoll(roll.id);

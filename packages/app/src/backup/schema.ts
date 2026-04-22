@@ -4,7 +4,6 @@ import { BACKUP_KEY_PATTERN } from '../state';
 const camera = z.object({
   id: z.string(),
   name: z.string(),
-  type: z.string(),
   currentRollId: z.string().nullable().optional(),
   lensId: z.string().nullable().optional(),
   filterId: z.string().nullable().optional(),

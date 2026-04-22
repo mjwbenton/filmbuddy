@@ -38,19 +38,9 @@ export function relTime(ts: number | null, now: number = Date.now()): string {
   return `${m} min${m === 1 ? '' : 's'} ago`;
 }
 
-export function defaultRollLength(cameraType: string): number {
-  if (/Digital/i.test(cameraType)) return 9999;
-  if (/Medium/i.test(cameraType)) return 10;
-  return 36;
-}
-
-export function isDigitalType(cameraType: string): boolean {
-  return /Digital/i.test(cameraType);
-}
-
 export function suggestStrings(
   state: AppState,
-  field: 'stock' | 'lens' | 'filter' | 'camera-name' | 'camera-type' | 'aperture' | 'shutter',
+  field: 'stock' | 'lens' | 'filter' | 'camera-name' | 'aperture' | 'shutter',
 ): string[] {
   const dedupe = (arr: string[]): string[] => {
     const seen = new Set<string>();
@@ -72,8 +62,6 @@ export function suggestStrings(
       return dedupe(state.filters.map((f) => f.name));
     case 'camera-name':
       return dedupe(state.cameras.map((c) => c.name));
-    case 'camera-type':
-      return dedupe(state.cameras.map((c) => c.type));
     case 'aperture': {
       const prior = state.shots.map((s) => s.aperture).filter((v): v is string => !!v);
       return dedupe(prior);

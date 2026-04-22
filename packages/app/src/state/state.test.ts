@@ -45,7 +45,7 @@ describe('persistence round-trip', () => {
 
   it('saves and reloads state', () => {
     const s = fresh();
-    const afterAdd = addCamera(s, { name: 'M6', type: '35mm Rangefinder' });
+    const afterAdd = addCamera(s, { name: 'M6' });
     saveState(afterAdd);
     const reloaded = loadState();
     expect(reloaded.cameras).toHaveLength(1);
@@ -117,7 +117,7 @@ describe('implicit creators de-dupe by case-insensitive name', () => {
 
 describe('roll lifecycle', () => {
   it('loadRoll creates stock + roll and points camera at it', () => {
-    const s0 = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    const s0 = addCamera(fresh(), { name: 'M6' });
     const camId = s0.cameras[0]!.id;
     const s1 = loadRoll(s0, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     expect(s1.stocks).toHaveLength(1);
@@ -127,7 +127,7 @@ describe('roll lifecycle', () => {
   });
 
   it('completeRoll clears camera.currentRollId and sets completedAt', () => {
-    const s0 = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    const s0 = addCamera(fresh(), { name: 'M6' });
     const camId = s0.cameras[0]!.id;
     const s1 = loadRoll(s0, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     const rollId = s1.rolls[0]!.id;
@@ -137,7 +137,7 @@ describe('roll lifecycle', () => {
   });
 
   it('logShot stamps current lens + filter onto shot', () => {
-    let s = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     s = setLensFilter(s, { cameraId: camId, lensName: '35 Summilux', filterName: 'Y2 yellow' });
@@ -151,7 +151,7 @@ describe('roll lifecycle', () => {
   });
 
   it('setShotCount clamps to non-negative integers', () => {
-    let s = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     s = setShotCount(s, camId, -5);
@@ -161,7 +161,7 @@ describe('roll lifecycle', () => {
   });
 
   it('updateShot merges patch fields', () => {
-    let s = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     s = logShot(s, { cameraId: camId, frame: 1, aperture: 'f/5.6' });
@@ -173,10 +173,9 @@ describe('roll lifecycle', () => {
 });
 
 describe('digital camera auto-roll', () => {
-  it('creates a 9999-length digital roll on add', () => {
+  it('creates a 9999-length digital roll on add when flag is set', () => {
     const s = addCamera(fresh(), {
       name: 'M11',
-      type: 'Digital Rangefinder',
       startDigitalRoll: true,
     });
     expect(s.rolls).toHaveLength(1);
@@ -184,12 +183,8 @@ describe('digital camera auto-roll', () => {
     expect(s.rolls[0]?.digital).toBe(true);
   });
 
-  it('does not create roll for analogue cameras even if flag set', () => {
-    const s = addCamera(fresh(), {
-      name: 'M6',
-      type: '35mm Rangefinder',
-      startDigitalRoll: true,
-    });
+  it('does not create a roll when flag is not set', () => {
+    const s = addCamera(fresh(), { name: 'M6' });
     expect(s.rolls).toHaveLength(0);
   });
 });
@@ -200,7 +195,7 @@ describe('restoreFromSnapshot preserves local backup key', () => {
     const snapshot: AppState = {
       ...fresh(),
       backupKey: 'fb-aaaa-aaaa-aaaa',
-      cameras: [{ id: 'x', name: 'M6', type: '35mm Rangefinder' }],
+      cameras: [{ id: 'x', name: 'M6' }],
     };
     const restored = restoreFromSnapshot(local, snapshot);
     expect(restored.backupKey).toBe(local.backupKey);
@@ -218,7 +213,7 @@ describe('suggestStrings', () => {
   });
 
   it('returns non-null prior apertures/shutters', () => {
-    let s = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
+    let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
     s = logShot(s, { cameraId: camId, frame: 1, aperture: 'f/2', shutter: '1/125' });

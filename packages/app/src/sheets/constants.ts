@@ -36,14 +36,3 @@ export const SHUTTERS = [
 export const COMMON_ISOS = ['100', '200', '400', '800', '1600', '3200'];
 
 export const ROLL_LENGTHS = [24, 36, 10, 12, 15, 16];
-
-export const CAMERA_TYPES = [
-  '35mm Rangefinder',
-  '35mm SLR',
-  '35mm Compact',
-  'Medium Format 6×6',
-  'Medium Format 6×7',
-  'Digital Rangefinder',
-  'Digital SLR',
-  'Digital Mirrorless',
-];

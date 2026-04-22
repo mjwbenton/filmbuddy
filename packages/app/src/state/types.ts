@@ -1,7 +1,6 @@
 export type Camera = {
   id: string;
   name: string;
-  type: string;
   currentRollId?: string | null;
   lensId?: string | null;
   filterId?: string | null;

@@ -32,7 +32,7 @@ describe('load film flow', () => {
     localStorage.setItem(
       STATE_KEY,
       JSON.stringify({
-        cameras: [{ id: 'c1', name: 'M6', type: '35mm Rangefinder' }],
+        cameras: [{ id: 'c1', name: 'M6' }],
         rolls: [],
         shots: [],
         stocks: [],
@@ -63,7 +63,7 @@ describe('log shot flow', () => {
     localStorage.setItem(
       STATE_KEY,
       JSON.stringify({
-        cameras: [{ id: 'c1', name: 'M6', type: '35mm Rangefinder', currentRollId: 'r1' }],
+        cameras: [{ id: 'c1', name: 'M6', currentRollId: 'r1' }],
         rolls: [
           {
             id: 'r1',
