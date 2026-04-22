@@ -12,7 +12,6 @@ import {
 } from './index';
 import {
   addCamera,
-  advanceShot,
   completeRoll,
   ensureLens,
   ensureStock,
@@ -149,15 +148,6 @@ describe('roll lifecycle', () => {
     expect(shot.lensId).toBe(s.lenses[0]!.id);
     expect(shot.filterId).toBe(s.filters[0]!.id);
     expect(s.rolls[0]?.shotCount).toBe(1);
-  });
-
-  it('advanceShot increments shot count on active roll only', () => {
-    let s = addCamera(fresh(), { name: 'M6', type: '35mm Rangefinder' });
-    const camId = s.cameras[0]!.id;
-    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
-    s = advanceShot(s, camId);
-    s = advanceShot(s, camId);
-    expect(s.rolls[0]?.shotCount).toBe(2);
   });
 
   it('setShotCount clamps to non-negative integers', () => {

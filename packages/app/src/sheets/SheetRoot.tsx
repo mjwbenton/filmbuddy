@@ -2,7 +2,6 @@ import { useNav } from '../nav/context';
 import { LoadFilmSheet } from './LoadFilmSheet';
 import { SwapLensFilterSheet } from './SwapLensFilterSheet';
 import { LogShotSheet } from './LogShotSheet';
-import { AdvanceShotSheet } from './AdvanceShotSheet';
 import { ChangeShotSheet } from './ChangeShotSheet';
 import { CompleteRollSheet } from './CompleteRollSheet';
 import { AddCameraSheet } from './AddCameraSheet';
@@ -26,8 +25,6 @@ export function SheetRoot() {
           {...(sheet.editShotId ? { editShotId: sheet.editShotId } : {})}
         />
       );
-    case 'advance-shot':
-      return <AdvanceShotSheet cameraId={sheet.cameraId} />;
     case 'change-shot':
       return <ChangeShotSheet cameraId={sheet.cameraId} />;
     case 'complete-roll':

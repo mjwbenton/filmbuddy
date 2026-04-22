@@ -18,7 +18,6 @@ type Mutators = {
   completeRoll: (rollId: string) => void;
   setLensFilter: (args: Parameters<typeof M.setLensFilter>[1]) => void;
   setShotCount: (cameraId: string, n: number) => void;
-  advanceShot: (cameraId: string) => void;
   logShot: (args: Parameters<typeof M.logShot>[1]) => void;
   updateShot: (shotId: string, patch: Parameters<typeof M.updateShot>[2]) => void;
   markBackedUp: (at?: number) => void;
@@ -51,7 +50,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       completeRoll: apply(M.completeRoll),
       setLensFilter: apply(M.setLensFilter),
       setShotCount: (cameraId, n) => setState((prev) => M.setShotCount(prev, cameraId, n)),
-      advanceShot: apply(M.advanceShot),
       logShot: apply(M.logShot),
       updateShot: (shotId, patch) => setState((prev) => M.updateShot(prev, shotId, patch)),
       markBackedUp: (at) => setState((prev) => M.markBackedUp(prev, at)),

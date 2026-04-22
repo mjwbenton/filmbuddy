@@ -136,17 +136,6 @@ export function setShotCount(state: AppState, cameraId: string, n: number): AppS
   };
 }
 
-export function advanceShot(state: AppState, cameraId: string): AppState {
-  const cam = state.cameras.find((c) => c.id === cameraId);
-  if (!cam?.currentRollId) return state;
-  return {
-    ...state,
-    rolls: state.rolls.map((r) =>
-      r.id === cam.currentRollId ? { ...r, shotCount: r.shotCount + 1 } : r,
-    ),
-  };
-}
-
 export function logShot(
   state: AppState,
   args: {

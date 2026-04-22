@@ -6,7 +6,6 @@ export type SheetState =
   | { kind: 'load-film'; cameraId: string }
   | { kind: 'swap-lens-filter'; cameraId: string }
   | { kind: 'log-shot'; cameraId: string; editShotId?: string }
-  | { kind: 'advance-shot'; cameraId: string }
   | { kind: 'change-shot'; cameraId: string }
   | { kind: 'complete-roll'; cameraId: string }
   | { kind: 'add-camera' }
