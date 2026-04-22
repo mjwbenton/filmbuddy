@@ -9,5 +9,6 @@ env:
 #   TEXT: The text to enter
 - tapOn:
     id: ${INPUT_ID}
+- eraseText
 - inputText: ${TEXT}
 - runFlow: ./hide-keyboard.yaml

@@ -1,7 +1,6 @@
 appId: tech.mattb.filmbuddy
 ---
-# Helper: Hide keyboard by tapping outside
-# Workaround for flaky hideKeyboard command
-# See: https://docs.maestro.dev/troubleshooting/known-issues#hidekeyboard-command-is-flaky
-- tapOn:
-    point: "50%,15%"
+# Helper: Hide keyboard
+# Use hideKeyboard command with animation wait for reliability
+- hideKeyboard
+- waitForAnimationToEnd

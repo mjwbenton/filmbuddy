@@ -28,11 +28,17 @@ export function ISOPicker({
       <Pressable
         onPress={() => setIsOpen(!isOpen)}
         testID={testID}
+        accessible={false}
         className={`min-h-touch flex-row items-center justify-between rounded-md border bg-white px-md py-sm ${
           hasError ? "border-error" : "border-fog"
         }`}
       >
-        <Text className="text-body text-ink">{value}</Text>
+        <Text
+          className="text-body text-ink"
+          testID={testID ? `${testID}-value` : undefined}
+        >
+          {value}
+        </Text>
         <Text className="text-stone">{isOpen ? "▲" : "▼"}</Text>
       </Pressable>
 

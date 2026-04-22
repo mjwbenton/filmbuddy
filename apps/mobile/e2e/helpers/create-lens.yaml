@@ -29,6 +29,7 @@ env:
     env:
       INPUT_ID: "generator-min-aperture"
       TEXT: "16"
+- runFlow: ./hide-keyboard.yaml
 - tapOn:
     id: "generate-apertures-button"
 

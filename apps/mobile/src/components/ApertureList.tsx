@@ -186,6 +186,8 @@ export function ApertureList({
               onBlur={handleAddInputBlur}
               placeholder="e.g. 2.8"
               keyboardType="decimal-pad"
+              autoCorrect={false}
+              autoCapitalize="none"
               editable={!disabled}
               testID="add-aperture-input"
               className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
@@ -230,6 +232,8 @@ export function ApertureList({
               onBlur={handleMaxApertureBlur}
               placeholder="e.g. 2.8"
               keyboardType="decimal-pad"
+              autoCorrect={false}
+              autoCapitalize="none"
               editable={!disabled}
               testID="generator-max-aperture"
               className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
@@ -262,6 +266,8 @@ export function ApertureList({
               onBlur={handleMinApertureBlur}
               placeholder="e.g. 16"
               keyboardType="decimal-pad"
+              autoCorrect={false}
+              autoCapitalize="none"
               editable={!disabled}
               testID="generator-min-aperture"
               className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${

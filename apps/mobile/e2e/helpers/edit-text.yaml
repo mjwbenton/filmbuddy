@@ -7,8 +7,9 @@ env:
 # Parameters:
 #   INPUT_ID: The testID of the input field
 #   TEXT: The new text to enter
+# Note: Does not hide keyboard - caller should hide if needed
 - tapOn:
     id: ${INPUT_ID}
+    retryTapIfNoChange: false
 - eraseText
 - inputText: ${TEXT}
-- runFlow: ./hide-keyboard.yaml

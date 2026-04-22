@@ -49,6 +49,9 @@ export function TextInput<T extends FieldValues>({
             placeholder={placeholder}
             editable={!disabled}
             autoFocus={autoFocus}
+            autoCorrect={false}
+            autoCapitalize="none"
+            spellCheck={false}
             testID={testID}
             className={`min-h-touch rounded-md border bg-white px-md py-sm text-body ${
               error ? "border-error" : "border-fog"
