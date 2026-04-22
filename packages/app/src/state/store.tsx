@@ -1,0 +1,73 @@
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import type { ReactNode } from 'react';
+import type { AppState } from './types';
+import { loadState, saveState } from './persistence';
+import * as M from './mutators';
+
+type Mutators = {
+  addCamera: (args: Parameters<typeof M.addCamera>[1]) => void;
+  loadRoll: (args: Parameters<typeof M.loadRoll>[1]) => void;
+  completeRoll: (rollId: string) => void;
+  setLensFilter: (args: Parameters<typeof M.setLensFilter>[1]) => void;
+  setShotCount: (cameraId: string, n: number) => void;
+  advanceShot: (cameraId: string) => void;
+  logShot: (args: Parameters<typeof M.logShot>[1]) => void;
+  updateShot: (shotId: string, patch: Parameters<typeof M.updateShot>[2]) => void;
+  markBackedUp: (at?: number) => void;
+  restoreFromSnapshot: (snapshot: AppState) => void;
+  setHomeLayout: (layout: AppState['homeLayout']) => void;
+};
+
+type Ctx = { state: AppState; mutators: Mutators };
+
+const StateContext = createContext<Ctx | null>(null);
+
+export function AppStateProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<AppState>(() => loadState());
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
+  useEffect(() => {
+    saveState(state);
+  }, [state]);
+
+  const apply = useCallback(<A extends unknown[]>(fn: (s: AppState, ...args: A) => AppState) => {
+    return (...args: A) => {
+      setState((prev) => fn(prev, ...args));
+    };
+  }, []);
+
+  const mutators = useMemo<Mutators>(
+    () => ({
+      addCamera: apply(M.addCamera),
+      loadRoll: apply(M.loadRoll),
+      completeRoll: apply(M.completeRoll),
+      setLensFilter: apply(M.setLensFilter),
+      setShotCount: (cameraId, n) => setState((prev) => M.setShotCount(prev, cameraId, n)),
+      advanceShot: apply(M.advanceShot),
+      logShot: apply(M.logShot),
+      updateShot: (shotId, patch) => setState((prev) => M.updateShot(prev, shotId, patch)),
+      markBackedUp: (at) => setState((prev) => M.markBackedUp(prev, at)),
+      restoreFromSnapshot: apply(M.restoreFromSnapshot),
+      setHomeLayout: apply(M.setHomeLayout),
+    }),
+    [apply],
+  );
+
+  const value = useMemo(() => ({ state, mutators }), [state, mutators]);
+  return <StateContext.Provider value={value}>{children}</StateContext.Provider>;
+}
+
+export function useAppState(): Ctx {
+  const ctx = useContext(StateContext);
+  if (!ctx) throw new Error('useAppState must be used inside <AppStateProvider>');
+  return ctx;
+}
