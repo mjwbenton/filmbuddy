@@ -7,6 +7,8 @@ import { ChangeShotSheet } from './ChangeShotSheet';
 import { CompleteRollSheet } from './CompleteRollSheet';
 import { AddCameraSheet } from './AddCameraSheet';
 import { MoreActionsSheet } from './MoreActionsSheet';
+import { BackupSheet } from './BackupSheet';
+import { RestoreSheet } from './RestoreSheet';
 
 export function SheetRoot() {
   const { sheet } = useNav();
@@ -35,8 +37,8 @@ export function SheetRoot() {
     case 'more':
       return <MoreActionsSheet cameraId={sheet.cameraId} />;
     case 'backup':
+      return <BackupSheet />;
     case 'restore':
-      // Backup/Restore sheets arrive in Commit 12.
-      return null;
+      return <RestoreSheet />;
   }
 }
