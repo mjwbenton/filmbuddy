@@ -8,5 +8,5 @@
       "onAutoForward": "openBrowser"
     }
   },
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "npm install"
 }
