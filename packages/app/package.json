@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:pwa-assets": "pwa-assets-generator",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
@@ -28,6 +29,8 @@
     "jsdom": "^26.0.0",
     "typescript": "^5.7.3",
     "vite": "^6.0.7",
+    "vite-plugin-pwa": "^0.21.1",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "vitest": "^3.0.0"
   }
 }
