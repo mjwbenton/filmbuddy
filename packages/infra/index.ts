@@ -1,7 +1,10 @@
-// FilmBuddy infrastructure entrypoint.
-// Subsequent commits will wire up:
-//   src/providers.ts  — deploy + parent-zone AWS providers
-//   src/site.ts       — S3 + CloudFront + ACM + Route53 (filmbuddy.mattb.tech)
-//   src/delegation.ts — NS delegation from mattb.tech parent zone
-//   src/backup.ts     — backup bucket + Lambda Function URL (STS vending)
-export {};
+import { buildSite } from './src/site';
+import { delegateSubzone } from './src/delegation';
+
+const site = buildSite();
+delegateSubzone(site.zone.nameServers);
+
+export const siteBucketName = site.siteBucket.bucket;
+export const cloudfrontDistributionId = site.distribution.id;
+export const cloudfrontDomain = site.distribution.domainName;
+export const zoneNameServers = site.zone.nameServers;
