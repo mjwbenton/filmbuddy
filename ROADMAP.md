@@ -8,18 +8,18 @@
 
 ## Workflow
 
-- [ ] Get implementation skill to commit as it goes
-- [ ] Get implementation skill to use code review agents
-- [ ] Logging skill
-- [ ] Error handling skill
-- [ ] Create verification agent
+- [ ] Improve skill descriptions to always include "Use this when"
+- [ ] Issues from film feature
+  - Didn't actually invoke the skills in either planning or execution stage
+  - Didn't commit as it went, just one commit for implementation, another for maestro tests
+- [ ] Missing skills
+  - Logging skill
+  - Error handling skill
 
 ## Features
 
 - [ ] Replace ISOPicker
 - [ ] Add more data to camera
-- [ ] Add more data to lens
-- [ ] Add more data to film stock
 - [ ] Integrate gear and rolls
 - [ ] Add ability to record first note
 - [ ] Export all data to JSON
@@ -29,6 +29,8 @@
 - [ ] Maestro tests are failing in CI
 
 ## Quality
+
+- [ ] Split form UI components from form components for use with react-hooks-form
 
 ## Other
 
