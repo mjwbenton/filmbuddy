@@ -1,0 +1,20 @@
+{
+  "name": "@filmbuddy/infra",
+  "version": "0.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "preview": "pulumi preview",
+    "up": "pulumi up --yes"
+  },
+  "dependencies": {
+    "@pulumi/aws": "^6.66.2",
+    "@pulumi/pulumi": "^3.144.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,5 @@
+name: filmbuddy
+runtime: nodejs
+description: FilmBuddy infrastructure — static site, DNS, backup API.
+backend:
+  url: s3://filmbuddy.mattb.tech-infra-state
