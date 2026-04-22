@@ -208,7 +208,3 @@ export function markBackedUp(state: AppState, at: number = Date.now()): AppState
 export function restoreFromSnapshot(state: AppState, snapshot: AppState): AppState {
   return { ...snapshot, backupKey: state.backupKey };
 }
-
-export function setHomeLayout(state: AppState, layout: AppState['homeLayout']): AppState {
-  return { ...state, homeLayout: layout };
-}

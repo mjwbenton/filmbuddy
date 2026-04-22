@@ -391,47 +391,6 @@ body {
   color: var(--accent);
 }
 
-/* ================= Compact list variant ================= */
-.list-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--row-pad-y) var(--card-pad);
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background 120ms ease;
-}
-
-.list-row:hover {
-  background: var(--surface-2);
-}
-
-.list-row .left {
-  min-width: 0;
-}
-
-.list-row .left .cam-name {
-  font-size: 15px;
-}
-
-.list-row .left .cam-sub {
-  font-size: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.list-row .right {
-  text-align: right;
-}
-
-.list-row .right .num {
-  font-size: 18px;
-  font-weight: 600;
-}
-
 /* ================= Add camera card ================= */
 .add-card {
   border: 1px dashed var(--line);

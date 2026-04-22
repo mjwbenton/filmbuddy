@@ -1,4 +1,4 @@
-export type { AppState, Camera, Roll, Shot, Stock, Lens, Filter, HomeLayout } from './types';
+export type { AppState, Camera, Roll, Shot, Stock, Lens, Filter } from './types';
 export { AppStateProvider, useAppState } from './store';
 export {
   currentRoll,

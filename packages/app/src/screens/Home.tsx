@@ -1,14 +1,12 @@
 import { useAppState } from '../state';
 import { CameraCard } from '../components/CameraCard';
-import { ListRow } from '../components/ListRow';
 import { AddCameraCard } from '../components/AddCameraCard';
 import { StaleBackupBanner } from '../components/StaleBackupBanner';
 import { BackupFooter } from '../components/BackupFooter';
-import { Seg } from '../ui';
 
 export function Home() {
-  const { state, mutators } = useAppState();
-  const { cameras, homeLayout } = state;
+  const { state } = useAppState();
+  const { cameras } = state;
 
   return (
     <div className="page" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -16,18 +14,6 @@ export function Home() {
 
       <div className="section-label">
         <span>Your cameras</span>
-        <span className="count">
-          {cameras.length > 0 && (
-            <Seg
-              value={homeLayout}
-              onChange={(l) => mutators.setHomeLayout(l)}
-              options={[
-                { value: 'stacked', label: 'Cards' },
-                { value: 'list', label: 'List' },
-              ]}
-            />
-          )}
-        </span>
       </div>
 
       {cameras.length === 0 ? (
@@ -38,14 +24,10 @@ export function Home() {
           </div>
         </>
       ) : (
-        <div className="cards" style={homeLayout === 'list' ? { gap: 6 } : undefined}>
-          {cameras.map((c) =>
-            homeLayout === 'list' ? (
-              <ListRow key={c.id} camera={c} />
-            ) : (
-              <CameraCard key={c.id} camera={c} />
-            ),
-          )}
+        <div className="cards">
+          {cameras.map((c) => (
+            <CameraCard key={c.id} camera={c} />
+          ))}
           <AddCameraCard />
         </div>
       )}

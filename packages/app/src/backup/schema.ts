@@ -51,7 +51,6 @@ export const appStateSchema = z.object({
   filters: z.array(named),
   backupKey: z.string().regex(BACKUP_KEY_PATTERN),
   lastBackupAt: z.number().nullable(),
-  homeLayout: z.enum(['stacked', 'list']),
 });
 
 export type AppStateSnapshot = z.infer<typeof appStateSchema>;

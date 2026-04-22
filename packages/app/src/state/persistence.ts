@@ -13,7 +13,6 @@ export function emptyState(): AppState {
     filters: [],
     backupKey: generateBackupKey(),
     lastBackupAt: null,
-    homeLayout: 'stacked',
   };
 }
 

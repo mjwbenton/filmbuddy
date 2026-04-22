@@ -23,7 +23,6 @@ type Mutators = {
   updateShot: (shotId: string, patch: Parameters<typeof M.updateShot>[2]) => void;
   markBackedUp: (at?: number) => void;
   restoreFromSnapshot: (snapshot: AppState) => void;
-  setHomeLayout: (layout: AppState['homeLayout']) => void;
 };
 
 type Ctx = { state: AppState; mutators: Mutators };
@@ -57,7 +56,6 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       updateShot: (shotId, patch) => setState((prev) => M.updateShot(prev, shotId, patch)),
       markBackedUp: (at) => setState((prev) => M.markBackedUp(prev, at)),
       restoreFromSnapshot: apply(M.restoreFromSnapshot),
-      setHomeLayout: apply(M.setHomeLayout),
     }),
     [apply],
   );

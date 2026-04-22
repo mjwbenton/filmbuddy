@@ -40,7 +40,6 @@ describe('load film flow', () => {
         filters: [],
         backupKey: 'fb-aaaa-aaaa-aaaa',
         lastBackupAt: null,
-        homeLayout: 'stacked',
       }),
     );
     render(<App />);
@@ -83,7 +82,6 @@ describe('log shot flow', () => {
         filters: [],
         backupKey: 'fb-aaaa-aaaa-aaaa',
         lastBackupAt: null,
-        homeLayout: 'stacked',
       }),
     );
     render(<App />);
