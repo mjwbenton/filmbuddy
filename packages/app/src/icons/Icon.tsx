@@ -27,11 +27,11 @@ export type IconName =
   | 'cloud'
   | 'copy';
 
-type IconProps = {
+type IconProps = Omit<SVGProps<SVGSVGElement>, 'name' | 'stroke' | 'strokeWidth'> & {
   name: IconName;
   size?: number;
   stroke?: number;
-} & Omit<SVGProps<SVGSVGElement>, 'name'>;
+};
 
 export function Icon({ name, size = 20, stroke = 1.75, ...rest }: IconProps) {
   const common = {
