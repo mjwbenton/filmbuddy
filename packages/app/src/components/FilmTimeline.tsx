@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { Roll, Shot } from '../state';
+import { Icon } from '../icons';
 
 type Props = {
   roll: Roll;
@@ -25,6 +26,8 @@ export function FilmTimeline({ roll, shots, selectedFrame, onSelectFrame }: Prop
         const shot = shots.find((s) => s.frame === frame);
         const isCurrent = frame === selectedFrame;
         const beyond = !roll.digital && frame > roll.shotCount;
+        const hasLog = !!(shot && (shot.aperture || shot.shutter || shot.note));
+        const hasSwap = !!(shot && (shot.lensId !== undefined || shot.filterId !== undefined));
         return (
           <button
             type="button"
@@ -36,15 +39,9 @@ export function FilmTimeline({ roll, shots, selectedFrame, onSelectFrame }: Prop
             onClick={() => onSelectFrame(frame)}
           >
             <span className="fn mono">{frame}</span>
-            <span className={shot ? 'has-meta' : 'no-meta'} aria-hidden />
-            <span className="exposure mono">
-              {shot?.aperture && <>{shot.aperture}</>}
-              {shot?.shutter && (
-                <>
-                  <br />
-                  {shot.shutter}
-                </>
-              )}
+            <span className="frame-marks" aria-hidden>
+              {hasLog && <span className="frame-dot" />}
+              {hasSwap && <Icon name="swap" size={14} />}
             </span>
           </button>
         );

@@ -768,29 +768,25 @@ body {
   color: var(--accent-ink);
 }
 
-.frame .has-meta {
+.frame .frame-marks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 6px;
+  min-height: 16px;
+  color: var(--ink-2);
+}
+
+.frame.current .frame-marks {
+  color: var(--accent-ink);
+}
+
+.frame .frame-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-  margin-top: 6px;
-}
-
-.frame .no-meta {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: transparent;
-  margin-top: 6px;
-}
-
-.frame .exposure {
-  font-size: 10px;
-  margin-top: 4px;
-  color: var(--ink-2);
-  line-height: 1.1;
-  text-align: center;
-  min-height: 22px;
 }
 
 .frame.empty {
