@@ -33,11 +33,6 @@ export function MoreActionsSheet({ cameraId }: Props) {
       disabled: !roll,
     },
     {
-      label: 'Log aperture / shutter',
-      to: { kind: 'log-shot', cameraId },
-      disabled: !roll,
-    },
-    {
       label: 'Mark roll complete',
       to: { kind: 'complete-roll', cameraId },
       disabled: !roll,
