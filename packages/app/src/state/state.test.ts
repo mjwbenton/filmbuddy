@@ -130,6 +130,20 @@ describe('roll lifecycle', () => {
     expect(cam.currentRollId).toBe(s1.rolls[0]?.id);
   });
 
+  it('loadRoll auto-completes the previous roll when one is already active', () => {
+    const s0 = addCamera(fresh(), { name: 'M6' });
+    const camId = s0.cameras[0]!.id;
+    const s1 = loadRoll(s0, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    const firstRollId = s1.rolls[0]!.id;
+    const s2 = loadRoll(s1, { cameraId: camId, stockName: 'Portra 400', iso: 400, length: 36 });
+    expect(s2.rolls).toHaveLength(2);
+    const prev = s2.rolls.find((r) => r.id === firstRollId)!;
+    expect(prev.completedAt).toBeTypeOf('number');
+    const cam = s2.cameras.find((c) => c.id === camId)!;
+    expect(cam.currentRollId).not.toBe(firstRollId);
+    expect(cam.currentRollId).toBe(s2.rolls.find((r) => r.id !== firstRollId)!.id);
+  });
+
   it('completeRoll clears camera.currentRollId and sets completedAt', () => {
     const s0 = addCamera(fresh(), { name: 'M6' });
     const camId = s0.cameras[0]!.id;

@@ -70,14 +70,24 @@ export function loadRoll(
   state: AppState,
   args: { cameraId: string; stockName: string; iso: number; length: number },
 ): AppState {
-  const [s1, stock] = ensureStock(state, args.stockName, args.iso);
+  const now = Date.now();
+  const existingRollId = state.cameras.find((c) => c.id === args.cameraId)?.currentRollId ?? null;
+  const s0: AppState = existingRollId
+    ? {
+        ...state,
+        rolls: state.rolls.map((r) =>
+          r.id === existingRollId && !r.completedAt && !r.digital ? { ...r, completedAt: now } : r,
+        ),
+      }
+    : state;
+  const [s1, stock] = ensureStock(s0, args.stockName, args.iso);
   const roll: Roll = {
     id: uid('roll'),
     cameraId: args.cameraId,
     stockId: stock.id,
     iso: args.iso,
     length: args.length,
-    startedAt: Date.now(),
+    startedAt: now,
     completedAt: null,
     shotCount: 0,
   };
