@@ -1,13 +1,15 @@
 import { useMemo, useState } from 'react';
-import { useAppState, currentRoll, shotsForRoll } from '../state';
+import { useAppState, currentRoll, shotsForRoll, completedRollsForCamera } from '../state';
 import { useNav } from '../nav/context';
 import { FilmTimeline } from '../components/FilmTimeline';
 import { DetailGrid } from '../components/DetailGrid';
 import { BackupFooter } from '../components/BackupFooter';
+import { RollsTabList } from '../components/RollsTabList';
 import { Button } from '../ui';
 import { Icon } from '../icons';
 
 type Props = { cameraId: string };
+type Tab = 'current' | 'rolls';
 
 export function CameraDetail({ cameraId }: Props) {
   const { state } = useAppState();
@@ -15,12 +17,14 @@ export function CameraDetail({ cameraId }: Props) {
   const camera = state.cameras.find((c) => c.id === cameraId);
   const roll = camera ? currentRoll(state, cameraId) : null;
   const shots = useMemo(() => (roll ? shotsForRoll(state, roll.id) : []), [state, roll]);
+  const pastRolls = camera ? completedRollsForCamera(state, cameraId) : [];
 
   const initialFrame = roll?.digital
     ? Math.max(1, roll.shotCount)
     : Math.max(1, Math.min(roll?.shotCount ?? 1, roll?.length ?? 1));
 
   const [selectedFrame, setSelectedFrame] = useState(initialFrame);
+  const [tab, setTab] = useState<Tab>('current');
 
   if (!camera) {
     return (
@@ -36,6 +40,7 @@ export function CameraDetail({ cameraId }: Props) {
   const digital = roll?.digital === true;
   const selectedShot = shots.find((s) => s.frame === selectedFrame) ?? null;
   const progressPct = roll && !digital ? Math.min(100, (roll.shotCount / roll.length) * 100) : 0;
+  const showTabs = !digital && pastRolls.length > 0;
 
   return (
     <div className="page" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -47,8 +52,34 @@ export function CameraDetail({ cameraId }: Props) {
         <h1>{camera.name}</h1>
       </div>
 
+      {showTabs && (
+        <div className="cam-tabs" role="tablist">
+          <button
+            type="button"
+            className={`cam-tab ${tab === 'current' ? 'active' : ''}`}
+            role="tab"
+            aria-selected={tab === 'current'}
+            onClick={() => setTab('current')}
+          >
+            Current roll
+          </button>
+          <button
+            type="button"
+            className={`cam-tab ${tab === 'rolls' ? 'active' : ''}`}
+            role="tab"
+            aria-selected={tab === 'rolls'}
+            onClick={() => setTab('rolls')}
+          >
+            Rolls
+            <span className="badge">{pastRolls.length}</span>
+          </button>
+        </div>
+      )}
+
       <div style={{ padding: '0 var(--pad)' }}>
-        {roll ? (
+        {tab === 'rolls' ? (
+          <RollsTabList cameraId={camera.id} />
+        ) : roll ? (
           <>
             <FilmTimeline
               roll={roll}

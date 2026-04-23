@@ -1,6 +1,9 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 
-export type Screen = { name: 'home' } | { name: 'camera'; cameraId: string };
+export type Screen =
+  | { name: 'home' }
+  | { name: 'camera'; cameraId: string }
+  | { name: 'past-roll'; cameraId: string; rollId: string };
 
 export type SheetState =
   | { kind: 'load-film'; cameraId: string }

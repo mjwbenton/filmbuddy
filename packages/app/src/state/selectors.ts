@@ -13,6 +13,12 @@ export function shotsForRoll(state: AppState, rollId: string): Shot[] {
   return state.shots.filter((s) => s.rollId === rollId).sort((a, b) => a.frame - b.frame);
 }
 
+export function completedRollsForCamera(state: AppState, cameraId: string): Roll[] {
+  return state.rolls
+    .filter((r) => r.cameraId === cameraId && r.completedAt && !r.digital)
+    .sort((a, b) => (b.completedAt ?? 0) - (a.completedAt ?? 0));
+}
+
 export function latestShotForRoll(state: AppState, rollId: string): Shot | null {
   const ss = shotsForRoll(state, rollId);
   return ss.length > 0 ? (ss[ss.length - 1] ?? null) : null;

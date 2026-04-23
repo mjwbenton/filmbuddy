@@ -2,6 +2,7 @@ export type { AppState, Camera, Roll, Shot, Stock, Lens, Filter } from './types'
 export { AppStateProvider, useAppState } from './store';
 export {
   currentRoll,
+  completedRollsForCamera,
   shotsForRoll,
   latestShotForRoll,
   effectiveLensAt,
