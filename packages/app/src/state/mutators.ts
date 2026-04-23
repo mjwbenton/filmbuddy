@@ -101,7 +101,12 @@ export function completeRoll(state: AppState, rollId: string): AppState {
 
 export function setLensFilter(
   state: AppState,
-  args: { cameraId: string; lensName: string | null; filterName: string | null },
+  args: {
+    cameraId: string;
+    lensName: string | null;
+    filterName: string | null;
+    frame?: number;
+  },
 ): AppState {
   const cam = state.cameras.find((c) => c.id === args.cameraId);
   if (!cam?.currentRollId) return state;
@@ -123,12 +128,19 @@ export function setLensFilter(
     filterId = filter.id;
   }
 
-  const targetFrame = Math.max(1, roll.shotCount + 1);
+  const targetFrame = Math.max(1, args.frame ?? roll.shotCount + 1);
   const existing = next.shots.find((s) => s.rollId === rollId && s.frame === targetFrame);
+
+  const nextShotCount = Math.max(roll.shotCount, targetFrame - 1);
+  const rolls =
+    nextShotCount === roll.shotCount
+      ? next.rolls
+      : next.rolls.map((r) => (r.id === rollId ? { ...r, shotCount: nextShotCount } : r));
 
   if (existing) {
     return {
       ...next,
+      rolls,
       shots: next.shots.map((s) => (s.id === existing.id ? { ...s, lensId, filterId } : s)),
     };
   }
@@ -140,7 +152,7 @@ export function setLensFilter(
     filterId,
     ts: Date.now(),
   };
-  return { ...next, shots: [...next.shots, shot] };
+  return { ...next, rolls, shots: [...next.shots, shot] };
 }
 
 export function setShotCount(state: AppState, cameraId: string, n: number): AppState {

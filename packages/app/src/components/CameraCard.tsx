@@ -100,7 +100,7 @@ export function CameraCard({ camera }: Props) {
           onClick={() => openSheet({ kind: 'swap-lens-filter', cameraId: camera.id })}
         >
           <Icon name="swap" size={18} />
-          Swap
+          Swap lens
         </button>
         <button
           type="button"
