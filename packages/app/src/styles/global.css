@@ -713,6 +713,18 @@ body {
   color: var(--ink);
 }
 
+/* ================= Current roll stock + ISO ================= */
+.roll-stock {
+  font-size: 14.5px;
+  color: var(--ink);
+  padding: 6px 0 2px;
+}
+
+.roll-stock-iso {
+  color: var(--ink-3);
+  margin-left: 4px;
+}
+
 /* ================= Film timeline ================= */
 .timeline {
   display: flex;

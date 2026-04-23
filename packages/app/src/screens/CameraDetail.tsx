@@ -41,6 +41,7 @@ export function CameraDetail({ cameraId }: Props) {
   const selectedShot = shots.find((s) => s.frame === selectedFrame) ?? null;
   const progressPct = roll && !digital ? Math.min(100, (roll.shotCount / roll.length) * 100) : 0;
   const showTabs = !digital;
+  const stock = roll && !digital ? state.stocks.find((s) => s.id === roll.stockId) : null;
 
   return (
     <div className="page" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
@@ -81,6 +82,11 @@ export function CameraDetail({ cameraId }: Props) {
           <RollsTabList cameraId={camera.id} />
         ) : roll ? (
           <>
+            {stock && (
+              <div className="roll-stock">
+                {stock.name} <span className="roll-stock-iso mono">@ ISO {roll.iso}</span>
+              </div>
+            )}
             <FilmTimeline
               roll={roll}
               shots={shots}

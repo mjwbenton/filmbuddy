@@ -9,7 +9,6 @@ type Props = {
 };
 
 export function DetailGrid({ state, roll, shot, frame }: Props) {
-  const stock = state.stocks.find((s) => s.id === roll.stockId);
   const lensId = effectiveLensAt(state, roll.id, frame);
   const filterId = effectiveFilterAt(state, roll.id, frame);
   const lens = lensId ? state.lenses.find((l) => l.id === lensId) : null;
@@ -20,8 +19,6 @@ export function DetailGrid({ state, roll, shot, frame }: Props) {
     ['Shutter', shot?.shutter ?? '—'],
     ['Lens', lens?.name ?? '—'],
     ['Filter', filter?.name ?? '—'],
-    ['Stock', roll.digital ? 'digital' : (stock?.name ?? '—')],
-    ['ISO', roll.digital ? '—' : String(roll.iso)],
   ];
 
   return (
