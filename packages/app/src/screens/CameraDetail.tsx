@@ -83,7 +83,7 @@ export function CameraDetail({ cameraId }: Props) {
                   })
                 }
               >
-                <Icon name="aperture" size={18} />
+                <Icon name="notebook" size={18} />
                 {selectedShot ? 'Edit shot' : 'Log shot'}
               </button>
               <button

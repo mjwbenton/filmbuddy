@@ -2,7 +2,6 @@ import type { SVGProps } from 'react';
 
 export type IconName =
   | 'camera'
-  | 'aperture'
   | 'film-frame'
   | 'lens'
   | 'filter'
@@ -25,7 +24,8 @@ export type IconName =
   | 'more'
   | 'flag'
   | 'cloud'
-  | 'copy';
+  | 'copy'
+  | 'notebook';
 
 type IconProps = Omit<SVGProps<SVGSVGElement>, 'name' | 'stroke' | 'strokeWidth'> & {
   name: IconName;
@@ -52,13 +52,6 @@ export function Icon({ name, size = 20, stroke = 1.75, ...rest }: IconProps) {
         <svg {...common}>
           <path d="M3 8a2 2 0 0 1 2-2h2l2-2h6l2 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" />
           <circle cx="12" cy="13" r="3.5" />
-        </svg>
-      );
-    case 'aperture':
-      return (
-        <svg {...common}>
-          <circle cx="12" cy="12" r="9" />
-          <path d="M12 3v8l7 4M12 21v-8l-7-4M21 12h-8l-3.5 6.5M3 12h8l3.5-6.5" />
         </svg>
       );
     case 'film-frame':
@@ -219,6 +212,17 @@ export function Icon({ name, size = 20, stroke = 1.75, ...rest }: IconProps) {
         <svg {...common}>
           <rect x="8" y="8" width="12" height="12" rx="2" />
           <path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" />
+        </svg>
+      );
+    case 'notebook':
+      return (
+        <svg {...common}>
+          <rect x="6" y="4" width="14" height="16" rx="1.2" />
+          <path d="M9 4v16" />
+          <path d="M7 6.5c0 1 2 1 2 0M7 11c0 1 2 1 2 0M7 15.5c0 1 2 1 2 0" />
+          <path d="M4 6h3M4 10.5h3M4 15h3" />
+          <path d="M12 9h5M12 13h5" />
+          <circle cx="12" cy="17" r="0.8" fill="currentColor" stroke="none" />
         </svg>
       );
   }

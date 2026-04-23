@@ -108,7 +108,7 @@ export function CameraCard({ camera }: Props) {
           disabled={!roll}
           onClick={() => openSheet({ kind: 'log-shot', cameraId: camera.id })}
         >
-          <Icon name="aperture" size={18} />
+          <Icon name="notebook" size={18} />
           Log shot
         </button>
         <button
