@@ -40,7 +40,7 @@ export function CameraDetail({ cameraId }: Props) {
   const digital = roll?.digital === true;
   const selectedShot = shots.find((s) => s.frame === selectedFrame) ?? null;
   const progressPct = roll && !digital ? Math.min(100, (roll.shotCount / roll.length) * 100) : 0;
-  const showTabs = !digital && pastRolls.length > 0;
+  const showTabs = !digital;
 
   return (
     <div className="page" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
