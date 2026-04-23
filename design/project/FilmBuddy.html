@@ -766,6 +766,122 @@
     cursor: pointer;
   }
 
+  /* Camera detail: tab bar */
+  .cam-tabs {
+    display: flex;
+    gap: 2px;
+    margin: 14px var(--pad) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .cam-tab {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    padding: 10px 8px 12px;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--ink-3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: -1px;
+    transition: color 120ms ease, border-color 120ms ease;
+  }
+  .cam-tab:hover { color: var(--ink-2); }
+  .cam-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+  .cam-tab .badge {
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    border-radius: 999px;
+    padding: 1px 7px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 16px;
+  }
+  .cam-tab.active .badge {
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+
+  /* Past roll history row */
+  .past-roll {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px;
+    cursor: pointer;
+    transition: border-color 120ms ease, background 120ms ease;
+  }
+  .past-roll:hover { background: var(--surface-2); border-color: var(--line); }
+  .past-roll .pr-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  .past-roll .pr-stock {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+  .past-roll .pr-iso {
+    font-size: 12px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .past-roll .pr-meta {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .past-roll .pr-meta .sep { margin: 0 6px; opacity: 0.5; }
+  .past-roll .pr-strip {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 8px;
+  }
+
+  .past-roll .pr-lenses {
+    font-size: 12px;
+    color: var(--ink-2);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .past-roll .pr-lenses .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink-3);
+    opacity: 0.4;
+  }
+
+  /* Read-only roll detail — hide hover affordance on frames */
+  .rolls-empty {
+    text-align: center;
+    padding: 32px 20px;
+    color: var(--ink-3);
+    font-size: 14px;
+  }
+  .rolls-empty .rolls-empty-title {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink-2);
+    margin-bottom: 4px;
+  }
+
   /* shot detail page header */
   .detail-header {
     padding: 0 var(--pad) 8px;
@@ -780,6 +896,171 @@
     font-size: 13.5px;
     color: var(--ink-3);
     margin-top: 4px;
+  }
+
+  /* Camera detail tabs */
+  .cam-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    margin: 6px var(--pad) 10px;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .cam-tab {
+    flex: 1;
+    padding: 9px 10px;
+    background: transparent;
+    border: 0;
+    border-radius: 9px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: background 160ms, color 160ms, box-shadow 160ms;
+  }
+  .cam-tab.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 0 0 1px var(--line);
+  }
+  .cam-tab .badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    background: var(--ink-3);
+    color: var(--surface);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    display: inline-block;
+    text-align: center;
+  }
+  .cam-tab.active .badge {
+    background: var(--accent);
+    color: white;
+  }
+
+  /* Past-roll history rows */
+  .past-roll {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 120ms, box-shadow 160ms, border-color 160ms;
+  }
+  .past-roll:hover,
+  .past-roll:active {
+    border-color: var(--ink-3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(26,34,54,0.05);
+  }
+  .pr-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pr-stock {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    font-family: var(--serif);
+    letter-spacing: -0.01em;
+    min-width: 0;
+    flex: 1;
+  }
+  .pr-iso {
+    font-size: 12px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .pr-meta {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    margin-top: 2px;
+  }
+  .pr-meta .sep {
+    margin: 0 6px;
+    opacity: 0.6;
+  }
+  .pr-strip {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
+    margin-top: 12px;
+    padding: 6px 8px;
+    background: var(--brand-blue);
+    border-radius: 6px;
+    position: relative;
+  }
+  .pr-strip::before,
+  .pr-strip::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--brand-cream);
+    opacity: 0.25;
+  }
+  .pr-strip::before { left: 2px; }
+  .pr-strip::after  { right: 2px; }
+  .pr-tile {
+    aspect-ratio: 1 / 1;
+    background: rgba(251,243,222,0.10);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    color: rgba(251,243,222,0.45);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .pr-tile.filled {
+    background: var(--brand-yellow);
+    color: var(--brand-blue-ink);
+    font-weight: 600;
+  }
+  .pr-tile-n { line-height: 1; }
+  .pr-lenses {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+
+  /* Rolls empty state */
+  .rolls-empty {
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--ink-3);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .rolls-empty-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: 6px;
   }
 
   /* page container transitions */
@@ -922,6 +1203,56 @@
       "startedAt": 1745200000000,
       "completedAt": null,
       "shotCount": 4
+    },
+    {
+      "id": "roll-m2-hist-01",
+      "cameraId": "cam-leica-m2",
+      "stockId": "stock-hp5",
+      "iso": 800,
+      "length": 36,
+      "startedAt": 1741900000000,
+      "completedAt": 1744100000000,
+      "shotCount": 36
+    },
+    {
+      "id": "roll-m2-hist-02",
+      "cameraId": "cam-leica-m2",
+      "stockId": "stock-portra-400",
+      "iso": 400,
+      "length": 36,
+      "startedAt": 1738800000000,
+      "completedAt": 1741400000000,
+      "shotCount": 34
+    },
+    {
+      "id": "roll-m2-hist-03",
+      "cameraId": "cam-leica-m2",
+      "stockId": "stock-tri-x-400",
+      "iso": 400,
+      "length": 36,
+      "startedAt": 1735200000000,
+      "completedAt": 1738000000000,
+      "shotCount": 36
+    },
+    {
+      "id": "roll-gf670-hist-01",
+      "cameraId": "cam-gf670",
+      "stockId": "stock-ektar",
+      "iso": 100,
+      "length": 10,
+      "startedAt": 1742600000000,
+      "completedAt": 1744700000000,
+      "shotCount": 10
+    },
+    {
+      "id": "roll-gf670-hist-02",
+      "cameraId": "cam-gf670",
+      "stockId": "stock-delta-3200",
+      "iso": 3200,
+      "length": 10,
+      "startedAt": 1737500000000,
+      "completedAt": 1739900000000,
+      "shotCount": 10
     }
   ],
   "shots": [
@@ -929,7 +1260,29 @@
     {"id":"s2","rollId":"roll-m2-01","frame":16,"aperture":"f/8","shutter":"1/500","lensId":"lens-summicron-50","filterId":"filter-yellow-k2","note":null,"ts":1745710000000},
     {"id":"s3","rollId":"roll-m2-01","frame":17,"aperture":null,"shutter":null,"lensId":"lens-summicron-50","filterId":"filter-yellow-k2","note":"Backlit — pushed guess","ts":1745720000000},
     {"id":"s4","rollId":"roll-gf670-01","frame":2,"aperture":"f/11","shutter":"1/60","lensId":"lens-gf670-built","filterId":null,"note":"Tripod, sunset over bridge","ts":1745300000000},
-    {"id":"s5","rollId":"roll-gf670-01","frame":4,"aperture":"f/8","shutter":"1/125","lensId":"lens-gf670-built","filterId":null,"note":null,"ts":1745400000000}
+    {"id":"s5","rollId":"roll-gf670-01","frame":4,"aperture":"f/8","shutter":"1/125","lensId":"lens-gf670-built","filterId":null,"note":null,"ts":1745400000000},
+
+    {"id":"h1","rollId":"roll-m2-hist-01","frame":3,"aperture":"f/2.8","shutter":"1/60","lensId":"lens-summicron-50","filterId":null,"note":"Pushed to 800 — rainy night, Mission","ts":1742000000000},
+    {"id":"h2","rollId":"roll-m2-hist-01","frame":8,"aperture":"f/4","shutter":"1/125","lensId":"lens-summicron-50","filterId":null,"note":null,"ts":1742400000000},
+    {"id":"h3","rollId":"roll-m2-hist-01","frame":12,"aperture":"f/5.6","shutter":"1/250","lensId":"lens-voigtlander-35-f12","filterId":null,"note":"Switched to 35 at café","ts":1742900000000},
+    {"id":"h4","rollId":"roll-m2-hist-01","frame":22,"aperture":"f/2","shutter":"1/30","lensId":"lens-voigtlander-35-f12","filterId":null,"note":null,"ts":1743500000000},
+    {"id":"h5","rollId":"roll-m2-hist-01","frame":31,"aperture":"f/4","shutter":"1/125","lensId":"lens-voigtlander-35-f12","filterId":null,"note":"Last one — accidentally double-exposed 32","ts":1744000000000},
+
+    {"id":"h6","rollId":"roll-m2-hist-02","frame":5,"aperture":"f/8","shutter":"1/500","lensId":"lens-summicron-50","filterId":"filter-yellow-k2","note":"Beach day — Ocean Beach","ts":1739000000000},
+    {"id":"h7","rollId":"roll-m2-hist-02","frame":11,"aperture":"f/5.6","shutter":"1/250","lensId":"lens-summicron-50","filterId":"filter-yellow-k2","note":null,"ts":1739600000000},
+    {"id":"h8","rollId":"roll-m2-hist-02","frame":19,"aperture":"f/4","shutter":"1/125","lensId":"lens-summicron-50","filterId":null,"note":"Removed filter indoors","ts":1740200000000},
+    {"id":"h9","rollId":"roll-m2-hist-02","frame":27,"aperture":"f/2","shutter":"1/60","lensId":"lens-summicron-50","filterId":null,"note":null,"ts":1740900000000},
+
+    {"id":"h10","rollId":"roll-m2-hist-03","frame":6,"aperture":"f/5.6","shutter":"1/250","lensId":"lens-summicron-50","filterId":"filter-orange","note":"Orange filter — moody sky","ts":1735600000000},
+    {"id":"h11","rollId":"roll-m2-hist-03","frame":17,"aperture":"f/8","shutter":"1/500","lensId":"lens-summicron-50","filterId":"filter-orange","note":null,"ts":1736400000000},
+    {"id":"h12","rollId":"roll-m2-hist-03","frame":28,"aperture":"f/4","shutter":"1/125","lensId":"lens-summicron-50","filterId":null,"note":"Birthday party","ts":1737500000000},
+
+    {"id":"h13","rollId":"roll-gf670-hist-01","frame":2,"aperture":"f/11","shutter":"1/60","lensId":"lens-gf670-built","filterId":null,"note":"Marin headlands at dawn","ts":1742800000000},
+    {"id":"h14","rollId":"roll-gf670-hist-01","frame":5,"aperture":"f/16","shutter":"1/30","lensId":"lens-gf670-built","filterId":null,"note":null,"ts":1743400000000},
+    {"id":"h15","rollId":"roll-gf670-hist-01","frame":8,"aperture":"f/8","shutter":"1/125","lensId":"lens-gf670-built","filterId":null,"note":"Harder to hold steady than I thought","ts":1744300000000},
+
+    {"id":"h16","rollId":"roll-gf670-hist-02","frame":3,"aperture":"f/2.8","shutter":"1/15","lensId":"lens-gf670-built","filterId":null,"note":"Bar at night — grainy but worked","ts":1738000000000},
+    {"id":"h17","rollId":"roll-gf670-hist-02","frame":7,"aperture":"f/4","shutter":"1/30","lensId":"lens-gf670-built","filterId":null,"note":null,"ts":1739200000000}
   ],
   "stocks": [
     {"id":"stock-tri-x-400","name":"Kodak Tri-X 400","boxSpeed":400},
@@ -1214,6 +1567,10 @@ const rollForCamera = (state, camId) => {
 };
 const shotsForRoll = (state, rollId) =>
   state.shots.filter((s) => s.rollId === rollId).sort((a, b) => a.frame - b.frame);
+const completedRollsForCamera = (state, camId) =>
+  state.rolls
+    .filter((r) => r.cameraId === camId && r.completedAt && !r.digital)
+    .sort((a, b) => (b.completedAt || 0) - (a.completedAt || 0));
 const latestShotForRoll = (state, rollId) => {
   const ss = shotsForRoll(state, rollId);
   return ss.length ? ss[ss.length - 1] : null;
@@ -1246,7 +1603,7 @@ const defaultLengthFor = (cam) => {
 window.FB = {
   STATE_KEY, TWEAKS_KEY,
   loadState, saveState, loadTweaks, saveTweaks,
-  byId, rollForCamera, shotsForRoll, latestShotForRoll,
+  byId, rollForCamera, shotsForRoll, latestShotForRoll, completedRollsForCamera,
   uid, relTime, daysSince, defaultLengthFor,
 };
 
@@ -2065,7 +2422,174 @@ function Frame({ shot, frame, isCurrent, isEmpty, onClick }) {
   );
 }
 
-function CameraDetail({ state, setState, cameraId, onBack, onSwap, onLog, onLogFrame, onMore, onLoadFilm }) {
+// -------- Date range formatter for past rolls --------
+const fmtDateRange = (startTs, endTs) => {
+  const M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const a = new Date(startTs), b = new Date(endTs);
+  const sameYear = a.getFullYear() === b.getFullYear();
+  const thisYear = b.getFullYear() === new Date().getFullYear();
+  const left = `${M[a.getMonth()]} ${a.getDate()}`;
+  const right = `${M[b.getMonth()]} ${b.getDate()}${!thisYear || !sameYear ? `, ${b.getFullYear()}` : ""}`;
+  return sameYear ? `${left} – ${right}` : `${left}, ${a.getFullYear()} – ${right}`;
+};
+
+// -------- Past roll list row --------
+function PastRollRow({ state, roll, onOpen }) {
+  const stock = FB.byId(state.stocks, roll.stockId);
+  const shots = FB.shotsForRoll(state, roll.id);
+  // Up to 8 mini-tiles representing evenly distributed frames across the roll
+  const tileCount = Math.min(8, roll.length);
+  const step = roll.length / tileCount;
+  const tiles = [];
+  for (let i = 0; i < tileCount; i++) {
+    const frameStart = Math.floor(i * step) + 1;
+    const frameEnd = Math.floor((i + 1) * step);
+    const filled = shots.some((s) => s.frame >= frameStart && s.frame <= frameEnd);
+    tiles.push({ n: frameStart, filled });
+  }
+  // Lenses used on this roll
+  const lensIds = [...new Set(shots.map((s) => s.lensId).filter(Boolean))];
+  const lensNames = lensIds.map((id) => FB.byId(state.lenses, id)).filter(Boolean).map((l) => l.name);
+  const lensLabel = lensNames.length === 0
+    ? "No lens logged"
+    : lensNames.length <= 2
+      ? lensNames.join(" · ")
+      : `${lensNames.slice(0, 2).join(" · ")} +${lensNames.length - 2}`;
+  return (
+    <div className="past-roll" onClick={onOpen}>
+      <div className="pr-head">
+        <div className="pr-stock">{stock ? stock.name : "Unknown stock"}</div>
+        <div className="pr-iso">ISO <span className="mono">{roll.iso}</span></div>
+      </div>
+      <div className="pr-meta">
+        {fmtDateRange(roll.startedAt, roll.completedAt)}
+        <span className="sep">•</span>
+        <span className="mono">{shots.length}/{roll.length}</span>
+        <span> logged</span>
+      </div>
+      <div className="pr-lenses">
+        <Icon name="swap" size={12} style={{ color: "var(--ink-3)" }} />
+        <span>{lensLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+// -------- Rolls (history) tab body --------
+function RollsTab({ state, camera, onOpenRoll }) {
+  const rolls = FB.completedRollsForCamera(state, camera.id);
+  if (rolls.length === 0) {
+    return (
+      <div className="rolls-empty">
+        <div className="rolls-empty-title">No past rolls yet</div>
+        <div>Finished rolls on {camera.name} will show up here.</div>
+      </div>
+    );
+  }
+  return (
+    <div className="cards" style={{ padding: 0, gap: 10, marginTop: 10 }}>
+      {rolls.map((r) => (
+        <PastRollRow key={r.id} state={state} roll={r} onOpen={() => onOpenRoll(r.id)} />
+      ))}
+    </div>
+  );
+}
+
+// -------- Read-only roll detail (past roll) --------
+function RollDetail({ state, rollId, onBack }) {
+  const roll = FB.byId(state.rolls, rollId);
+  if (!roll) return null;
+  const cam = FB.byId(state.cameras, roll.cameraId);
+  const stock = FB.byId(state.stocks, roll.stockId);
+  const shots = FB.shotsForRoll(state, roll.id);
+  const maxFrame = roll.length;
+  const frames = [];
+  for (let i = 1; i <= maxFrame; i++) {
+    const shot = shots.find((s) => s.frame === i);
+    frames.push({ frame: i, shot });
+  }
+  return (
+    <div className="page" data-screen-label={`03 ${cam ? cam.name : ""} · past roll`}>
+      <button className="nav-back" onClick={onBack}>
+        <Icon name="chevron-left" size={18} /> {cam ? cam.name : "Back"}
+      </button>
+      <div className="detail-header">
+        <h1>{stock ? stock.name : "Roll"}</h1>
+        <div className="sub">
+          ISO <span className="mono">{roll.iso}</span> · {fmtDateRange(roll.startedAt, roll.completedAt)} · completed {FB.relTime(roll.completedAt)}
+        </div>
+      </div>
+
+      <div style={{ padding: `0 var(--pad)` }}>
+        <div className="card" style={{ marginTop: 10 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 600 }}>Finished roll</div>
+              <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 2 }}>
+                {shots.length} of {roll.length} frames logged
+              </div>
+            </div>
+            <div className="shot-counter">
+              <div className="num mono">{shots.length}</div>
+              <div className="of">of {roll.length}</div>
+            </div>
+          </div>
+          <div className="progress-track">
+            <div className="progress-fill" style={{ width: `${Math.min(100, (shots.length / roll.length) * 100)}%` }} />
+          </div>
+        </div>
+
+        <div className="section-label" style={{ padding: "18px 0 0" }}>
+          <span>Timeline</span>
+          <span className="count mono">{shots.length} logged</span>
+        </div>
+        <div className="timeline">
+          {frames.map(({ frame, shot }) => (
+            <Frame
+              key={frame}
+              frame={frame}
+              shot={shot}
+              isCurrent={false}
+              isEmpty={false}
+              onClick={() => {}}
+            />
+          ))}
+        </div>
+
+        {shots.length > 0 && (
+          <>
+            <div className="section-label" style={{ padding: "18px 0 0" }}>
+              <span>Logged shots</span>
+            </div>
+            <div className="cards" style={{ padding: 0, gap: 8 }}>
+              {shots.slice().reverse().map((s) => {
+                const sLens = FB.byId(state.lenses, s.lensId);
+                const sFilter = FB.byId(state.filters, s.filterId);
+                return (
+                  <div key={s.id} className="card" style={{ padding: "12px 14px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                      <div className="mono" style={{ fontSize: 17, fontWeight: 600 }}>#{s.frame}</div>
+                      <div className="mono" style={{ fontSize: 13, color: "var(--ink-2)" }}>
+                        {s.aperture || "—"} · {s.shutter || "—"}
+                      </div>
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--ink-3)", marginTop: 4 }}>
+                      {sLens ? sLens.name : "lens —"}{sFilter ? ` + ${sFilter.name}` : ""}
+                    </div>
+                    {s.note && <div className="shot-note">{s.note}</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+        <div style={{ height: 24 }} />
+      </div>
+    </div>
+  );
+}
+
+function CameraDetail({ state, setState, cameraId, activeTab, setActiveTab, onBack, onSwap, onLog, onLogFrame, onMore, onLoadFilm, onOpenRoll }) {
   const cam = FB.byId(state.cameras, cameraId);
   if (!cam) return null;
   const isDigital = /Digital/i.test(cam.type);
@@ -2074,6 +2598,9 @@ function CameraDetail({ state, setState, cameraId, onBack, onSwap, onLog, onLogF
   const lens = FB.byId(state.lenses, cam.lensId);
   const filter = FB.byId(state.filters, cam.filterId);
   const shots = roll ? FB.shotsForRoll(state, roll.id) : [];
+  const pastRolls = FB.completedRollsForCamera(state, cam.id);
+  const showTabs = !isDigital;
+  const tab = showTabs ? (activeTab || "current") : "current";
 
   // Build frames — include every frame up to max(shotCount, length); mark logged
   const maxFrame = roll ? (roll.length === 9999 ? Math.max(roll.shotCount, 20) : roll.length) : 0;
@@ -2096,8 +2623,32 @@ function CameraDetail({ state, setState, cameraId, onBack, onSwap, onLog, onLogF
         <div className="sub">{cam.type}</div>
       </div>
 
+      {showTabs && (
+        <div className="cam-tabs" role="tablist">
+          <button
+            className={`cam-tab ${tab === "current" ? "active" : ""}`}
+            role="tab"
+            aria-selected={tab === "current"}
+            onClick={() => setActiveTab && setActiveTab("current")}
+          >
+            Current roll
+          </button>
+          <button
+            className={`cam-tab ${tab === "rolls" ? "active" : ""}`}
+            role="tab"
+            aria-selected={tab === "rolls"}
+            onClick={() => setActiveTab && setActiveTab("rolls")}
+          >
+            Rolls
+            <span className="badge">{pastRolls.length}</span>
+          </button>
+        </div>
+      )}
+
       <div style={{ padding: `0 var(--pad)` }}>
-        {roll ? (
+        {tab === "rolls" ? (
+          <RollsTab state={state} camera={cam} onOpenRoll={(rid) => onOpenRoll && onOpenRoll(cam.id, rid)} />
+        ) : roll ? (
           <>
             <div className="card" style={{ marginTop: 10 }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
@@ -2212,7 +2763,7 @@ function CameraDetail({ state, setState, cameraId, onBack, onSwap, onLog, onLogF
   );
 }
 
-Object.assign(window, { CameraDetail });
+Object.assign(window, { CameraDetail, RollDetail, PastRollRow, RollsTab, fmtDateRange });
 
 
 // ===== app/tweaks.jsx =====
@@ -2356,7 +2907,7 @@ function App() {
             state={state}
             setState={setState}
             tweaks={tweaks}
-            onOpenCamera={(id) => go({ name: "camera", cameraId: id })}
+            onOpenCamera={(id) => go({ name: "camera", cameraId: id, activeTab: "current" })}
             onAdd={() => openSheet("add-camera")}
             onSwap={(id) => openSheet("swap", id)}
             onLog={(id) => openSheet("log", id)}
@@ -2366,17 +2917,26 @@ function App() {
             onBackup={() => openSheet("backup")}
             onRestore={() => openSheet("restore")}
           />
+        ) : screen.name === "roll" ? (
+          <RollDetail
+            state={state}
+            rollId={screen.rollId}
+            onBack={() => go({ name: "camera", cameraId: screen.cameraId, activeTab: "rolls" })}
+          />
         ) : (
           <CameraDetail
             state={state}
             setState={setState}
             cameraId={screen.cameraId}
+            activeTab={screen.activeTab}
+            setActiveTab={(t) => go({ ...screen, activeTab: t })}
             onBack={() => go({ name: "home" })}
             onSwap={(id) => openSheet("swap", id)}
             onLog={(id) => openSheet("log", id)}
             onLogFrame={(id, frame, existing) => openSheet("log", id, { editFrame: frame, existingShot: existing })}
             onMore={(id) => openSheet("more", id)}
             onLoadFilm={(id) => openSheet("load", id)}
+            onOpenRoll={(camId, rollId) => go({ name: "roll", cameraId: camId, rollId })}
           />
         )}
 
