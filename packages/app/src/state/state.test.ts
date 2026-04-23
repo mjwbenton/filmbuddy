@@ -229,7 +229,7 @@ describe('suggestStrings', () => {
 });
 
 describe('lens + filter as timeline events', () => {
-  it('setLensFilter creates a shot at the pending frame (no aperture/shutter)', () => {
+  it('setLensFilter creates a shot at the pending frame and advances shotCount to that frame', () => {
     let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
@@ -239,7 +239,16 @@ describe('lens + filter as timeline events', () => {
     expect(shot.frame).toBe(1);
     expect(shot.lensId).toBe(s.lenses[0]!.id);
     expect(shot.aperture ?? null).toBe(null);
-    expect(s.rolls[0]?.shotCount).toBe(0);
+    expect(s.rolls[0]?.shotCount).toBe(1);
+  });
+
+  it('setLensFilter honors an explicit frame and advances shotCount to max', () => {
+    let s = addCamera(fresh(), { name: 'M6' });
+    const camId = s.cameras[0]!.id;
+    s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
+    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens A', filterName: null, frame: 5 });
+    expect(s.shots[0]?.frame).toBe(5);
+    expect(s.rolls[0]?.shotCount).toBe(5);
   });
 
   it('effective lens/filter at a later frame carries forward from the last swap', () => {
@@ -260,12 +269,12 @@ describe('lens + filter as timeline events', () => {
     expect(frame2.filterId ?? null).toBe(null);
   });
 
-  it('second swap before shooting updates the swap-shot at the same frame', () => {
+  it('setLensFilter at an existing frame updates that frame in place', () => {
     let s = addCamera(fresh(), { name: 'M6' });
     const camId = s.cameras[0]!.id;
     s = loadRoll(s, { cameraId: camId, stockName: 'Tri-X', iso: 400, length: 36 });
-    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens A', filterName: null });
-    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens B', filterName: null });
+    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens A', filterName: null, frame: 1 });
+    s = setLensFilter(s, { cameraId: camId, lensName: 'Lens B', filterName: null, frame: 1 });
     const frame1Shots = s.shots.filter((x) => x.frame === 1);
     expect(frame1Shots).toHaveLength(1);
     const lensB = s.lenses.find((l) => l.name === 'Lens B')!;

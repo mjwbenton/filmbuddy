@@ -131,7 +131,7 @@ export function setLensFilter(
   const targetFrame = Math.max(1, args.frame ?? roll.shotCount + 1);
   const existing = next.shots.find((s) => s.rollId === rollId && s.frame === targetFrame);
 
-  const nextShotCount = Math.max(roll.shotCount, targetFrame - 1);
+  const nextShotCount = Math.max(roll.shotCount, targetFrame);
   const rolls =
     nextShotCount === roll.shotCount
       ? next.rolls
