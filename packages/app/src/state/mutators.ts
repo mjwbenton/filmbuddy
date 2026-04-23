@@ -98,6 +98,27 @@ export function loadRoll(
   };
 }
 
+export function deleteCamera(state: AppState, cameraId: string): AppState {
+  const rollIds = new Set(state.rolls.filter((r) => r.cameraId === cameraId).map((r) => r.id));
+  return {
+    ...state,
+    cameras: state.cameras.filter((c) => c.id !== cameraId),
+    rolls: state.rolls.filter((r) => r.cameraId !== cameraId),
+    shots: state.shots.filter((s) => !rollIds.has(s.rollId)),
+  };
+}
+
+export function deleteRoll(state: AppState, rollId: string): AppState {
+  return {
+    ...state,
+    rolls: state.rolls.filter((r) => r.id !== rollId),
+    shots: state.shots.filter((s) => s.rollId !== rollId),
+    cameras: state.cameras.map((c) =>
+      c.currentRollId === rollId ? { ...c, currentRollId: null } : c,
+    ),
+  };
+}
+
 export function completeRoll(state: AppState, rollId: string): AppState {
   const now = Date.now();
   return {

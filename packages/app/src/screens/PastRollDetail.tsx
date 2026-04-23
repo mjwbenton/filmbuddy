@@ -12,7 +12,7 @@ type Props = { cameraId: string; rollId: string };
 
 export function PastRollDetail({ cameraId, rollId }: Props) {
   const { state } = useAppState();
-  const { openScreen } = useNav();
+  const { openScreen, openSheet } = useNav();
   const camera = state.cameras.find((c) => c.id === cameraId);
   const roll = state.rolls.find((r) => r.id === rollId);
   const shots = useMemo(() => (roll ? shotsForRoll(state, roll.id) : []), [state, roll]);
@@ -70,6 +70,15 @@ export function PastRollDetail({ cameraId, rollId }: Props) {
           <div className="progress-fill" style={{ width: `${progressPct}%` }} />
         </div>
         <DetailGrid state={state} roll={roll} shot={selectedShot} frame={selectedFrame} />
+        <div style={{ marginTop: 16 }}>
+          <Button
+            variant="ghost"
+            onClick={() => openSheet({ kind: 'delete-roll', cameraId, rollId })}
+            style={{ color: 'var(--danger)' }}
+          >
+            Delete roll
+          </Button>
+        </div>
       </div>
 
       <BackupFooter />

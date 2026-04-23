@@ -14,8 +14,10 @@ import * as M from './mutators';
 
 type Mutators = {
   addCamera: (args: Parameters<typeof M.addCamera>[1]) => void;
+  deleteCamera: (cameraId: string) => void;
   loadRoll: (args: Parameters<typeof M.loadRoll>[1]) => void;
   completeRoll: (rollId: string) => void;
+  deleteRoll: (rollId: string) => void;
   setLensFilter: (args: Parameters<typeof M.setLensFilter>[1]) => void;
   setShotCount: (cameraId: string, n: number) => void;
   logShot: (args: Parameters<typeof M.logShot>[1]) => void;
@@ -46,8 +48,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const mutators = useMemo<Mutators>(
     () => ({
       addCamera: apply(M.addCamera),
+      deleteCamera: (cameraId) => setState((prev) => M.deleteCamera(prev, cameraId)),
       loadRoll: apply(M.loadRoll),
       completeRoll: apply(M.completeRoll),
+      deleteRoll: (rollId) => setState((prev) => M.deleteRoll(prev, rollId)),
       setLensFilter: apply(M.setLensFilter),
       setShotCount: (cameraId, n) => setState((prev) => M.setShotCount(prev, cameraId, n)),
       logShot: apply(M.logShot),

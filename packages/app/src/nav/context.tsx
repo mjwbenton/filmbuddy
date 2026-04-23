@@ -13,6 +13,8 @@ export type SheetState =
   | { kind: 'complete-roll'; cameraId: string }
   | { kind: 'add-camera' }
   | { kind: 'more'; cameraId: string }
+  | { kind: 'delete-camera'; cameraId: string }
+  | { kind: 'delete-roll'; cameraId: string; rollId: string }
   | { kind: 'backup' }
   | { kind: 'restore' };
 

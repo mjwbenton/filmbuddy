@@ -6,6 +6,8 @@ import { ChangeShotSheet } from './ChangeShotSheet';
 import { CompleteRollSheet } from './CompleteRollSheet';
 import { AddCameraSheet } from './AddCameraSheet';
 import { MoreActionsSheet } from './MoreActionsSheet';
+import { DeleteCameraSheet } from './DeleteCameraSheet';
+import { DeleteRollSheet } from './DeleteRollSheet';
 import { BackupSheet } from './BackupSheet';
 import { RestoreSheet } from './RestoreSheet';
 
@@ -33,6 +35,10 @@ export function SheetRoot() {
       return <AddCameraSheet />;
     case 'more':
       return <MoreActionsSheet cameraId={sheet.cameraId} />;
+    case 'delete-camera':
+      return <DeleteCameraSheet cameraId={sheet.cameraId} />;
+    case 'delete-roll':
+      return <DeleteRollSheet cameraId={sheet.cameraId} rollId={sheet.rollId} />;
     case 'backup':
       return <BackupSheet />;
     case 'restore':

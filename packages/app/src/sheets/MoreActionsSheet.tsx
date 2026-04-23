@@ -10,6 +10,7 @@ type Action = {
   sub?: string | undefined;
   to: SheetState;
   disabled?: boolean | undefined;
+  destructive?: boolean | undefined;
 };
 
 export function MoreActionsSheet({ cameraId }: Props) {
@@ -37,6 +38,22 @@ export function MoreActionsSheet({ cameraId }: Props) {
       to: { kind: 'complete-roll', cameraId },
       disabled: !roll,
     },
+    ...(roll
+      ? [
+          {
+            label: 'Delete current roll',
+            sub: 'Removes roll and its shots',
+            to: { kind: 'delete-roll', cameraId, rollId: roll.id } as SheetState,
+            destructive: true,
+          },
+        ]
+      : []),
+    {
+      label: 'Delete camera',
+      sub: 'Removes camera and all its rolls',
+      to: { kind: 'delete-camera', cameraId },
+      destructive: true,
+    },
   ];
 
   const route = (a: Action) => {
@@ -63,6 +80,7 @@ export function MoreActionsSheet({ cameraId }: Props) {
             opacity: a.disabled ? 0.4 : 1,
             cursor: a.disabled ? 'not-allowed' : 'pointer',
             padding: '12px 0',
+            color: a.destructive ? 'var(--danger)' : undefined,
           }}
         >
           <div className="ll">
