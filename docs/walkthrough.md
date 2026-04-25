@@ -66,8 +66,8 @@ The app is a single-page React 18 app. There's no router library — navigation 
   <ToastProvider>
     <NavProvider>
       <Brand header />
-      <Screens />         {/* Home | CameraDetail | PastRollDetail */}
-      <SheetRoot />       {/* whichever modal sheet is open */}
+      <Screens /> {/* Home | CameraDetail | PastRollDetail */}
+      <SheetRoot /> {/* whichever modal sheet is open */}
     </NavProvider>
   </ToastProvider>
 </AppStateProvider>
@@ -150,7 +150,7 @@ flowchart LR
 - `state/persistence.ts` reads `STATE_KEY = 'filmbuddy.state.v2'` from `localStorage` on boot, and a `useEffect` in the provider writes it back on every change. On first run, `loadState()` generates a new `backupKey` (a `fb-xxxx-xxxx-xxxx` random string from `state/id.ts`) and saves it immediately — that key is the identity used for cloud backups.
 - `state/selectors.ts` holds the read-side helpers: `currentRoll`, `shotsForRoll`, `completedRollsForCamera`, plus the "effective lens/filter at frame N" walkers and a `relTime` / `daysSince` pair used by the backup-staleness UI.
 
-A mutator worth calling out: `loadRoll` (mutators.ts:69). When you load a new roll into a camera that already has one, it auto-completes the previous non-digital roll *before* creating the new one, so past-rolls don't accumulate unfinished entries.
+A mutator worth calling out: `loadRoll` (mutators.ts:69). When you load a new roll into a camera that already has one, it auto-completes the previous non-digital roll _before_ creating the new one, so past-rolls don't accumulate unfinished entries.
 
 #### Why two kinds of roll?
 
@@ -189,13 +189,14 @@ stateDiagram-v2
 
 There are three screens, each in `packages/app/src/screens/`:
 
-| Screen | File | Purpose |
-| --- | --- | --- |
-| Home | `Home.tsx` | List of cameras (`CameraCard`), add-camera card, stale-backup banner, backup footer. |
-| CameraDetail | `CameraDetail.tsx` | One camera: current roll timeline + detail grid, "Rolls" tab with past rolls, primary action buttons. |
-| PastRollDetail | `PastRollDetail.tsx` | A completed roll, read-only timeline + detail grid + delete button. |
+| Screen         | File                 | Purpose                                                                                               |
+| -------------- | -------------------- | ----------------------------------------------------------------------------------------------------- |
+| Home           | `Home.tsx`           | List of cameras (`CameraCard`), add-camera card, stale-backup banner, backup footer.                  |
+| CameraDetail   | `CameraDetail.tsx`   | One camera: current roll timeline + detail grid, "Rolls" tab with past rolls, primary action buttons. |
+| PastRollDetail | `PastRollDetail.tsx` | A completed roll, read-only timeline + detail grid + delete button.                                   |
 
 `CameraDetail` is where most of the action lives. A single `selectedFrame` state drives three children:
+
 - `FilmTimeline` — horizontally scrollable row of frames, each annotated with a dot for "has log" and a swap icon for "lens/filter changed here".
 - `DetailGrid` — the aperture / shutter / lens / filter for the selected frame, reading the "effective" lens/filter via the selectors.
 - The primary action buttons — "Swap lens", "Log shot" (shows "Edit shot" if the selected frame already has a log), "More".
@@ -283,12 +284,12 @@ sequenceDiagram
 What makes this safe-ish without user accounts:
 
 - The only identity the user has is `backupKey` — a random `fb-xxxx-xxxx-xxxx` string from `state/id.ts`. No auth server, no passwords.
-- The browser never has durable AWS credentials. It calls the Lambda Function URL with the key + action, and gets back short-lived STS credentials *scoped to exactly one S3 object* via an inline session policy. That policy is attached per request in `packages/infra/lambda/handler.ts:80`:
+- The browser never has durable AWS credentials. It calls the Lambda Function URL with the key + action, and gets back short-lived STS credentials _scoped to exactly one S3 object_ via an inline session policy. That policy is attached per request in `packages/infra/lambda/handler.ts:80`:
   ```js
   Action: action === 'put' ? ['s3:PutObject'] : ['s3:GetObject'],
   Resource: `arn:aws:s3:::${BUCKET}/${objectKey}`,  // key/state.json
   ```
-- Roles are split so the Lambda itself can't touch S3 directly: it has a role (`backup-lambda-role`) whose only privilege is `sts:AssumeRole` onto a federation role (`backup-federation-role`), which in turn holds the bucket permissions (`packages/infra/src/backup.ts:77`–`140`). That way if the Lambda code has a bug, the worst case is vending *overly* broad credentials — it can't bypass STS and hit the bucket itself.
+- Roles are split so the Lambda itself can't touch S3 directly: it has a role (`backup-lambda-role`) whose only privilege is `sts:AssumeRole` onto a federation role (`backup-federation-role`), which in turn holds the bucket permissions (`packages/infra/src/backup.ts:77`–`140`). That way if the Lambda code has a bug, the worst case is vending _overly_ broad credentials — it can't bypass STS and hit the bucket itself.
 - Backups are opaque JSON snapshots of the entire `AppState`. Restore replaces the local state but preserves the device's own `backupKey` (see `restoreFromSnapshot` in `mutators.ts:267`) so the same device keeps writing to the same cloud slot.
 - On the client side, `backup/schema.ts` runs every downloaded snapshot through a Zod schema before handing it to the reducer. The bucket is server-side encrypted (AES256) and versioned — a bad restore can be recovered by rolling back the S3 object version.
 
@@ -311,9 +312,9 @@ The "stale backup" banner (`components/StaleBackupBanner.tsx`) on Home is a gent
 
 FilmBuddy spans two AWS accounts:
 
-| Account | Role |
-| --- | --- |
-| `858777967843` (parent) | Owns the `mattb.tech` public hosted zone. Holds the GitHub OIDC role `github-actions-admin`. |
+| Account                 | Role                                                                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `858777967843` (parent) | Owns the `mattb.tech` public hosted zone. Holds the GitHub OIDC role `github-actions-admin`.                                                             |
 | `625838970384` (deploy) | Owns everything FilmBuddy-specific: the S3 site bucket, CloudFront, the `filmbuddy.mattb.tech` hosted subzone, the backup bucket, and the backup Lambda. |
 
 Pulumi assumes into each account as needed via two named providers in `packages/infra/src/providers.ts`. The deploy provider handles app resources; the parent-zone provider only writes the NS record for the subzone delegation.
@@ -447,13 +448,13 @@ That's the whole loop.
 
 ## Where to look for...
 
-| You want to... | Start at |
-| --- | --- |
-| Change what data a Shot stores | `packages/app/src/state/types.ts`, then `state/mutators.ts` + `backup/schema.ts` |
-| Add a new sheet | `nav/context.tsx` (add to `SheetState`), a new file under `sheets/`, register in `sheets/SheetRoot.tsx` |
-| Tweak the timeline UI | `components/FilmTimeline.tsx` and `styles/global.css` |
-| Add a new "effective at frame N" computation | `state/selectors.ts` — `latestAtOrBefore` is the pattern |
-| Change backup validation or cloud shape | `backup/schema.ts` (client) + `lambda/handler.ts` (server) |
-| Tighten the backup IAM model | `packages/infra/src/backup.ts` — specifically the federation role's policy and the Lambda's inline session policy |
-| Move domains or add environments | `packages/infra/src/site.ts` (`DOMAIN`) and `Pulumi.prod.yaml` / new stack |
-| Change CI | `.github/workflows/deploy.yml` |
+| You want to...                               | Start at                                                                                                          |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Change what data a Shot stores               | `packages/app/src/state/types.ts`, then `state/mutators.ts` + `backup/schema.ts`                                  |
+| Add a new sheet                              | `nav/context.tsx` (add to `SheetState`), a new file under `sheets/`, register in `sheets/SheetRoot.tsx`           |
+| Tweak the timeline UI                        | `components/FilmTimeline.tsx` and `styles/global.css`                                                             |
+| Add a new "effective at frame N" computation | `state/selectors.ts` — `latestAtOrBefore` is the pattern                                                          |
+| Change backup validation or cloud shape      | `backup/schema.ts` (client) + `lambda/handler.ts` (server)                                                        |
+| Tighten the backup IAM model                 | `packages/infra/src/backup.ts` — specifically the federation role's policy and the Lambda's inline session policy |
+| Move domains or add environments             | `packages/infra/src/site.ts` (`DOMAIN`) and `Pulumi.prod.yaml` / new stack                                        |
+| Change CI                                    | `.github/workflows/deploy.yml`                                                                                    |

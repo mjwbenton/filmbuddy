@@ -1,4 +1,4 @@
-# First deploy — bootstrapping FilmBuddy in a fresh AWS account
+# First deploy — bootstrapping FilmBuddy
 
 This doc walks through the one-time setup to stand FilmBuddy up from scratch.
 Once it's done, ongoing deploys are just `git push` to `main` and GitHub
@@ -23,102 +23,38 @@ public hosted zone.
 
 FilmBuddy spans two AWS accounts (see `packages/infra/src/providers.ts`):
 
-| Account          | Role                                                                                   |
-| ---------------- | -------------------------------------------------------------------------------------- |
-| `858777967843`   | Parent. Owns `mattb.tech` hosted zone `Z2GPSB1CDK86DH` and the `github-actions-admin` OIDC role. |
-| `625838970384`   | Deploy. All app infra (buckets, CloudFront, Lambda, sub-zone) lives here.              |
-
-The `github-actions-admin` role in the parent account is trusted by both
-accounts, so a single OIDC assume-role from GitHub Actions can create
-resources in either place.
-
-"Fresh AWS account" in this doc means a new **deploy account**. The parent
-account, its hosted zone, and the OIDC role are assumed to exist already.
+| Account        | Role                                                                                             |
+| -------------- | ------------------------------------------------------------------------------------------------ |
+| `858777967843` | Parent. Owns `mattb.tech` hosted zone `Z2GPSB1CDK86DH` and the `github-actions-admin` OIDC role. |
+| `625838970384` | Deploy. All app infra (buckets, CloudFront, Lambda, sub-zone) lives here.                        |
 
 ## Prerequisites
 
-Local:
+Repo secret `PULUMI_CONFIG_PASSPHRASE` set in github. Pulumi encrypts stack outputs
+and config secrets with this; any random high-entropy value works, but
+**save it** — losing it orphans the state.
 
-- Node 24 (pinned in `.node-version`)
-- [Pulumi CLI](https://www.pulumi.com/docs/install/)
-- AWS CLI v2, logged in with credentials that can assume into both accounts
-  (or with two named profiles, one per account)
-
-In AWS:
-
-- Parent account `858777967843`
-  - Hosted zone `Z2GPSB1CDK86DH` for `mattb.tech` exists.
-  - IAM role `github-actions-admin` exists, trusts GitHub's OIDC provider
-    for this repo, and has permission to `sts:AssumeRole` into the deploy
-    account (or inline admin rights, matching the role name).
-- Deploy account `625838970384`
-  - Trusts `github-actions-admin` in the parent account. The simplest
-    pattern is a role named the same thing in the deploy account whose
-    trust policy allows the parent-account role to assume it; or give the
-    parent-account role direct `AdministratorAccess` via a cross-account
-    trust.
-
-On GitHub:
-
-- Repo secret `PULUMI_CONFIG_PASSPHRASE` set. Pulumi encrypts stack outputs
-  and config secrets with this; any random high-entropy value works, but
-  **save it** — losing it orphans the state.
+Changes have been deployed to [mjwbenton/aws-account-stack](https://github.com/mjwbenton/aws-account-stack).
 
 ## Bootstrap steps
 
-### 1. Create the Pulumi state bucket (deploy account)
-
-Pulumi uses an S3 backend (`packages/infra/Pulumi.yaml`):
-
-```
-s3://filmbuddy.mattb.tech-infra-state
-```
-
-Create it in the deploy account, `us-east-1`, with versioning on:
-
-```sh
-aws s3api create-bucket \
-  --bucket filmbuddy.mattb.tech-infra-state \
-  --region us-east-1
-aws s3api put-bucket-versioning \
-  --bucket filmbuddy.mattb.tech-infra-state \
-  --versioning-configuration Status=Enabled
-aws s3api put-public-access-block \
-  --bucket filmbuddy.mattb.tech-infra-state \
-  --public-access-block-configuration \
-    BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
-```
-
-### 2. Log in to the Pulumi backend
+### 1. Log in to the Pulumi backend
 
 ```sh
 cd packages/infra
 export PULUMI_CONFIG_PASSPHRASE='<same value you put in the GitHub secret>'
-pulumi login s3://filmbuddy.mattb.tech-infra-state
+AWS_PROFILE=filmbuddy-admin pulumi login s3://filmbuddy.mattb.tech-infra-state
 ```
 
-### 3. Initialize the `prod` stack
+### 2. Initialize the `prod` stack
+
+From `packages/infra`:
 
 ```sh
-pulumi stack init prod
+AWS_PROFILE=filmbuddy-admin pulumi stack init prod
 ```
 
-`Pulumi.prod.yaml` already pins `aws:region: us-east-1`.
-
-If your local AWS credentials are not already the right identity in both
-accounts (common — e.g. you're running with parent-account creds), tell
-Pulumi which role to assume for each provider:
-
-```sh
-pulumi config set deployRoleArn  arn:aws:iam::625838970384:role/<role-with-admin-in-deploy>
-pulumi config set parentRoleArn  arn:aws:iam::858777967843:role/<role-with-route53-write-in-parent>
-```
-
-These are both optional — unset, each provider uses the caller's ambient
-credentials. CI runs as `github-actions-admin` (which already has access in
-both accounts), so these stay unset in the GHA deploy path.
-
-### 4. First `pulumi up`
+### 3. First `pulumi up`
 
 From `packages/infra`:
 

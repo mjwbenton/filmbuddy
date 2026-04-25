@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import {
-  useAppState,
-  suggestStrings,
-  currentLensId,
-  currentFilterId,
-  currentRoll,
-} from '../state';
+import { useAppState, suggestStrings, currentLensId, currentFilterId, currentRoll } from '../state';
 import { useToast, Sheet, Field, Input, SuggestInput, Seg } from '../ui';
 import { useNav } from '../nav/context';
 
