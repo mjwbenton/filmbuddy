@@ -144,7 +144,7 @@ export function buildBackup() {
   const lambdaFn = new aws.lambda.Function(
     'backup-api',
     {
-      runtime: 'nodejs20.x',
+      runtime: 'nodejs24.x',
       handler: 'handler.handler',
       role: lambdaRole.arn,
       code: new pulumi.asset.FileArchive(lambdaCodePath),
