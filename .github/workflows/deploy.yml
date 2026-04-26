@@ -81,6 +81,14 @@ jobs:
           VITE_BACKUP_API: ${{ steps.outputs.outputs.backupApiUrl }}
         run: npm run build
 
+      - name: Assume deploy-account admin for S3/CloudFront
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::625838970384:role/admin
+          role-chaining: true
+          aws-region: us-east-1
+          role-session-name: filmbuddy-gha-deploy
+
       - name: Sync to S3
         run: |
           aws s3 sync packages/app/dist "s3://${{ steps.outputs.outputs.siteBucket }}" \
