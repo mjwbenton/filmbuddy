@@ -46,6 +46,10 @@ jobs:
           aws-region: us-east-1
           role-session-name: filmbuddy-gha
 
+      - name: Build Lambda bundle
+        working-directory: packages/infra
+        run: npm run build:lambda
+
       - uses: pulumi/actions@v6
         with:
           command: up
