@@ -22,15 +22,15 @@ docs/
 
 Run from the repo root.
 
-| Command                | What it does                                           |
-| ---------------------- | ------------------------------------------------------ |
-| `npm run dev`          | Vite dev server for the SPA on port 5173               |
-| `npm run build`        | Build all workspaces                                   |
-| `npm run typecheck`    | `tsc --noEmit` per workspace                           |
-| `npm run lint`         | ESLint across the repo                                 |
-| `npm run format`       | Prettier write                                         |
-| `npm run format:check` | Prettier check                                         |
-| `npm run test`         | Vitest in every workspace (jsdom + Testing Library)    |
+| Command                | What it does                                        |
+| ---------------------- | --------------------------------------------------- |
+| `npm run dev`          | Vite dev server for the SPA on port 5173            |
+| `npm run build`        | Build all workspaces                                |
+| `npm run typecheck`    | `tsc --noEmit` per workspace                        |
+| `npm run lint`         | ESLint across the repo                              |
+| `npm run format`       | Prettier write                                      |
+| `npm run format:check` | Prettier check                                      |
+| `npm run test`         | Vitest in every workspace (jsdom + Testing Library) |
 
 Single test file: `cd packages/app && npx vitest run src/path/to/file.test.tsx` (add `-t "<name>"` to filter by name).
 
