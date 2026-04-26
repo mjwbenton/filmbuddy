@@ -12,14 +12,14 @@
     "up": "npm run build:lambda && pulumi up --yes"
   },
   "dependencies": {
-    "@pulumi/aws": "^6.66.2",
-    "@pulumi/pulumi": "^3.144.1"
+    "@pulumi/aws": "^7.27.0",
+    "@pulumi/pulumi": "^3.232.0"
   },
   "devDependencies": {
-    "@aws-sdk/client-sts": "^3.717.0",
+    "@aws-sdk/client-sts": "^3.1037.0",
     "@types/aws-lambda": "^8.10.147",
     "@types/node": "^22.10.5",
-    "esbuild": "^0.24.2",
+    "esbuild": "^0.28.0",
     "typescript": "^5.7.3"
   }
 }

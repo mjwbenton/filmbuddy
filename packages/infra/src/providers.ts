@@ -17,10 +17,12 @@ import * as aws from '@pulumi/aws';
 export const deployProvider = new aws.Provider('deploy', {
   region: 'us-east-1',
   allowedAccountIds: ['625838970384'],
-  assumeRole: {
-    roleArn: 'arn:aws:iam::625838970384:role/admin',
-    sessionName: 'pulumi-deploy',
-  },
+  assumeRoles: [
+    {
+      roleArn: 'arn:aws:iam::625838970384:role/admin',
+      sessionName: 'pulumi-deploy',
+    },
+  ],
 });
 
 export const parentZoneProvider = new aws.Provider('parent-zone', {
