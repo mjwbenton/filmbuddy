@@ -409,21 +409,23 @@ flowchart LR
     end
     Verify --> Deploy
     subgraph Deploy["Job: deploy"]
-      D1["OIDC →<br/>assume github-actions-admin"]
+      D1["OIDC →<br/>assume github-actions-admin<br/>(parent account)"]
       D1 --> D2["pulumi up (prod)"]
       D2 --> D3["read stack outputs<br/>(siteBucket, distId, backupApiUrl)"]
       D3 --> D4["npm run build:pwa-assets"]
       D4 --> D5["vite build<br/>with VITE_BACKUP_API"]
-      D5 --> D6["aws s3 sync dist →<br/>site bucket (--delete)"]
-      D6 --> D7["overwrite index.html<br/>with Cache-Control: no-cache"]
-      D7 --> D8["CloudFront<br/>invalidation /*"]
+      D5 --> D6["role-chain →<br/>assume admin in deploy account<br/>(skip session tagging)"]
+      D6 --> D7["aws s3 sync dist →<br/>site bucket (--delete)"]
+      D7 --> D8["overwrite index.html<br/>with Cache-Control: no-cache"]
+      D8 --> D9["CloudFront<br/>invalidation /*"]
     end
 ```
 
 Key details:
 
-- Auth is via GitHub OIDC into the **parent** account's `github-actions-admin` role. From there Pulumi's providers STS-hop into the deploy account as needed.
+- Auth starts via GitHub OIDC into the **parent** account's `github-actions-admin` role. Pulumi's providers STS-hop from there into the deploy account as needed for resource changes.
 - The Pulumi run is always applied first so the workflow can read the **live** backup-API URL and bake it into the SPA via the `VITE_BACKUP_API` build-time env var. That's why `backup/client.ts` reads `import.meta.env['VITE_BACKUP_API']` and throws if it's unset.
+- After the SPA build, the workflow role-chains into the deploy account's `admin` role (with `role-skip-session-tagging: true`, since the chained credentials can't re-tag the session) so the `aws s3` and `aws cloudfront` CLIs run directly against deploy-account resources rather than relying on the parent role's cross-account permissions.
 - `aws s3 sync --delete` does the upload with a default 5-minute cache, then immediately overrides `index.html` to `Cache-Control: no-cache` so CloudFront (and browsers) always revalidate the HTML entrypoint — the PWA's service worker handles asset versioning for the rest.
 - Final step is a full `/*` CloudFront invalidation.
 
