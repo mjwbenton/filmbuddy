@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=24"
   },
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",

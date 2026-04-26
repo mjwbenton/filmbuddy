@@ -8,10 +8,10 @@ await build({
   entryPoints: ['lambda/handler.ts'],
   bundle: true,
   platform: 'node',
-  target: 'node20',
+  target: 'node24',
   format: 'esm',
   outfile: 'lambda/dist/handler.mjs',
-  // @aws-sdk/* is provided by the Lambda runtime (Node 18/20/22).
+  // @aws-sdk/* is provided by the Lambda runtime.
   external: ['@aws-sdk/*'],
   legalComments: 'none',
   minify: false,
