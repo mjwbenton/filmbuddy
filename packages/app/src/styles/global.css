@@ -69,7 +69,7 @@ body {
 
 /* ================= Header ================= */
 .app-header {
-  padding: 22px var(--pad) 10px;
+  padding: calc(22px + env(safe-area-inset-top)) var(--pad) 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
