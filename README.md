@@ -1,3 +1,5 @@
+<img src="appicon.png" alt="FilmBuddy" width="128" />
+
 # FilmBuddy
 
 A personal film-photography logbook. Register your cameras, load a roll, and log frames as you shoot — aperture, shutter, lens, filter, notes. Installs as a PWA from [filmbuddy.mattb.tech](https://filmbuddy.mattb.tech) onto your home screen.
