@@ -166,12 +166,6 @@ export function buildBackup() {
     {
       functionName: lambdaFn.name,
       authorizationType: 'NONE',
-      cors: {
-        allowOrigins: allowedOrigins,
-        allowMethods: ['POST'],
-        allowHeaders: ['content-type'],
-        maxAge: 3000,
-      },
     },
     { provider: deployProvider },
   );
