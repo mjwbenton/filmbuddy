@@ -44,10 +44,6 @@ body {
     radial-gradient(ellipse at top, var(--brand-yellow-soft) 0%, transparent 55%), var(--surface-2);
 }
 
-[data-theme='dark'] .stage {
-  background: radial-gradient(ellipse at top, #2e3d5b 0%, transparent 55%), var(--surface-2);
-}
-
 .app {
   width: 100%;
   max-width: 440px;
@@ -174,12 +170,6 @@ body {
   gap: 10px;
   font-size: 13.5px;
   color: #6b4a12;
-}
-
-[data-theme='dark'] .stale {
-  background: #3c3014;
-  border-color: #5a4820;
-  color: #e3b560;
 }
 
 .stale .dotpulse {
@@ -661,15 +651,6 @@ body {
 
 .btn-primary:hover {
   background: oklch(0.26 0.008 260);
-}
-
-[data-theme='dark'] .btn-primary {
-  background: var(--bg);
-  color: var(--ink);
-}
-
-[data-theme='dark'] .btn-primary:hover {
-  background: var(--surface-2);
 }
 
 .btn-primary:active {

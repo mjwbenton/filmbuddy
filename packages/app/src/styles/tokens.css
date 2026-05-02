@@ -44,22 +44,6 @@
   --serif: 'Fraunces', 'Recoleta', 'Playfair Display', Georgia, serif;
 }
 
-[data-theme='dark'] {
-  --bg: #1a2236;
-  --surface: #242d44;
-  --surface-2: #2c3650;
-  --ink: #fbf3de;
-  --ink-2: #c6cbda;
-  --ink-3: #8e94a8;
-  --line: #3a4560;
-  --line-2: #323c55;
-  --accent: #6a9fe0;
-  --accent-soft: #2e3d5b;
-  --accent-ink: #b6d4f2;
-  --warn: #e3b560;
-  --warn-soft: #3c3014;
-}
-
 [data-density='compact'] {
   --pad: 14px;
   --row-pad-y: 10px;
