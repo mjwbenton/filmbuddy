@@ -85,9 +85,8 @@ describe('log shot flow', () => {
       }),
     );
     render(<App />);
-    // Multiple Log shot buttons may exist (card action + detail); pick the card one
-    const logBtn = screen.getAllByText('Log shot')[0]!;
-    await user.click(logBtn);
+    await user.click(screen.getByText('M6'));
+    await user.click(screen.getByText('Log shot'));
     const dialog = await screen.findByRole('dialog', { name: 'Log shot' });
     expect(dialog).toBeInTheDocument();
     const aperture = screen.getByPlaceholderText('f/5.6');

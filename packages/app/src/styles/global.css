@@ -841,6 +841,18 @@ body {
   opacity: 0.5;
 }
 
+.frame-gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  min-width: 18px;
+  padding: 0 4px;
+  color: var(--ink-3);
+  font-size: 11px;
+  user-select: none;
+}
+
 /* ================= Detail rows ================= */
 .detail-grid {
   display: grid;
