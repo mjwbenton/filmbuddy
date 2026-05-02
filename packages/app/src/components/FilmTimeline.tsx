@@ -45,6 +45,7 @@ export function FilmTimeline({ roll, shots, selectedFrame, onSelectFrame }: Prop
     }
     const shot = shots.find((s) => s.frame === frame);
     const isCurrent = frame === selectedFrame;
+    const isHead = roll.shotCount >= 1 && frame === roll.shotCount;
     const beyond = !roll.digital && frame > roll.shotCount;
     const hasLog = !!(shot && (shot.aperture || shot.shutter || shot.note));
     const hasSwap = !!(shot && (shot.lensId !== undefined || shot.filterId !== undefined));
@@ -53,7 +54,7 @@ export function FilmTimeline({ roll, shots, selectedFrame, onSelectFrame }: Prop
         type="button"
         key={frame}
         data-frame={frame}
-        className={['frame', isCurrent && 'current', beyond && !shot && 'empty']
+        className={['frame', isCurrent && 'current', isHead && 'head', beyond && !shot && 'empty']
           .filter(Boolean)
           .join(' ')}
         onClick={() => onSelectFrame(frame)}
