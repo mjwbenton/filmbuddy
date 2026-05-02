@@ -25,7 +25,6 @@ export function MoreActionsSheet({ cameraId }: Props) {
   const actions: Action[] = [
     {
       label: roll ? 'Load new roll' : 'Load film',
-      sub: roll ? 'Replaces the current roll' : undefined,
       to: { kind: 'load-film', cameraId },
     },
     {
