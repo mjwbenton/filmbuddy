@@ -127,9 +127,7 @@ export function CameraDetail({ cameraId }: Props) {
                   openSheet({
                     kind: 'log-shot',
                     cameraId: camera.id,
-                    ...(selectedShot
-                      ? { editShotId: selectedShot.id }
-                      : { frame: selectedFrame }),
+                    ...(selectedShot ? { editShotId: selectedShot.id } : { frame: selectedFrame }),
                   })
                 }
               >
