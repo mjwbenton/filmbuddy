@@ -19,12 +19,18 @@ export function SheetRoot() {
     case 'load-film':
       return <LoadFilmSheet cameraId={sheet.cameraId} />;
     case 'swap-lens-filter':
-      return <SwapLensFilterSheet cameraId={sheet.cameraId} />;
+      return (
+        <SwapLensFilterSheet
+          cameraId={sheet.cameraId}
+          {...(sheet.frame !== undefined ? { frame: sheet.frame } : {})}
+        />
+      );
     case 'log-shot':
       return (
         <LogShotSheet
           cameraId={sheet.cameraId}
           {...(sheet.editShotId ? { editShotId: sheet.editShotId } : {})}
+          {...(sheet.frame !== undefined ? { frame: sheet.frame } : {})}
         />
       );
     case 'change-shot':

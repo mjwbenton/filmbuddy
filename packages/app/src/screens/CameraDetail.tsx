@@ -109,7 +109,13 @@ export function CameraDetail({ cameraId }: Props) {
                 type="button"
                 className="act-btn primary"
                 disabled={!roll}
-                onClick={() => openSheet({ kind: 'swap-lens-filter', cameraId: camera.id })}
+                onClick={() =>
+                  openSheet({
+                    kind: 'swap-lens-filter',
+                    cameraId: camera.id,
+                    frame: selectedFrame,
+                  })
+                }
               >
                 <Icon name="swap" size={18} />
                 Swap lens
@@ -121,7 +127,9 @@ export function CameraDetail({ cameraId }: Props) {
                   openSheet({
                     kind: 'log-shot',
                     cameraId: camera.id,
-                    ...(selectedShot ? { editShotId: selectedShot.id } : {}),
+                    ...(selectedShot
+                      ? { editShotId: selectedShot.id }
+                      : { frame: selectedFrame }),
                   })
                 }
               >

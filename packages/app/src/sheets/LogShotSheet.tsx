@@ -4,9 +4,9 @@ import { useToast, Sheet, Field, SuggestInput, Input, Textarea } from '../ui';
 import { useNav } from '../nav/context';
 import { APERTURES, SHUTTERS } from './constants';
 
-type Props = { cameraId: string; editShotId?: string };
+type Props = { cameraId: string; editShotId?: string; frame?: number };
 
-export function LogShotSheet({ cameraId, editShotId }: Props) {
+export function LogShotSheet({ cameraId, editShotId, frame: initialFrame }: Props) {
   const { state, mutators } = useAppState();
   const { closeSheet } = useNav();
   const toast = useToast();
@@ -14,7 +14,9 @@ export function LogShotSheet({ cameraId, editShotId }: Props) {
   const roll = camera ? currentRoll(state, cameraId) : null;
   const editShot = editShotId ? state.shots.find((s) => s.id === editShotId) : null;
 
-  const [frame, setFrame] = useState(String(editShot?.frame ?? (roll?.shotCount ?? 0) + 1));
+  const [frame, setFrame] = useState(
+    String(editShot?.frame ?? initialFrame ?? (roll?.shotCount ?? 0) + 1),
+  );
   const [aperture, setAperture] = useState(editShot?.aperture ?? '');
   const [shutter, setShutter] = useState(editShot?.shutter ?? '');
   const [note, setNote] = useState(editShot?.note ?? '');

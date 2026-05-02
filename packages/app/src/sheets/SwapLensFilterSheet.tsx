@@ -3,9 +3,9 @@ import { useAppState, suggestStrings, currentLensId, currentFilterId, currentRol
 import { useToast, Sheet, Field, Input, SuggestInput, Seg } from '../ui';
 import { useNav } from '../nav/context';
 
-type Props = { cameraId: string };
+type Props = { cameraId: string; frame?: number };
 
-export function SwapLensFilterSheet({ cameraId }: Props) {
+export function SwapLensFilterSheet({ cameraId, frame: initialFrame }: Props) {
   const { state, mutators } = useAppState();
   const { closeSheet } = useNav();
   const toast = useToast();
@@ -18,7 +18,7 @@ export function SwapLensFilterSheet({ cameraId }: Props) {
     ? (state.filters.find((f) => f.id === filterId)?.name ?? '')
     : '';
 
-  const [frame, setFrame] = useState(String((roll?.shotCount ?? 0) + 1));
+  const [frame, setFrame] = useState(String(initialFrame ?? (roll?.shotCount ?? 0) + 1));
   const [lens, setLens] = useState(currentLensName);
   const [withFilter, setWithFilter] = useState<'yes' | 'no'>(currentFilterName ? 'yes' : 'no');
   const [filter, setFilter] = useState(currentFilterName);
