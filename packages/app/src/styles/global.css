@@ -296,28 +296,11 @@ body {
   background: linear-gradient(
     90deg,
     var(--accent-soft) 0%,
-    var(--accent) 25%,
+    var(--accent) 30%,
     var(--accent-ink) 50%,
-    var(--accent) 75%,
+    var(--accent) 70%,
     var(--accent-soft) 100%
   );
-  background-size: 200% 100%;
-  animation: filmbuddy-infinite 2.4s linear infinite;
-}
-
-@keyframes filmbuddy-infinite {
-  from {
-    background-position: 0% 50%;
-  }
-  to {
-    background-position: -200% 50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .progress-fill-infinite {
-    animation: none;
-  }
 }
 
 /* ================= Pills ================= */
