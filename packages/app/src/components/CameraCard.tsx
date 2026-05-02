@@ -50,8 +50,14 @@ export function CameraCard({ camera }: Props) {
         </div>
       )}
 
+      {roll && digital && roll.shotCount > 0 && (
+        <div className="progress-track infinite">
+          <div className="progress-fill-infinite" />
+        </div>
+      )}
+
       {roll ? (
-        digital ? (
+        digital && roll.shotCount === 0 ? (
           <div className="film-row">
             <span className="film-main">In-camera counter</span>
             <button
@@ -62,7 +68,7 @@ export function CameraCard({ camera }: Props) {
               Set
             </button>
           </div>
-        ) : (
+        ) : digital ? null : (
           <div className="film-row">
             <span className="film-main">{stock?.name ?? 'Unknown stock'}</span>
             <span className="film-iso mono">ISO {roll.iso}</span>

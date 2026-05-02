@@ -98,6 +98,11 @@ export function CameraDetail({ cameraId }: Props) {
                 <div className="progress-fill" style={{ width: `${progressPct}%` }} />
               </div>
             )}
+            {digital && roll.shotCount > 0 && (
+              <div className="progress-track infinite">
+                <div className="progress-fill-infinite" />
+              </div>
+            )}
             <DetailGrid state={state} roll={roll} shot={selectedShot} frame={selectedFrame} />
             <div className="card-actions" style={{ marginTop: 12 }}>
               <button
