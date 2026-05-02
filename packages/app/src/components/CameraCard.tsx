@@ -91,35 +91,6 @@ export function CameraCard({ camera }: Props) {
           {filter ? filter.name : 'no filter'}
         </Pill>
       </div>
-
-      <div className="card-actions">
-        <button
-          type="button"
-          className="act-btn primary"
-          disabled={!roll}
-          onClick={() => openSheet({ kind: 'swap-lens-filter', cameraId: camera.id })}
-        >
-          <Icon name="swap" size={18} />
-          Swap lens
-        </button>
-        <button
-          type="button"
-          className="act-btn"
-          disabled={!roll}
-          onClick={() => openSheet({ kind: 'log-shot', cameraId: camera.id })}
-        >
-          <Icon name="notebook" size={18} />
-          Log shot
-        </button>
-        <button
-          type="button"
-          className="act-btn"
-          onClick={() => openSheet({ kind: 'more', cameraId: camera.id })}
-        >
-          <Icon name="more" size={18} />
-          More
-        </button>
-      </div>
     </div>
   );
 }
